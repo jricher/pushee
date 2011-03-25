@@ -1,4 +1,4 @@
-package org.mitre.pushee.hub.objectmodel;
+package org.mitre.pushee.hub.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -7,12 +7,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+/**
+ * Publisher representation. Since publishers may publish several feeds,
+ * subscriber/subscription information is stored in Feed objects.
+ * 
+ * @author AANGANES
+ *
+ */
 @Entity
 public class Publisher {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
+	
+	@Basic
+	private String callbackURL;
 	
 	@ManyToOne
 	private List<Feed> feeds;
@@ -21,7 +31,7 @@ public class Publisher {
 	public Publisher() {
 		
 	}
-
+	
 	/**
 	 * @param feed the feed to set
 	 */
@@ -48,5 +58,19 @@ public class Publisher {
 	 */
 	public String getId() {
 		return id;
+	}
+
+	/**
+	 * @param callbackURL the callbackURL to set
+	 */
+	public void setCallbackURL(String callbackURL) {
+		this.callbackURL = callbackURL;
+	}
+
+	/**
+	 * @return the callbackURL
+	 */
+	public String getCallbackURL() {
+		return callbackURL;
 	}
 }

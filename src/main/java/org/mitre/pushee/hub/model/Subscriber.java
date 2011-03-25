@@ -1,4 +1,4 @@
-package org.mitre.pushee.hub.objectmodel;
+package org.mitre.pushee.hub.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,15 +7,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Entity;
 import javax.persistence.Basic;
 
+/**
+ * Subscriber representation. Subscribers are referenced from
+ * the Feeds they are subscribed to.
+ * @author AANGANES
+ *
+ */
 @Entity
 public class Subscriber {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
-	
-	@ManyToOne
-	private List<Subscription> subscriptions;
 	
 	@Basic
 	private String postbackURL;
@@ -37,19 +40,19 @@ public class Subscriber {
 	public String getId() {
 		return id;
 	}
-	
+
 	/**
-	 * @return the subscriptions list
+	 * @param postbackURL the postbackURL to set
 	 */
-	public List<Subscription> getSubscriptions() {
-		return subsriptions;
+	public void setPostbackURL(String postbackURL) {
+		this.postbackURL = postbackURL;
 	}
-	
+
 	/**
-	 * @param subscriptions the subscriptions list to set
+	 * @return the postbackURL
 	 */
-	public void setSubscriptions(List<Subscription> subscriptions) {
-		this.subscriptions = subscriptions;
+	public String getPostbackURL() {
+		return postbackURL;
 	}
 	
 }
