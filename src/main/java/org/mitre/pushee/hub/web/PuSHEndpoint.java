@@ -3,7 +3,7 @@ package org.mitre.pushee.hub.web;
 import org.apache.commons.httpclient.HttpClient;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
-import org.mitre.pushee.hub.service.IHubRepository;
+import org.mitre.pushee.hub.service.HubService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/hub")
 public class PuSHEndpoint {
 
-	private IHubRepository hubRepository;
+	private HubService hubService;
 	
 	@RequestMapping(params={"hub.mode=subscribe",
 							"hub.callback","hub.topic","hub.verify"}, 

@@ -7,12 +7,12 @@ import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
 
 /**
- * Interface for hub service layer.
+ * Provides support for standard Hub transactions
  * 
  * @author AANGANES
  *
  */
-public interface IHubRepository {
+public interface HubService {
 
 	/**
 	 * Get a list of subscribers subscribed to the given feed ID.
@@ -20,7 +20,7 @@ public interface IHubRepository {
 	 * @param feedID ID of the feed to get subscribers for
 	 * @return the list of subscribers
 	 */
-	public List<Subscriber> getSubscribersByFeedID(String feedID);
+	public List<Subscriber> getSubscribersByFeedId(String feedID);
 	
 	/**
 	 * Get a list of subscribers subscribed to the given feed reference.
@@ -28,7 +28,7 @@ public interface IHubRepository {
 	 * @param f the field to get subscribers for
 	 * @return the list of subscribers
 	 */
-	public List<Subscriber> getSubscribersByFeedRef(Feed f);
+	public List<Subscriber> getSubscribersByFeed(Feed f);
 	
 	/**
 	 * Get the feed with the given URL.
@@ -36,7 +36,7 @@ public interface IHubRepository {
 	 * @param feedURL the URL of the feed to get
 	 * @return the feed
 	 */
-	public Feed getFeedByURL(String feedURL);
+	public Feed getFeedByUrl(String feedURL);
 	
 	/**
 	 * Get the feed with the given ID.
@@ -44,7 +44,7 @@ public interface IHubRepository {
 	 * @param feedID the ID of the feed to get
 	 * @return the feed
 	 */
-	public Feed getFeedByID(String feedID);
+	public Feed getFeedById(String feedID);
 	
 	/**
 	 * Get the publisher with the given ID.
@@ -52,7 +52,7 @@ public interface IHubRepository {
 	 * @param publisherID the ID of the publisher to get
 	 * @return the publisher
 	 */
-	public Publisher getPublisherByID(String publisherID);
+	public Publisher getPublisherById(String publisherID);
 	
 	/**
 	 * Get the publisher with the given URL.
@@ -60,7 +60,7 @@ public interface IHubRepository {
 	 * @param publisherURL the URL of the publisher to get
 	 * @return the publisher
 	 */
-	public Publisher getPublisherByURL(String publisherURL);
+	public Publisher getPublisherByUrl(String publisherURL);
 	
 	/**
 	 * Save a new publisher to the database.
