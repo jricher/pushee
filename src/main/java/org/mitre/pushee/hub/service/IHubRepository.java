@@ -1,5 +1,11 @@
 package org.mitre.pushee.hub.service;
 
+import java.util.List;
+
+import org.mitre.pushee.hub.model.Feed;
+import org.mitre.pushee.hub.model.Publisher;
+import org.mitre.pushee.hub.model.Subscriber;
+
 /**
  * Interface for hub service layer.
  * 

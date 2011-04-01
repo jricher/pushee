@@ -1,12 +1,15 @@
 package org.mitre.pushee.hub.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.Basic;
-import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Feed representation. Feed objects contain a list of the subscribers
@@ -37,7 +40,7 @@ public class Feed {
 	private Publisher publisher;
 	
 	@ManyToOne
-	private ArrayList<Subscriber> subscribers;
+	private List<Subscriber> subscribers;
 	
 	public Feed() {
 		
@@ -120,7 +123,7 @@ public class Feed {
 	/**
 	 * @param subscribers the subscribers list to set
 	 */
-	public void setSubscribers(List<Subscribers> subscribers) {
+	public void setSubscribers(List<Subscriber> subscribers) {
 		this.subscribers = subscribers;
 	}
 	
