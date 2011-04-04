@@ -4,7 +4,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.service.HubService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,19 +17,24 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/hub")
 public class PuSHEndpoint {
 
-	private HubService hubService;
-	
-	@RequestMapping(params={"hub.mode=subscribe",
+	private final HubService hubService;
+
+    @Autowired
+    public PuSHEndpoint(HubService hubService) {
+        this.hubService = hubService;
+    }
+
+    @RequestMapping(params={"hub.mode=subscribe",
 							"hub.callback","hub.topic","hub.verify"}, 
 							method=RequestMethod.POST)
-	public ModelMap subscribeRequest(
+	public Model subscribeRequest(
 			@RequestParam("hub.callback") String callback,
 			@RequestParam("hub.topic") String topic,
 			@RequestParam("hub.verify") ClientVerify verify,
 			@RequestParam(value="hub.lease_seconds", required=false, defaultValue="0") long leaseSeconds,
 			@RequestParam(value="hub.secret", required=false) String secret,
 			@RequestParam(value="hub.verify_token", required=false) String verifyToken,
-			ModelMap model) {
+			Model model) {
 		
 		// Load the subscriber from its callback url, if available
 		// create a subscriber {callback,verify} if not available, and save it
