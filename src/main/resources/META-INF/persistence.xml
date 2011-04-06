@@ -5,7 +5,6 @@
         version="1.0">
         <persistence-unit name="pusheePersistenceUnit" transaction-type="RESOURCE_LOCAL">
     		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-			<!--<class>org.richer.justin.TestEntity</class>-->
 			<exclude-unlisted-classes>false</exclude-unlisted-classes>
     		<properties>
 				<property name="eclipselink.ddl-generation" value="create-tables" />
