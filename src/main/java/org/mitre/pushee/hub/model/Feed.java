@@ -28,7 +28,7 @@ public class Feed {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String id;
+	private Long id;
 	
 	@Basic
 	private String url;
@@ -36,10 +36,10 @@ public class Feed {
 	@Basic
 	private FeedType type;
 	
-	@OneToMany
+	@ManyToOne
 	private Publisher publisher;
 	
-	@ManyToOne
+	@OneToMany
 	private List<Subscriber> subscribers;
 	
 	public Feed() {
@@ -60,14 +60,14 @@ public class Feed {
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 

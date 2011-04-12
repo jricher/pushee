@@ -2,12 +2,7 @@ package org.mitre.pushee.hub.model;
 
 import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * Publisher representation. Since publishers may publish several feeds,
@@ -26,7 +21,7 @@ public class Publisher {
 	@Basic
 	private String callbackURL;
 	
-	@ManyToOne
+	@OneToMany
 	private List<Feed> feeds;
 
 	

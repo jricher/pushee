@@ -1,4 +1,4 @@
-package org.mitre.pushee.web;
+package org.mitre.pushee.hub.web;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -47,7 +47,7 @@ public class PuSHEndpointTest {
 
         //Define expected return objects from domain requests
         Feed feed = new Feed();
-        feed.setId("UniqueIdShouldBeLong");
+        feed.setId(1L);
 
         List<Subscriber> subscriber = new ArrayList<Subscriber>();
         Subscriber s = new Subscriber();

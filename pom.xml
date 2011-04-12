@@ -41,7 +41,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- AspectJ -->
+        <!-- Asp${org.springframework-version}ectJ -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
@@ -128,57 +128,73 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <version>2.0</version>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.154</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Build -->
         <dependency>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
             <version>2.4</version>
+            <scope>build</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-acl</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-aspects</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-cas-client</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-openid</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -203,7 +219,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>3.0.5.RELEASE</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -332,6 +348,9 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
+                    <formats>
+                        <format>xml</format>
+                    </formats>
                     <instrumentation>
                         <ignores>
                             <ignore>org.apache.log4j.*</ignore>
@@ -341,6 +360,15 @@
                         </excludes>
                     </instrumentation>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>cobertura</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>cobertura</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

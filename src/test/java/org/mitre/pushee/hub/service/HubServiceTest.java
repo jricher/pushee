@@ -1,4 +1,4 @@
-package org.mitre.pushee.service;
+package org.mitre.pushee.hub.service;
 
 
 import org.junit.Before;

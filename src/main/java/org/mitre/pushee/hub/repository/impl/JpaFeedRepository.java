@@ -22,7 +22,7 @@ public class JpaFeedRepository implements FeedRepository {
 
     @Override
     public Feed get(long id) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return manager.find(Feed.class, id);
     }
 
     @Override
