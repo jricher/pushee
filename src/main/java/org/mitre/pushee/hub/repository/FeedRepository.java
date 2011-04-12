@@ -14,7 +14,7 @@ public interface FeedRepository {
      * @param id the id of the feed
      * @return a valid Feed if exists; null otherwise;
      */
-    Feed get(long id);
+    public Feed get(long id);
 
     /**
      * Gets a feed by its unique URL
@@ -22,11 +22,11 @@ public interface FeedRepository {
      * @param url the URL of the feed
      * @return a valid Feed if exists; null otherwise;
      */
-    Feed get(String url);
+    public Feed get(String url);
 
     /**
      * Persists a Feed
      * @param feed valid Feed instance
      */
-    void save(Feed feed);
+    public void save(Feed feed);
 }

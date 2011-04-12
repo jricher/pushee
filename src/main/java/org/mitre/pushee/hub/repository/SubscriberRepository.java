@@ -17,12 +17,12 @@ public interface SubscriberRepository {
      * @param feedId the id of the feed
      * @return a list of valid Subscribers if any are found; Empty list otherwise
      */
-    Set<Subscriber> getSubscribers(String feedId);
+    public Set<Subscriber> getSubscribers(String feedId);
 
     /**
      * Persists a Subscriber
      *
      * @param subscriber valid Subscriber instance
      */
-    void save(Subscriber subscriber);
+    public void save(Subscriber subscriber);
 }

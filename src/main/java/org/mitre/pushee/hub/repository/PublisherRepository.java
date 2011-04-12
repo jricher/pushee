@@ -14,7 +14,7 @@ public interface PublisherRepository {
      * @param id the id of the feed
      * @return a valid Publisher if exists; null otherwise;
      */
-    Publisher get(long id);
+    public Publisher get(long id);
 
     /**
      * Gets a Publisher by its unique URL
@@ -22,12 +22,12 @@ public interface PublisherRepository {
      * @param url the URL of the Publisher
      * @return a valid URL if exists; null otherwise;
      */
-    Publisher get(String url);
+    public Publisher get(String url);
 
     /**
      * Persists a Publisher
      *
      * @param publisher valid Publisher instance
      */
-    void save(Publisher publisher);
+    public void save(Publisher publisher);
 }

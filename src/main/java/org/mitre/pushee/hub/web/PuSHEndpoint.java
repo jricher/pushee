@@ -1,22 +1,51 @@
 package org.mitre.pushee.hub.web;
 
-import org.apache.commons.httpclient.HttpClient;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_CALLBACK;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_CHALLENGE;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_LEASE_SECONDS;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_MODE;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_MODE_PUBLISH;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_MODE_SUBSCRIBE;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_MODE_UNSUBSCRIBE;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_SECRET;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_TOPIC;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_URL;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY;
+import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY_TOKEN;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+
+import com.google.common.base.Strings;
+import com.google.common.io.CharStreams;
 
 @Controller
 @RequestMapping("/hub")
 public class PuSHEndpoint {
 
+	@Autowired
 	private final HubService hubService;
 
     @Autowired
@@ -24,18 +53,29 @@ public class PuSHEndpoint {
         this.hubService = hubService;
     }
 
-    @RequestMapping(params={"hub.mode=subscribe",
-							"hub.callback","hub.topic","hub.verify"}, 
+	/**
+	 * Process a "subscribe" request
+	 * @param callback
+	 * @param topic
+	 * @param verify
+	 * @param leaseSeconds
+	 * @param secret
+	 * @param verifyToken
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params={HUB_MODE_SUBSCRIBE,
+							HUB_CALLBACK,HUB_TOPIC,HUB_VERIFY}, 
 							method=RequestMethod.POST)
 	public Model subscribeRequest(
-			@RequestParam("hub.callback") String callback,
-			@RequestParam("hub.topic") String topic,
-			@RequestParam("hub.verify") ClientVerify verify,
-			@RequestParam(value="hub.lease_seconds", required=false, defaultValue="0") long leaseSeconds,
-			@RequestParam(value="hub.secret", required=false) String secret,
-			@RequestParam(value="hub.verify_token", required=false) String verifyToken,
+			@RequestParam(HUB_CALLBACK) String callback,
+			@RequestParam(HUB_TOPIC) String topic,
+			@RequestParam(HUB_VERIFY) ClientVerify verify,
+			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
+			@RequestParam(value=HUB_SECRET, required=false) String secret,
+			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,
 			Model model) {
-		
+
 		// Load the subscriber from its callback url, if available
 		// create a subscriber {callback,verify} if not available, and save it
 		// get the feed object from the topic url
@@ -50,17 +90,28 @@ public class PuSHEndpoint {
 		return model;
 	}
 	
-	@RequestMapping(params={"hub.mode=unsubscribe",
-			"hub.callback","hub.topic","hub.verify"}, 
+	/**
+	 * process an "unsubscribe" request
+	 * @param callback
+	 * @param topic
+	 * @param verify
+	 * @param leaseSeconds
+	 * @param secret
+	 * @param verifyToken
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params={HUB_MODE_UNSUBSCRIBE,
+			HUB_CALLBACK,HUB_TOPIC,HUB_VERIFY}, 
 			method=RequestMethod.POST)
-	public ModelMap unsubscribeRequest(
-			@RequestParam("hub.callback") String callback,
-			@RequestParam("hub.topic") String topic,
-			@RequestParam("hub.verify") ClientVerify verify,
-			@RequestParam(value="hub.lease_seconds", required=false, defaultValue="0") long leaseSeconds,
-			@RequestParam(value="hub.secret", required=false) String secret,
-			@RequestParam(value="hub.verify_token", required=false) String verifyToken,			
-			ModelMap model) {
+	public Model unsubscribeRequest(
+			@RequestParam(HUB_CALLBACK) String callback,
+			@RequestParam(HUB_TOPIC) String topic,
+			@RequestParam(HUB_VERIFY) ClientVerify verify,
+			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
+			@RequestParam(value=HUB_SECRET, required=false) String secret,
+			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,			
+			Model model) {
 		
 		// Load the subscriber from its callback url, if available
 		// get the feed object from the topic url
@@ -77,11 +128,17 @@ public class PuSHEndpoint {
 		return model;
 	}
 	
-	@RequestMapping(params = {"hub.mode=publish"}, method=RequestMethod.POST)
-	public ModelMap publish(
-			@RequestParam("hub.url") String url,
-			ModelMap model) {
-		
+	/**
+	 * Process a "publish" request
+	 * @param url
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(params = {HUB_MODE_PUBLISH}, method=RequestMethod.POST)
+	public Model publish(
+			@RequestParam(HUB_URL) String url,
+			Model model) {
+
 		// load feed for url
 		// if found, fetch feed for url, update cache, and alert subscribers
 		// if not found or not authorized, return 404,403
@@ -94,14 +151,118 @@ public class PuSHEndpoint {
 	// TODO: add in periodic refresh of subscription on verification
 	
 	// utility functions, to be moved to utility class
-	private boolean verifyCallback(String callback, String mode, long leaseSeconds, String verifyToken) {
+	private boolean verifyCallback(String callback, String mode, String topic, long leaseSeconds, String verifyToken) {
 		// make a call to callback with the appropriate parameters
-		HttpClient hc = new HttpClient(); // etc...
-		// if the call comes back 200 return true, else
+
+		HttpClient hc = new DefaultHttpClient();
+		
+		HttpPost post = new HttpPost(callback);
+		HttpParams params = post.getParams();
+
+		UUID challenge = UUID.randomUUID();
+		
+		params.setParameter(HUB_MODE, mode);
+		params.setParameter(HUB_TOPIC, topic);
+		params.setParameter(HUB_CHALLENGE, challenge.toString());
+		params.setLongParameter(HUB_LEASE_SECONDS, leaseSeconds);
+		if (!Strings.isNullOrEmpty(verifyToken)) {
+			params.setParameter(HUB_VERIFY_TOKEN, verifyToken);
+		}
+		
+		try {
+			HttpResponse resp = hc.execute(post);
+			
+			int sc = resp.getStatusLine().getStatusCode();
+			
+			if (sc >= 200 && sc < 300) {
+				// HTTP 2XX response code
+
+				// parse out the body
+				HttpEntity entity = resp.getEntity();
+				String body = CharStreams.toString(new InputStreamReader(entity.getContent()));
+				
+				body = body.trim();
+				if (body.equals(challenge.toString())) {
+					// valid response with matching challenge
+					return true;
+				} else {
+					// valid response, challenge doesn't match
+					return false;
+				}
+				
+			} else {
+				
+				// some other error code, handle it here
+				
+				return false;
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// if the call comes back 200 and the challenge matches, return true, else
 		return false;
 	}
 	
-	private void fetchAndRepublishUrl(Feed feed) {
+	private void fetchAndRepublishFeedToSubscribers(Feed feed) {
 
+		HttpClient hc = new DefaultHttpClient();
+
+		HttpGet get = new HttpGet(feed.getUrl());
+
+		try {
+			HttpResponse resp = hc.execute(get);
+			
+			int sc = resp.getStatusLine().getStatusCode();
+			
+			if (sc >= 200 && sc < 300) {
+				// HTTP 2XX response code
+
+				// parse out the body
+				HttpEntity entity = resp.getEntity();
+				String body = CharStreams.toString(new InputStreamReader(entity.getContent()));
+
+				List<Subscriber> subscribers = hubService.getSubscribersByFeed(feed);
+				
+				for (Subscriber subscriber : subscribers) {
+					postToSubscriber(body, subscriber, entity.getContentType().getValue(), entity.getContentEncoding().getValue(), hc);
+				}
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void postToSubscriber(String body, Subscriber subscriber, String mimeType, String charset, HttpClient hc)
+			throws UnsupportedEncodingException {
+		
+		String url = subscriber.getPostbackURL();
+		HttpPost post = new HttpPost(url);
+		HttpParams params = post.getParams();
+
+		// re-send the body as a string
+		HttpEntity postBody = new StringEntity(body, mimeType, charset);
+		post.setEntity(postBody);
+		
+		try {
+			HttpResponse resp = hc.execute(post);
+			
+			// TODO: handle response
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
