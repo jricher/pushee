@@ -3,10 +3,13 @@ package org.mitre.pushee.hub.service.impl;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
+import org.mitre.pushee.hub.repository.FeedRepository;
+import org.mitre.pushee.hub.repository.PublisherRepository;
+import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author mfranklin
@@ -14,49 +17,59 @@ import java.util.List;
  *         Time: 1:34 PM
  */
 @Service
-public class DefaultHubService implements HubService{
+public class DefaultHubService implements HubService {
+	
+	private FeedRepository feedRepository;
+	private PublisherRepository publisherRepository;
+	private SubscriberRepository subscriberRepository;
+	
     @Override
-    public List<Subscriber> getSubscribersByFeedId(String feedID) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Set<Subscriber> getSubscribersByFeedId(Long feedID) {
+        return subscriberRepository.getSubscribers(feedID);
     }
 
     @Override
-    public List<Subscriber> getSubscribersByFeed(Feed f) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Subscriber getSubscriberByCallbackURL(String url) {
+    	return subscriberRepository.get(url);
+    }
+    
+    @Override
+    public Set<Subscriber> getSubscribersByFeed(Feed f) {
+       return subscriberRepository.getSubscribers(f.getId());
     }
 
     @Override
     public Feed getFeedByUrl(String feedURL) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+      return feedRepository.get(feedURL);
     }
 
     @Override
-    public Feed getFeedById(String feedID) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Feed getFeedById(Long feedID) {
+       return feedRepository.get(feedID);
     }
 
     @Override
-    public Publisher getPublisherById(String publisherID) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Publisher getPublisherById(Long publisherID) {
+       return publisherRepository.get(publisherID);
     }
 
     @Override
     public Publisher getPublisherByUrl(String publisherURL) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return publisherRepository.get(publisherURL);
     }
 
     @Override
     public void savePublisher(Publisher publisher) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        publisherRepository.save(publisher);
     }
 
     @Override
     public void saveFeed(Feed feed) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        feedRepository.save(feed);
     }
 
     @Override
     public void saveSubscriber(Subscriber subscriber) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        subscriberRepository.save(subscriber);
     }
 }

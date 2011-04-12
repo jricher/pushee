@@ -1,6 +1,7 @@
 package org.mitre.pushee.hub.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
@@ -20,7 +21,7 @@ public interface HubService {
 	 * @param feedID ID of the feed to get subscribers for
 	 * @return the list of subscribers
 	 */
-	public List<Subscriber> getSubscribersByFeedId(String feedID);
+	public Set<Subscriber> getSubscribersByFeedId(Long feedID);
 	
 	/**
 	 * Get a list of subscribers subscribed to the given feed reference.
@@ -28,7 +29,16 @@ public interface HubService {
 	 * @param f the field to get subscribers for
 	 * @return the list of subscribers
 	 */
-	public List<Subscriber> getSubscribersByFeed(Feed f);
+	public Set<Subscriber> getSubscribersByFeed(Feed f);
+	
+	/**
+	 * Get a subscriber by its callback url, if we already have this subscriber
+	 * saved to the database.
+	 * 
+	 * @param url the subscriber's callback url
+	 * @return the found subscriber, or null
+	 */
+	public Subscriber getSubscriberByCallbackURL(String url);
 	
 	/**
 	 * Get the feed with the given URL.
@@ -44,7 +54,7 @@ public interface HubService {
 	 * @param feedID the ID of the feed to get
 	 * @return the feed
 	 */
-	public Feed getFeedById(String feedID);
+	public Feed getFeedById(Long feedID);
 	
 	/**
 	 * Get the publisher with the given ID.
@@ -52,7 +62,7 @@ public interface HubService {
 	 * @param publisherID the ID of the publisher to get
 	 * @return the publisher
 	 */
-	public Publisher getPublisherById(String publisherID);
+	public Publisher getPublisherById(Long publisherID);
 	
 	/**
 	 * Get the publisher with the given URL.
