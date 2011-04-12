@@ -22,10 +22,15 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     private EntityManager manager;
 
     @Override
-    public Set<Subscriber> getSubscribers(String feedId) {
+    public Set<Subscriber> getSubscribers(Long feedId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public Subscriber get (String callbackURL) {
+    	return null;
+    }
+    
     @Override
     public void save(Subscriber subscriber) {
         //To change body of implemented methods use File | Settings | File Templates.

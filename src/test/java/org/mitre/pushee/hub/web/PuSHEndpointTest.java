@@ -12,7 +12,9 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertThat;
@@ -49,7 +51,7 @@ public class PuSHEndpointTest {
         Feed feed = new Feed();
         feed.setId(1L);
 
-        List<Subscriber> subscriber = new ArrayList<Subscriber>();
+        Set<Subscriber> subscriber = new HashSet<Subscriber>();
         Subscriber s = new Subscriber();
         s.setId("THIS SHOULD BE A LONG");
         subscriber.add(s);
