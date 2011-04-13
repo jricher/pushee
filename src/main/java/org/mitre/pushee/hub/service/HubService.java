@@ -1,8 +1,6 @@
 package org.mitre.pushee.hub.service;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;

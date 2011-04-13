@@ -1,6 +1,7 @@
 package org.mitre.pushee.hub.repository.impl;
 
 import org.mitre.pushee.hub.model.Subscriber;
+import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * {@inheritDoc}
@@ -25,9 +29,17 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     @Override
     @SuppressWarnings("unchecked")
     public Collection<Subscriber> getSubscribers(long feedId) {
-        Query namedQuery = manager.createNamedQuery("Subscriber.getByFeedId");
+    	
+        Query namedQuery = manager.createNamedQuery("Subscription.getByFeedId");
         namedQuery.setParameter("feedId", feedId);
-        return (Collection<Subscriber>)namedQuery.getResultList();
+        List<Subscription> subscriptions = namedQuery.getResultList();
+        List<Subscriber> subscribers = new ArrayList<Subscriber>();
+       
+        for (Subscription s : subscriptions) {
+        	subscribers.add(s.getSubscriber());
+        }
+        
+        return subscribers;
     }
 
     @Override

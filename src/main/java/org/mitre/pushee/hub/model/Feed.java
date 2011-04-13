@@ -1,8 +1,6 @@
 package org.mitre.pushee.hub.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
- * Feed representation. Feed objects contain a list of the subscribers
+ * Feed representation. Feed objects contain a collection of the subscribers
  * subscribed to this feed, as well as a reference back to the feed's 
  * Publisher.
  * 
@@ -40,20 +38,20 @@ public class Feed {
 	private Publisher publisher;
 	
 	@OneToMany
-	private List<Subscriber> subscribers;
+	private Collection<Subscription> subscriptions;
 	
 	public Feed() {
 		
 	}
 	
 	/**
-	 * Add a subscriber to the list
+	 * Add a subscriber to the Collection
 	 * 
 	 * @param s the subscriber to add
 	 */
-	public void addSubsciber(Subscriber s) {
+	public void addSubscription(Subscription s) {
 		
-		subscribers.add(s); 
+		subscriptions.add(s); 
 	
 	}
 
@@ -114,17 +112,17 @@ public class Feed {
 	}
 	
 	/**
-	 * @return the subscribers list
+	 * @return the subscriptions Collection
 	 */
-	public List<Subscriber> getSubscribers() {
-		return subscribers;
+	public Collection<Subscription> getSubscriptions() {
+		return subscriptions;
 	}
 	
 	/**
-	 * @param subscribers the subscribers list to set
+	 * @param subscriptions the subscriptions Collection to set
 	 */
-	public void setSubscribers(List<Subscriber> subscribers) {
-		this.subscribers = subscribers;
+	public void setSubscriptions(Collection<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
 	}
 	
 }

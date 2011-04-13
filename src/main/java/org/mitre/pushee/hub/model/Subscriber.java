@@ -1,6 +1,13 @@
 package org.mitre.pushee.hub.model;
 
-import javax.persistence.*;
+import java.util.Collection;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Subscriber representation. Subscribers are referenced from
@@ -9,9 +16,6 @@ import javax.persistence.*;
  *
  */
 @Entity
-@NamedQueries({
-        @NamedQuery(name="Subscriber.getByFeedId", query="SELECT s FROM Subscriber s WHERE s.feed.id = :feedId")
-        })
 public class Subscriber {
 	
 	@Id
@@ -20,10 +24,10 @@ public class Subscriber {
 	
 	@Basic
 	private String postbackURL;
-
-    @ManyToOne
-    private Feed feed;
 	
+    @OneToMany
+    private Collection<Subscription> subscriptions;
+    
 	public Subscriber() {
 		
 	}
@@ -42,14 +46,6 @@ public class Subscriber {
 		return id;
 	}
 
-    public Feed getFeed() {
-        return feed;
-    }
-
-    public void setFeed(Feed feed) {
-        this.feed = feed;
-    }
-
     /**
 	 * @param postbackURL the postbackURL to set
 	 */
@@ -62,6 +58,20 @@ public class Subscriber {
 	 */
 	public String getPostbackURL() {
 		return postbackURL;
+	}
+
+	/**
+	 * @param subscriptions the subscriptions to set
+	 */
+	public void setSubscriptions(Collection<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
+
+	/**
+	 * @return the subscriptions
+	 */
+	public Collection<Subscription> getSubscriptions() {
+		return subscriptions;
 	}
 	
 }

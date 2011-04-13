@@ -11,6 +11,7 @@
                 <value>file:src/main/db/tables/feed.sql</value>
                 <value>file:src/main/db/tables/publisher.sql</value>
                 <value>file:src/main/db/tables/subscriber.sql</value>
+                <value>file:src/main/db/tables/subscription.sql</value>
                 <value>classpath:test-data.sql</value>
             </list>
         </property>
