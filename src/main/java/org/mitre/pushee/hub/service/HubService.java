@@ -1,5 +1,6 @@
 package org.mitre.pushee.hub.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -18,18 +19,20 @@ public interface HubService {
 	/**
 	 * Get a list of subscribers subscribed to the given feed ID.
 	 * 
-	 * @param feedID ID of the feed to get subscribers for
-	 * @return the list of subscribers
+	 *
+     * @param feedID ID of the feed to get subscribers for
+     * @return the list of subscribers
 	 */
-	public Set<Subscriber> getSubscribersByFeedId(Long feedID);
+	public Collection<Subscriber> getSubscribersByFeedId(Long feedID);
 	
 	/**
 	 * Get a list of subscribers subscribed to the given feed reference.
 	 * 
-	 * @param f the field to get subscribers for
-	 * @return the list of subscribers
+	 *
+     * @param f the field to get subscribers for
+     * @return the list of subscribers
 	 */
-	public Set<Subscriber> getSubscribersByFeed(Feed f);
+	public Collection<Subscriber> getSubscribersByFeed(Feed f);
 	
 	/**
 	 * Get a subscriber by its callback url, if we already have this subscriber

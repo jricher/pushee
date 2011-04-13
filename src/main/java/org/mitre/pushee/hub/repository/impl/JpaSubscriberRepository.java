@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
-import java.util.Set;
+import javax.persistence.Query;
+import java.util.Collection;
 
 /**
  * {@inheritDoc}
@@ -22,8 +23,11 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     private EntityManager manager;
 
     @Override
-    public Set<Subscriber> getSubscribers(Long feedId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @SuppressWarnings("unchecked")
+    public Collection<Subscriber> getSubscribers(long feedId) {
+        Query namedQuery = manager.createNamedQuery("Subscriber.getByFeedId");
+        namedQuery.setParameter("feedId", feedId);
+        return (Collection<Subscriber>)namedQuery.getResultList();
     }
 
     @Override

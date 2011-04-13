@@ -9,7 +9,7 @@ import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author mfranklin
@@ -24,7 +24,7 @@ public class DefaultHubService implements HubService {
 	private SubscriberRepository subscriberRepository;
 	
     @Override
-    public Set<Subscriber> getSubscribersByFeedId(Long feedID) {
+    public Collection<Subscriber> getSubscribersByFeedId(Long feedID) {
         return subscriberRepository.getSubscribers(feedID);
     }
 
@@ -34,7 +34,7 @@ public class DefaultHubService implements HubService {
     }
     
     @Override
-    public Set<Subscriber> getSubscribersByFeed(Feed f) {
+    public Collection<Subscriber> getSubscribersByFeed(Feed f) {
        return subscriberRepository.getSubscribers(f.getId());
     }
 

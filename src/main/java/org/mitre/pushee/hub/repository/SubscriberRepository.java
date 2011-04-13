@@ -2,7 +2,7 @@ package org.mitre.pushee.hub.repository;
 
 import org.mitre.pushee.hub.model.Subscriber;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author Matt Franklin
@@ -14,10 +14,12 @@ public interface SubscriberRepository {
     /**
      * Gets a list of subscribers for the given feed
      *
-     * @param feedID the id of the feed
+     *
+     *
+     * @param feedId the id of the feed
      * @return a list of valid Subscribers if any are found; Empty list otherwise
      */
-    public Set<Subscriber> getSubscribers(Long feedID);
+    public Collection<Subscriber> getSubscribers(long feedId);
 
     /**
      * Get a single subscriber via its callback URL

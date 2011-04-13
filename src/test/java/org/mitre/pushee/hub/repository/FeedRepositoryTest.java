@@ -25,11 +25,17 @@ public class FeedRepositoryTest {
 
 
     @Test
-    public void getById() {
-        Feed feed = repository.get(1);
+    public void getById_validId_validResult() {
+        Feed feed = repository.get(1L);
         assertThat(feed, CoreMatchers.notNullValue());
         assertThat(feed.getUrl(), CoreMatchers.equalTo("http://example.com/1"));
         assertThat(feed.getType(), CoreMatchers.equalTo(Feed.FeedType.RSS));
+    }
+
+    @Test
+    public void getById_invalidId_nullResult() {
+        Feed feed = repository.get(1000L);
+        assertThat(feed, CoreMatchers.nullValue());
     }
 
 }

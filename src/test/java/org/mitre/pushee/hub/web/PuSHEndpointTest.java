@@ -53,7 +53,7 @@ public class PuSHEndpointTest {
 
         Set<Subscriber> subscriber = new HashSet<Subscriber>();
         Subscriber s = new Subscriber();
-        s.setId("THIS SHOULD BE A LONG");
+        s.setId(1L);
         subscriber.add(s);
 
         //Define expected dependency calls

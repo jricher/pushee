@@ -22,7 +22,7 @@ public class JpaPublisherRepository implements PublisherRepository{
 
     @Override
     public Publisher get(long id) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return manager.find(Publisher.class, id);
     }
 
     @Override

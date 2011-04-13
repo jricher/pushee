@@ -16,6 +16,7 @@ import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY_TOKEN;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
@@ -226,7 +227,7 @@ public class PuSHEndpoint {
 				HttpEntity entity = resp.getEntity();
 				String body = CharStreams.toString(new InputStreamReader(entity.getContent()));
 
-				Set<Subscriber> subscribers = hubService.getSubscribersByFeed(feed);
+				Collection<Subscriber> subscribers = hubService.getSubscribersByFeed(feed);
 				
 				for (Subscriber subscriber : subscribers) {
 					postToSubscriber(body, subscriber, entity.getContentType().getValue(), entity.getContentEncoding().getValue(), hc);
