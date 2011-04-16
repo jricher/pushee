@@ -31,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
+import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
+
+import org.mitre.pushee.hub.exception.FeedNotFoundException;
 
 @Controller
 @RequestMapping("/hub")
@@ -78,15 +81,29 @@ public class PuSHEndpoint {
 			Model model) {
 
 		// Load the subscriber from its callback url, if available
+		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);
 		// create a subscriber {callback,verify} if not available, and save it
+		if (sub == null) {
+			sub = new Subscriber();
+			sub.setPostbackURL(callback);
+		}
 		// get the feed object from the topic url
+		Feed f = hubService.getFeedByUrl(topic);
 		//   -- return 404 if not found, 403 if not allowed, etc
+		if (f == null) {
+			throw new FeedNotFoundException();
+		}
 		// (for now, only support sync verification)
 		// do a sync post to the callback URL to verify
 		// check verification contents, continue
 		// create a subscription {subscriber,feed,timeout)
+		Subscription subscript = new Subscription();
+		subscript.setFeed(f);
+		subscript.setSubscriber(sub);
+		//etc
 		// store the subscription details, overwriting old subscription if found
-		// return a 204 for valid subscription
+		sub.addSubscription(subscript);
+		// return a 204 for valid subscript 
 		// TODO: if we do the callback async, return 202 instead
 		return model;
 	}

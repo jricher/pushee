@@ -33,6 +33,21 @@ public class Subscriber {
 	}
 
 	/**
+	 * Add a subscription, overwriting old subscriptions if an equivalent
+	 * one is found.
+	 * 
+	 * @param s the subscription to add
+	 */
+	public void addSubscription(Subscription s) {
+		if (!subscriptions.contains(s)) {
+			subscriptions.add(s);
+		} else {
+			subscriptions.remove(s);
+			subscriptions.add(s);
+		}
+	}
+	
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {

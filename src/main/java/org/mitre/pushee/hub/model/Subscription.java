@@ -48,6 +48,36 @@ public class Subscription {
 	}
 
 	/**
+	 * Override Object's .equals method so that we can manipulate collections
+	 * of Subscriptions with .contains.
+	 * Two subscriptions are considered equivalent if they connect the same feed (URL)
+	 * with the same subscriber (URL).
+	 */
+	@Override
+	public boolean equals(Object o) {
+		
+		if (o != null && o.getClass() == this.getClass()) {
+			
+			Subscription s = (Subscription)o;
+			if ( (s.getFeed().getUrl() == this.getFeed().getUrl()) &&
+				 (s.getSubscriber().getPostbackURL() == this.getSubscriber().getPostbackURL()) ) {
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * In order to override equals correctly, must override hashCode too.
+	 */
+	@Override
+	public int hashCode() {
+		return feed.getUrl().length();
+	}
+	
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
