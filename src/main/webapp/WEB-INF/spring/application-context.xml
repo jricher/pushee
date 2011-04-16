@@ -6,15 +6,27 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan annotation-config="true" base-package="org.mitre.pushee" />
-
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
 		<property name="databasePlatform" value="org.eclipse.persistence.platform.database.MySQLPlatform" />
 		<property name="showSql" value="true" />
 	</bean>
 	
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
+	<!-- Map our custom exception classes to named views -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	   <property name="exceptionMappings">
+	     <props>
+			<prop key="org.mitre.pushee.hub.ClientNotFoundException">clientNotFound</prop>
+			<prop key="org.mitre.pushee.hub.FeedNotFoundException">feedNotFound</prop>
+			<prop key="org.mitre.pushee.hub.SubscriberNotFoundException">subscriberNotFound</prop>
+			<prop key="org.mitre.pushee.hub.PublisherNotFoundException">publisherNotFound</prop>
+	        <prop key="org.mitre.pushee.hub.PermissionDeniedException">permissionDenied</prop>
+	     </props>
+	   </property>
+	</bean>
+	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>

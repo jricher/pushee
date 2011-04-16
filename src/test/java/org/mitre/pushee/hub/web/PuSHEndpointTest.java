@@ -1,24 +1,23 @@
 package org.mitre.pushee.hub.web;
 
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertThat;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.service.HubService;
-import org.mitre.pushee.hub.web.ClientVerify;
-import org.mitre.pushee.hub.web.PuSHEndpoint;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertThat;
-import org.hamcrest.CoreMatchers;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author mfranklin
@@ -45,7 +44,7 @@ public class PuSHEndpointTest {
         String callback = "";
         String topic = "http://topic.url";
         ClientVerify verify = ClientVerify.ASYNC;
-        Model model = new ExtendedModelMap();
+        ModelAndView mav = new ModelAndView();
 
         //Define expected return objects from domain requests
         Feed feed = new Feed();
@@ -76,13 +75,13 @@ public class PuSHEndpointTest {
         replay(hubService);
 
         //Make call to controller
-        Model result = endpoint.subscribeRequest(callback,topic, verify, -1, null, null, model);
+        ModelAndView result = endpoint.subscribeRequest(callback,topic, verify, -1, null, null, mav);
 
         //verify service was called properly
         verify(hubService);
 
         //Assert Result
-        assertThat((Boolean)result.asMap().get("success"), CoreMatchers.equalTo(true));
+        assertThat((Boolean)result.getModelMap().get("success"), CoreMatchers.equalTo(true));
 
     }
 }

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
@@ -29,6 +28,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
+import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
@@ -39,11 +39,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
-
-import org.mitre.pushee.hub.exception.FeedNotFoundException;
 
 @Controller
 @RequestMapping("/hub")
@@ -57,6 +56,12 @@ public class PuSHEndpoint {
         this.hubService = hubService;
     }
 
+    @RequestMapping(value="/")
+    public ModelAndView displayRoot(ModelAndView m) {
+    	m.setViewName("root");
+    	return m;
+    }
+    
 	/**
 	 * Process a "subscribe" request
 	 * @param callback
@@ -71,14 +76,14 @@ public class PuSHEndpoint {
 	@RequestMapping(params={HUB_MODE_SUBSCRIBE,
 							HUB_CALLBACK,HUB_TOPIC,HUB_VERIFY}, 
 							method=RequestMethod.POST)
-	public Model subscribeRequest(
+	public ModelAndView subscribeRequest(
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
 			@RequestParam(HUB_VERIFY) ClientVerify verify,
 			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,
-			Model model) {
+			ModelAndView modelAndView) {
 
 		// Load the subscriber from its callback url, if available
 		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);
@@ -93,6 +98,7 @@ public class PuSHEndpoint {
 		if (f == null) {
 			throw new FeedNotFoundException();
 		}
+		
 		// (for now, only support sync verification)
 		// do a sync post to the callback URL to verify
 		// check verification contents, continue
@@ -104,8 +110,9 @@ public class PuSHEndpoint {
 		// store the subscription details, overwriting old subscription if found
 		sub.addSubscription(subscript);
 		// return a 204 for valid subscript 
+		modelAndView.setViewName("validSubscription");
 		// TODO: if we do the callback async, return 202 instead
-		return model;
+		return modelAndView;
 	}
 	
 	/**

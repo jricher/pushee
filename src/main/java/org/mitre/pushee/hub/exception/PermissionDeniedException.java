@@ -4,10 +4,10 @@
 package org.mitre.pushee.hub.exception;
 
 /**
- * @author aanganes
+ * @author AANGANES
  *
  */
-public class ClientNotFoundException extends RuntimeException {
+public class PermissionDeniedException extends Exception {
 
 	/**
 	 * 
@@ -17,14 +17,14 @@ public class ClientNotFoundException extends RuntimeException {
 	/**
 	 * 
 	 */
-	public ClientNotFoundException() {
+	public PermissionDeniedException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public ClientNotFoundException(String message) {
+	public PermissionDeniedException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -32,7 +32,7 @@ public class ClientNotFoundException extends RuntimeException {
 	/**
 	 * @param cause
 	 */
-	public ClientNotFoundException(Throwable cause) {
+	public PermissionDeniedException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -41,7 +41,7 @@ public class ClientNotFoundException extends RuntimeException {
 	 * @param message
 	 * @param cause
 	 */
-	public ClientNotFoundException(String message, Throwable cause) {
+	public PermissionDeniedException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
