@@ -30,6 +30,14 @@ public class Publisher {
 	}
 	
 	/**
+	 * TODO: does this method need to be smarter; ie function like a Set?
+	 * @param f
+	 */
+	public void addFeed(Feed f) {
+		feeds.add(f);
+	}
+	
+	/**
 	 * @param feed the feed to set
 	 */
 	public void setFeeds(List<Feed> feeds) {

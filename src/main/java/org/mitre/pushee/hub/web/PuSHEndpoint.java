@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
@@ -35,7 +36,6 @@ import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,7 +70,7 @@ public class PuSHEndpoint {
 	 * @param leaseSeconds
 	 * @param secret
 	 * @param verifyToken
-	 * @param model
+	 * @param modelAndView
 	 * @return
 	 */
 	@RequestMapping(params={HUB_MODE_SUBSCRIBE,
@@ -99,6 +99,12 @@ public class PuSHEndpoint {
 			throw new FeedNotFoundException();
 		}
 		
+		/*
+		if (not allowed) {
+			throw new PermissionDeniedException();
+		}
+		*/
+		
 		// (for now, only support sync verification)
 		// do a sync post to the callback URL to verify
 		// check verification contents, continue
@@ -112,6 +118,7 @@ public class PuSHEndpoint {
 		// return a 204 for valid subscript 
 		modelAndView.setViewName("validSubscription");
 		// TODO: if we do the callback async, return 202 instead
+		         //modelAndView.setViewName("accepted");
 		return modelAndView;
 	}
 	
@@ -123,34 +130,47 @@ public class PuSHEndpoint {
 	 * @param leaseSeconds
 	 * @param secret
 	 * @param verifyToken
-	 * @param model
+	 * @param mav
 	 * @return
 	 */
 	@RequestMapping(params={HUB_MODE_UNSUBSCRIBE,
 			HUB_CALLBACK,HUB_TOPIC,HUB_VERIFY}, 
 			method=RequestMethod.POST)
-	public Model unsubscribeRequest(
+	public ModelAndView unsubscribeRequest(
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
 			@RequestParam(HUB_VERIFY) ClientVerify verify,
 			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,			
-			Model model) {
+			ModelAndView mav) {
 		
 		// Load the subscriber from its callback url, if available
+		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);
+		
 		// get the feed object from the topic url
-		// find the subscription {subscriber,feed,timeout)
+		Feed f = hubService.getFeedByUrl(topic);
 		//   -- return 404 if not found, 403 if not allowed, etc
+		if (f == null) {
+			throw new FeedNotFoundException();
+		}
+		
+		/*
+		if (not allowed) {
+			throw new PermissionDeniedException();
+		}
+		*/
+		
 		// (for now, only support sync verification)
 		// do a sync post to the callback URL to verify
 		// check verification contents, continue
 		// delete the subscription from our store
+		sub.removeSubscription(f);
 		// return a 204 for valid unsubscription
-
+		mav.setViewName("unsubscribeSuccess");
 		// TODO: if we do the callback async, return 202 instead
-		
-		return model;
+		         //mav.setViewName("accepted");
+		return mav;
 	}
 	
 	/**
@@ -160,17 +180,31 @@ public class PuSHEndpoint {
 	 * @return
 	 */
 	@RequestMapping(params = {HUB_MODE_PUBLISH}, method=RequestMethod.POST)
-	public Model publish(
+	public ModelAndView publish(
 			@RequestParam(HUB_URL) String url,
-			Model model) {
+			ModelAndView mav) {
 
 		// load feed for url
-		// if found, fetch feed for url, update cache, and alert subscribers
-		// if not found or not authorized, return 404,403
+		Feed f = hubService.getFeedByUrl(url);
 		
+		if (f != null) {
+			// if found: 
+			//fetch feed from url, 
+			//update cache, 
+			//and alert subscribers
+			List<Subscriber> subscribers = (List<Subscriber>) hubService.getSubscribersByFeed(f);
+			for (Subscriber s : subscribers) {
+				//alert
+			}
+		}
+		else {
+			// if not found or not authorized, return 404,403
+			throw new FeedNotFoundException();
+			//throw new PermissionDeniedException();
+		}
 		// return a 204 for success
-		
-		return model;
+		mav.setViewName("publishSuccess");
+		return mav;
 	}
 	
 	// TODO: add in periodic refresh of subscription on verification

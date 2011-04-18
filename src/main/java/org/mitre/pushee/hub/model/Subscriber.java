@@ -48,6 +48,21 @@ public class Subscriber {
 	}
 	
 	/**
+	 * Remove a subscription, if it exists.
+	 * 
+	 * @param f the feed this subscription this is for
+	 */
+	public void removeSubscription(Feed f) {
+		Subscription s = new Subscription();
+		s.setFeed(f);
+		s.setSubscriber(this);
+		
+		if (subscriptions.contains(s)) {
+			subscriptions.remove(s);
+		}
+	}
+	
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
