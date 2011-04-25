@@ -6,25 +6,32 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import java.awt.List;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @author mfranklin
  *         Date: 4/1/11
  *         Time: 4:57 PM
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/application-context.xml", "classpath:test-context.xml"})
 public class HubServiceTest {
+	
+	private Logger logger; 
 	
 	private HubService hubService;
 	private String subscriberURL;
@@ -44,6 +51,8 @@ public class HubServiceTest {
 	
     @Before
     public void setup() {
+    	logger = LoggerFactory.getLogger(this.getClass());
+    	logger.info("Setting up HubServiceTest");
     	
     	//Create the hubService and initialize URL parameters
     	//and IDs
@@ -85,60 +94,84 @@ public class HubServiceTest {
     	subscription.setSubscriber(subscriber);
     	
     	subscriber.addSubscription(subscription);
+    	logger.info("Setup finished");
     }
 
     @Test
     @Ignore
     public void getSubscribersByFeedId_validId() {
-    	
+    	logger.info("Starting get subscribers by feed ID test");
     	//Create subscribers list; the expected result of this shot
-    	Set<Subscriber> subscribers = new HashSet<Subscriber>();
+    	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
     	subscribers.add(subscriber);
-    	
     	//Test the method call
-        //expect(hubService.getSubscribersByFeedId(feedId).andReturn(subscribers).once());
-
+        expect(hubService.getSubscribersByFeedId(feedId)).andReturn(subscribers).once();
         //Finalize the mock object and tell it to begin matching expectations
-        //replay(hubService);
-
+        replay(hubService);
         //verify service was called properly
-        //verify(hubService);
+        verify(hubService);
     }
     
     @Test
     @Ignore
     public void getSubscribersByFeed_validFeed() {
-    	hubService.getSubscribersByFeed(feed);
+    	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
+    	subscribers.add(subscriber);
+    	
+    	expect(hubService.getSubscribersByFeed(feed)).andReturn(subscribers).once();
+    	
+    	replay(hubService);
+    	verify(hubService);
     }
     
     @Test
     @Ignore
     public void getSubscribersByCallbackUrl_validUrl() {
-    	hubService.getSubscriberByCallbackURL(subscriberURL);
+    	
+    	expect(hubService.getSubscriberByCallbackURL(subscriberURL)).andReturn(subscriber).once();
+    	
+    	replay(hubService);
+    	verify(hubService);
     }
     
     @Test
     @Ignore
     public void getFeedByUrl_validUrl() {
-    	hubService.getFeedByUrl(feedURL);
+    	
+    	expect(hubService.getFeedByUrl(feedURL)).andReturn(feed).once();
+    	
+    	replay(hubService);
+    	verify(hubService);
     }
     
     @Test
     @Ignore
     public void getFeedById_validId() {
-    	hubService.getFeedById(feedId);
+    	
+    	expect(hubService.getFeedById(feedId)).andReturn(feed).once();
+    	
+    	replay(hubService);
+    	verify(hubService);
     }
 
     @Test
     @Ignore
 	public void getPublisherById_validId() {
-		hubService.getPublisherById(publisherId);
+    	
+		expect(hubService.getPublisherById(publisherId)).andReturn(publisher).once();
+		
+		replay(hubService);
+		verify(hubService);
 	}
 
     @Test
     @Ignore
 	public void getPublisherByUrl_validUrl() {
-		hubService.getPublisherByUrl(publisherURL);
+    	
+		expect(hubService.getPublisherByUrl(publisherURL)).andReturn(publisher).once();
+		
+		replay(hubService);
+		verify(hubService);
 	}
 
     //Question: do we need to test the save methods?

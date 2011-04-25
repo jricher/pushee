@@ -1,8 +1,14 @@
 package org.mitre.pushee.hub.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Publisher representation. Since publishers may publish several feeds,
@@ -26,7 +32,7 @@ public class Publisher {
 
 	
 	public Publisher() {
-		
+		feeds = new ArrayList<Feed>();
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package org.mitre.pushee.hub.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
@@ -29,7 +30,7 @@ public class Subscriber {
     private Collection<Subscription> subscriptions;
     
 	public Subscriber() {
-		
+		subscriptions = new ArrayList<Subscription>();
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package org.mitre.pushee.hub.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +43,7 @@ public class Feed {
 	private Collection<Subscription> subscriptions;
 	
 	public Feed() {
-		
+		subscriptions = new ArrayList<Subscription>();
 	}
 	
 	/**
