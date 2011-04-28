@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 
 import static org.mitre.pushee.hub.repository.util.JpaUtil.getSingleResult;
+import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 
 /**
  * {@inheritDoc}
@@ -38,11 +39,6 @@ public class JpaFeedRepository implements FeedRepository {
 
     @Override
     public Feed save(Feed feed) {
-        if(feed.getId() == null) {
-            manager.persist(feed);
-            return feed;
-        } else {
-            return manager.merge(feed);
-        }
+        return saveOrUpdate(feed.getId(), manager, feed);
     }
 }

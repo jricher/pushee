@@ -1,5 +1,5 @@
 CREATE TABLE subscription (
-  id            	BIGINT,
+  id            	BIGINT AUTO_INCREMENT,
   feed_id        	BIGINT,
   timeout		 	DATE,
   secret		 	VARCHAR(2000),

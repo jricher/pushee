@@ -14,7 +14,8 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="Subscription.getByFeedId", query="SELECT s FROM Subscription s WHERE s.feed.id = :feedId")
+    @NamedQuery(name="Subscription.getByFeedId", query="SELECT s FROM Subscription s WHERE s.feed.id = :feedId"),
+    @NamedQuery(name="Subscription.getSubscribersByFeedId", query="SELECT s FROM Subscription sub join sub.subscriber s WHERE sub.feed.id = :feedId")
     })
 public class Subscription {
 

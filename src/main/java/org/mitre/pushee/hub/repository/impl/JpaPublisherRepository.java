@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.TypedQuery;
+
+import static org.mitre.pushee.hub.repository.util.JpaUtil.getSingleResult;
+import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 
 /**
  * {@inheritDoc}
@@ -21,17 +25,19 @@ public class JpaPublisherRepository implements PublisherRepository{
     private EntityManager manager;
 
     @Override
-    public Publisher get(long id) {
+    public Publisher getById(long id) {
         return manager.find(Publisher.class, id);
     }
 
     @Override
-    public Publisher get(String url) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Publisher getByUrl(String url) {
+        TypedQuery<Publisher> query = manager.createNamedQuery("Publisher.getByUrl", Publisher.class);
+        query.setParameter("url", url);
+        return getSingleResult(query.getResultList());
     }
 
     @Override
-    public void save(Publisher publisher) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Publisher save(Publisher publisher) {
+       return saveOrUpdate(publisher.getId(), manager, publisher);
     }
 }

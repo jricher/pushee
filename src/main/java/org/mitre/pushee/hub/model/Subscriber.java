@@ -3,12 +3,7 @@ package org.mitre.pushee.hub.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 /**
  * Subscriber representation. Subscribers are referenced from
@@ -17,6 +12,9 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Subscriber.getByUrl", query = "select s from Subscriber s where s.postbackURL = :url")
+        })
 public class Subscriber {
 	
 	@Id

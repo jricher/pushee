@@ -36,7 +36,7 @@ public class DefaultHubService implements HubService {
 
     @Override
     public Subscriber getSubscriberByCallbackURL(String url) {
-    	return subscriberRepository.get(url);
+    	return subscriberRepository.getByUrl(url);
     }
     
     @Override
@@ -56,12 +56,12 @@ public class DefaultHubService implements HubService {
 
     @Override
     public Publisher getPublisherById(Long publisherID) {
-       return publisherRepository.get(publisherID);
+       return publisherRepository.getById(publisherID);
     }
 
     @Override
     public Publisher getPublisherByUrl(String publisherURL) {
-        return publisherRepository.get(publisherURL);
+        return publisherRepository.getByUrl(publisherURL);
     }
 
     @Override

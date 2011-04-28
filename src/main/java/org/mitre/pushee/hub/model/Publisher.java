@@ -3,12 +3,7 @@ package org.mitre.pushee.hub.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 /**
  * Publisher representation. Since publishers may publish several feeds,
@@ -18,6 +13,9 @@ import javax.persistence.OneToMany;
  *
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name="Publisher.getByUrl", query = "select p from Publisher p where p.callbackURL = :url")
+})
 public class Publisher {
 	
 	@Id
@@ -27,7 +25,7 @@ public class Publisher {
 	@Basic
 	private String callbackURL;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "publisher")
 	private List<Feed> feeds;
 
 	

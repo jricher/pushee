@@ -1,4 +1,4 @@
 CREATE TABLE subscriber (
-  id             BIGINT,
+  id             BIGINT AUTO_INCREMENT,
   postbackURL    VARCHAR(2000)
 );

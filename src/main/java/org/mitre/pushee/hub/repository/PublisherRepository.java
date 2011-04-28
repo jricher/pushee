@@ -11,23 +11,26 @@ public interface PublisherRepository {
     /**
      * Gets a Publisher by its unique id
      *
+     *
      * @param id the id of the feed
      * @return a valid Publisher if exists; null otherwise;
      */
-    public Publisher get(long id);
+    public Publisher getById(long id);
 
     /**
      * Gets a Publisher by its unique URL
      *
+     *
      * @param url the URL of the Publisher
      * @return a valid URL if exists; null otherwise;
      */
-    public Publisher get(String url);
+    public Publisher getByUrl(String url);
 
     /**
      * Persists a Publisher
      *
      * @param publisher valid Publisher instance
+     * @return persisted Publisher
      */
-    public void save(Publisher publisher);
+    public Publisher save(Publisher publisher);
 }

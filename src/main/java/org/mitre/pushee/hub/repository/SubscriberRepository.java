@@ -24,15 +24,17 @@ public interface SubscriberRepository {
     /**
      * Get a single subscriber via its callback URL
      * 
+     *
      * @param callbackURL the callbackURL of the subscriber
      * @return the found subscriber, or null
      */
-    public Subscriber get (String callbackURL);
+    public Subscriber getByUrl(String callbackURL);
     
     /**
      * Persists a Subscriber
      *
      * @param subscriber valid Subscriber instance
+     * @return persisted subscriber
      */
-    public void save(Subscriber subscriber);
+    public Subscriber save(Subscriber subscriber);
 }

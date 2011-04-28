@@ -5,14 +5,14 @@ import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.Query;
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static org.mitre.pushee.hub.repository.util.JpaUtil.getSingleResult;
+import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 
 /**
  * {@inheritDoc}
@@ -27,28 +27,21 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     private EntityManager manager;
 
     @Override
-    @SuppressWarnings("unchecked")
     public Collection<Subscriber> getSubscribers(long feedId) {
-    	
-        Query namedQuery = manager.createNamedQuery("Subscription.getByFeedId");
+        TypedQuery<Subscriber> namedQuery = manager.createNamedQuery("Subscription.getSubscribersByFeedId", Subscriber.class);
         namedQuery.setParameter("feedId", feedId);
-        List<Subscription> subscriptions = namedQuery.getResultList();
-        List<Subscriber> subscribers = new ArrayList<Subscriber>();
-       
-        for (Subscription s : subscriptions) {
-        	subscribers.add(s.getSubscriber());
-        }
-        
-        return subscribers;
+        return namedQuery.getResultList();
     }
 
     @Override
-    public Subscriber get (String callbackURL) {
-    	return null;
+    public Subscriber getByUrl(String callbackURL) {
+        TypedQuery<Subscriber> query = manager.createNamedQuery("Subscriber.getByUrl", Subscriber.class);
+        query.setParameter("url", callbackURL);
+    	return getSingleResult(query.getResultList());
     }
     
     @Override
-    public void save(Subscriber subscriber) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Subscriber save(Subscriber subscriber) {
+        return saveOrUpdate(subscriber.getId(), manager, subscriber);
     }
 }
