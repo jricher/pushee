@@ -53,8 +53,8 @@ public class Subscription {
 		if (o != null && o.getClass() == this.getClass()) {
 			
 			Subscription s = (Subscription)o;
-			if ( (s.getFeed().getUrl() == this.getFeed().getUrl()) &&
-				 (s.getSubscriber().getPostbackURL() == this.getSubscriber().getPostbackURL()) ) {
+			if ( (s.getFeed().getUrl().equals(this.getFeed().getUrl())) &&
+				 (s.getSubscriber().getPostbackURL().equals(this.getSubscriber().getPostbackURL())) ) {
 				return true;
 			}
 			
