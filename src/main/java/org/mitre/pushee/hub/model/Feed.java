@@ -34,9 +34,10 @@ public class Feed {
 	private FeedType type;
 	
 	@ManyToOne
+    @JoinColumn(name="publisher_id")
 	private Publisher publisher;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "feed")
 	private Collection<Subscription> subscriptions;
 	
 	public Feed() {

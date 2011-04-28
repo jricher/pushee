@@ -3,6 +3,7 @@ package org.mitre.pushee.hub.repository.impl;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.repository.FeedRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,7 +37,12 @@ public class JpaFeedRepository implements FeedRepository {
     }
 
     @Override
-    public void save(Feed feed) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Feed save(Feed feed) {
+        if(feed.getId() == null) {
+            manager.persist(feed);
+            return feed;
+        } else {
+            return manager.merge(feed);
+        }
     }
 }

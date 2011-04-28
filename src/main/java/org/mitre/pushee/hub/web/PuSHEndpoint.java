@@ -48,7 +48,6 @@ import com.google.common.io.CharStreams;
 @RequestMapping("/hub")
 public class PuSHEndpoint {
 
-	@Autowired
 	private final HubService hubService;
 
     @Autowired

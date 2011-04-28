@@ -29,6 +29,7 @@ public interface FeedRepository {
     /**
      * Persists a Feed
      * @param feed valid Feed instance
+     * @return the persisted entity
      */
-    public void save(Feed feed);
+    public Feed save(Feed feed);
 }

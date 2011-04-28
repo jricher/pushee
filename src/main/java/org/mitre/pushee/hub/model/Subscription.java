@@ -2,16 +2,7 @@ package org.mitre.pushee.hub.model;
 
 import java.util.Date;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 
 /**
@@ -38,9 +29,11 @@ public class Subscription {
 	private String secret;
 	
 	@ManyToOne
+    @JoinColumn(name = "feed_id")
 	private Feed feed;
 	
 	@ManyToOne
+    @JoinColumn(name = "subscriber_id")
 	private Subscriber subscriber;
 	
 	public Subscription() {

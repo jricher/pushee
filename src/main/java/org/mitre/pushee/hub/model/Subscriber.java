@@ -26,7 +26,7 @@ public class Subscriber {
 	@Basic
 	private String postbackURL;
 	
-    @OneToMany
+    @OneToMany(mappedBy = "subscriber")
     private Collection<Subscription> subscriptions;
     
 	public Subscriber() {
