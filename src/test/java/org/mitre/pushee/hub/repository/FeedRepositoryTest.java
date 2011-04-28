@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -26,16 +27,31 @@ public class FeedRepositoryTest {
 
     @Test
     public void getById_validId_validResult() {
-        Feed feed = repository.get(1L);
+        Feed feed = repository.getById(1L);
         assertThat(feed, CoreMatchers.notNullValue());
-        assertThat(feed.getUrl(), CoreMatchers.equalTo("http://example.com/1"));
-        assertThat(feed.getType(), CoreMatchers.equalTo(Feed.FeedType.RSS));
+        assertThat(feed.getUrl(), is(equalTo("http://example.com/1")));
+        assertThat(feed.getType(), is(equalTo(Feed.FeedType.RSS)));
     }
 
     @Test
     public void getById_invalidId_nullResult() {
-        Feed feed = repository.get(1000L);
-        assertThat(feed, CoreMatchers.nullValue());
+        Feed feed = repository.getById(1000L);
+        assertThat(feed, is(nullValue()));
     }
+
+    @Test
+    public void getByUrl_validUrl_validResult() {
+        Feed feed = repository.getByUrl("http://example.com/1");
+        assertThat(feed, is(notNullValue()));
+        assertThat(feed.getId(), is(equalTo(1L)));
+        assertThat(feed.getType(), is(equalTo(Feed.FeedType.RSS)));
+    }
+
+    @Test
+    public void getByUrl_invalidUrl_nullResult() {
+        Feed feed = repository.getByUrl("http://bad.url/1");
+        assertThat(feed, is(nullValue()));
+    }
+
 
 }

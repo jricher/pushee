@@ -46,12 +46,12 @@ public class DefaultHubService implements HubService {
 
     @Override
     public Feed getFeedByUrl(String feedURL) {
-      return feedRepository.get(feedURL);
+      return feedRepository.getByUrl(feedURL);
     }
 
     @Override
     public Feed getFeedById(Long feedID) {
-       return feedRepository.get(feedID);
+       return feedRepository.getById(feedID);
     }
 
     @Override
