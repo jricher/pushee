@@ -76,7 +76,7 @@ public class PuSHEndpointTest {
         replay(hubService);
 
         //Make call to controller
-        ModelAndView result = endpoint.subscribeRequest(callback,topic, verify, -1, null, null, mav);
+        ModelAndView result = endpoint.subscribeRequest("subscribe", callback,topic, verify, -1, null, null, mav);
 
         //verify service was called properly
         verify(hubService);
@@ -138,7 +138,7 @@ public class PuSHEndpointTest {
         replay(hubService);
 
         //Make call to controller
-        ModelAndView result = endpoint.unsubscribeRequest(callback, topic, verify, -1, null, null, mav);
+        ModelAndView result = endpoint.unsubscribeRequest("unsubscribe", callback, topic, verify, -1, null, null, mav);
 
         //verify service was called properly
         verify(hubService);

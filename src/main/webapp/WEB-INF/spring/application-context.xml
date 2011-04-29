@@ -33,6 +33,8 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
+	<bean id="httpClientUtils" class="org.mitre.pushee.hub.web.HttpClientUtils" />
+
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="pusheePersistenceUnit" />
