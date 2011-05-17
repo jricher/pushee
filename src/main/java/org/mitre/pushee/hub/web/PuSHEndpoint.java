@@ -32,14 +32,20 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/hub")
 public class PuSHEndpoint {
 
+	public static final String PUBLISH_SUCCESS_VIEW = "publishSuccess";
+
+	public static final String UNSUBSCRIPTION_SUCCESS_VIEW = "unsubscribeSuccess";
+
+	public static final String SUBSCRIPTION_SUCCESS_VIEW = "validSubscription";
+
 	private final HubService hubService;
 
-	@Autowired
-	private HttpClientUtils http;
+	private ClientConnection http;
 	
     @Autowired
-    public PuSHEndpoint(HubService hubService) {
+    public PuSHEndpoint(HubService hubService, ClientConnection http) {
         this.hubService = hubService;
+        this.http = http;
     }
 
 	/**
@@ -100,8 +106,10 @@ public class PuSHEndpoint {
 			sub.addSubscription(subscript);
 			//hubService.saveSubscription?
 			
+			hubService.saveSubscriber(sub);
+			
 			// return a 204 for valid subscript 
-			modelAndView.setViewName("validSubscription");
+			modelAndView.setViewName(SUBSCRIPTION_SUCCESS_VIEW);
 		} else {
 			// no verification, throw an error
 			
@@ -158,8 +166,10 @@ public class PuSHEndpoint {
 			// check verification contents, continue
 			// delete the subscription from our store
 			sub.removeSubscription(f);
+			
+			hubService.saveSubscriber(sub);
 			// return a 204 for valid unsubscription
-			mav.setViewName("unsubscribeSuccess");
+			mav.setViewName(UNSUBSCRIPTION_SUCCESS_VIEW);
 			// TODO: if we do the callback async, return 202 instead
 			         //mav.setViewName("accepted");
 		} else {
@@ -195,7 +205,7 @@ public class PuSHEndpoint {
 			//throw new PermissionDeniedException();
 		}
 		// return a 204 for success
-		mav.setViewName("publishSuccess");
+		mav.setViewName(PUBLISH_SUCCESS_VIEW);
 		return mav;
 	}
 }

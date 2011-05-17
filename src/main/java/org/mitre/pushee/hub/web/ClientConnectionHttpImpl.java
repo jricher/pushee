@@ -27,8 +27,12 @@ import org.mitre.pushee.hub.model.Subscriber;
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 
-public class HttpClientUtils {
+public class ClientConnectionHttpImpl implements ClientConnection {
 
+	/* (non-Javadoc)
+	 * @see org.mitre.pushee.hub.web.ClientConnection#fetchAndRepublishFeedToSubscribers(org.mitre.pushee.hub.model.Feed, java.util.Collection)
+	 */
+	@Override
 	public void fetchAndRepublishFeedToSubscribers(Feed feed, Collection<Subscriber> subscribers) {
 	
 		HttpClient hc = new DefaultHttpClient();
@@ -60,6 +64,10 @@ public class HttpClientUtils {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.mitre.pushee.hub.web.ClientConnection#postToSubscriber(java.lang.String, org.mitre.pushee.hub.model.Subscriber, java.lang.String, java.lang.String, org.apache.http.client.HttpClient)
+	 */
+	@Override
 	public void postToSubscriber(String body, Subscriber subscriber, String mimeType, String charset, HttpClient hc)
 			throws UnsupportedEncodingException {
 		
@@ -88,6 +96,10 @@ public class HttpClientUtils {
 	// TODO: add in periodic refresh of subscription on verification
 	
 	// utility functions, to be moved to utility class
+	/* (non-Javadoc)
+	 * @see org.mitre.pushee.hub.web.ClientConnection#verifyCallback(java.lang.String, java.lang.String, java.lang.String, long, java.lang.String)
+	 */
+	@Override
 	public boolean verifyCallback(String callback, String mode, String topic, long leaseSeconds, String verifyToken) {
 		// make a call to callback with the appropriate parameters
 	

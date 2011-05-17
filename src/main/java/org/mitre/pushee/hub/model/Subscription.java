@@ -41,34 +41,50 @@ public class Subscription {
 		
 	}
 
-	/**
-	 * Override Object's .equals method so that we can manipulate collections
-	 * of Subscriptions with .contains.
-	 * Two subscriptions are considered equivalent if they connect the same feed (URL)
-	 * with the same subscriber (URL).
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object o) {
-		
-		if (o != null && o.getClass() == this.getClass()) {
-			
-			Subscription s = (Subscription)o;
-			if ( (s.getFeed().getUrl().equals(this.getFeed().getUrl())) &&
-				 (s.getSubscriber().getPostbackURL().equals(this.getSubscriber().getPostbackURL())) ) {
-				return true;
-			}
-			
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
 		}
-		
-		return false;
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Subscription other = (Subscription) obj;
+		if (feed == null) {
+			if (other.feed != null) {
+				return false;
+			}
+		} else if (!feed.equals(other.feed)) {
+			return false;
+		}
+		if (subscriber == null) {
+			if (other.subscriber != null) {
+				return false;
+			}
+		} else if (!subscriber.equals(other.subscriber)) {
+			return false;
+		}
+		return true;
 	}
 	
-	/**
-	 * In order to override equals correctly, must override hashCode too.
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		return feed.getUrl().length();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((feed == null) ? 0 : feed.hashCode());
+		result = prime * result
+				+ ((subscriber == null) ? 0 : subscriber.hashCode());
+		return result;
 	}
 	
 	/**
