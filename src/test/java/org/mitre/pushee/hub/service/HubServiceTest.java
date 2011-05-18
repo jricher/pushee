@@ -5,18 +5,23 @@ import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
+import org.mitre.pushee.hub.repository.FeedRepository;
+import org.mitre.pushee.hub.repository.PublisherRepository;
+import org.mitre.pushee.hub.repository.SubscriberRepository;
+import org.mitre.pushee.hub.service.impl.DefaultHubService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +39,10 @@ public class HubServiceTest {
 	private Logger logger; 
 	
 	private HubService hubService;
+	private FeedRepository feedRepository;
+	private SubscriberRepository subscriberRepository;
+	private PublisherRepository publisherRepository;
+	
 	private String subscriberURL;
 	private String publisherURL;
 	private String feedURL;
@@ -57,7 +66,11 @@ public class HubServiceTest {
     	//Create the hubService and initialize URL parameters
     	//and IDs
     	
-    	hubService = createNiceMock(HubService.class);
+    	feedRepository = createNiceMock(FeedRepository.class);
+    	subscriberRepository = createNiceMock(SubscriberRepository.class);
+    	publisherRepository = createNiceMock(PublisherRepository.class);
+    	
+    	hubService = new DefaultHubService(feedRepository, publisherRepository, subscriberRepository);
     	
     	subscriberURL = "http://example.com/subscriber";
     	publisherURL = "http://example.com/publisher";
@@ -98,100 +111,91 @@ public class HubServiceTest {
     }
 
     @Test
-    @Ignore
     public void getSubscribersByFeedId_validId() {
     	logger.info("Starting get subscribers by feed ID test");
     	//Create subscribers list; the expected result of this shot
     	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
     	subscribers.add(subscriber);
-    	//Test the method call
-        expect(hubService.getSubscribersByFeedId(feedId)).andReturn(subscribers).once();
-        //Finalize the mock object and tell it to begin matching expectations
-        replay(hubService);
-        //verify service was called properly
-        verify(hubService);
+    	
+    	//Place expectations, replays and verifies on repository mocks (look 
+    	//at internal calls in DefaultHubService)
+    	expect(subscriberRepository.getSubscribers(feedId)).andReturn(subscribers).once();
+    	
+    	replay(subscriberRepository);
+    	
+    	assertThat(hubService.getSubscribersByFeedId(feedId), CoreMatchers.equalTo(subscribers));
+    	
+    	
+    	verify(subscriberRepository);
     }
     
     @Test
-    @Ignore
     public void getSubscribersByFeed_validFeed() {
     	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
     	subscribers.add(subscriber);
     	
-    	expect(hubService.getSubscribersByFeed(feed)).andReturn(subscribers).once();
+    	expect(subscriberRepository.getSubscribers(feedId)).andReturn(subscribers).once();
     	
-    	replay(hubService);
+    	replay(subscriberRepository);
+    	
+    	assertThat(hubService.getSubscribersByFeed(feed), CoreMatchers.equalTo(subscribers));
+    	
     	verify(hubService);
     }
     
     @Test
-    @Ignore
     public void getSubscribersByCallbackUrl_validUrl() {
+    	expect(subscriberRepository.getByUrl(subscriberURL)).andReturn(subscriber).once();
     	
-    	expect(hubService.getSubscriberByCallbackURL(subscriberURL)).andReturn(subscriber).once();
+    	replay(subscriberRepository);
     	
-    	replay(hubService);
+    	assertThat(hubService.getSubscriberByCallbackURL(subscriberURL), CoreMatchers.equalTo(subscriber));
+    	
     	verify(hubService);
     }
     
     @Test
-    @Ignore
     public void getFeedByUrl_validUrl() {
+    	expect(feedRepository.getByUrl(feedURL)).andReturn(feed).once();
+    	  	
+    	replay(feedRepository);
     	
-    	expect(hubService.getFeedByUrl(feedURL)).andReturn(feed).once();
+    	assertThat(hubService.getFeedByUrl(feedURL), CoreMatchers.equalTo(feed));
     	
-    	replay(hubService);
     	verify(hubService);
     }
     
     @Test
-    @Ignore
     public void getFeedById_validId() {
+    	expect(feedRepository.getById(feedId)).andReturn(feed).once();
+
+    	replay(feedRepository);
     	
-    	expect(hubService.getFeedById(feedId)).andReturn(feed).once();
+    	assertThat(hubService.getFeedById(feedId), CoreMatchers.equalTo(feed));
     	
-    	replay(hubService);
     	verify(hubService);
     }
 
     @Test
-    @Ignore
 	public void getPublisherById_validId() {
-    	
-		expect(hubService.getPublisherById(publisherId)).andReturn(publisher).once();
+		expect(publisherRepository.getById(publisherId)).andReturn(publisher).once();
 		
-		replay(hubService);
+		replay(publisherRepository);
+		
+		assertThat(hubService.getPublisherById(publisherId), CoreMatchers.equalTo(publisher));
+		
 		verify(hubService);
 	}
 
     @Test
-    @Ignore
 	public void getPublisherByUrl_validUrl() {
-    	
-		expect(hubService.getPublisherByUrl(publisherURL)).andReturn(publisher).once();
+		expect(publisherRepository.getByUrl(publisherURL)).andReturn(publisher).once();
 		
-		replay(hubService);
+		replay(publisherRepository);
+		
+		assertThat(hubService.getPublisherByUrl(publisherURL), CoreMatchers.equalTo(publisher));
+		
 		verify(hubService);
-	}
-
-    //Question: do we need to test the save methods?
-    
-    @Test
-    @Ignore
-	public void savePublisher_validPublisher() {
-
-	}
-
-    @Test
-    @Ignore
-	public void saveFeed_validFeed() {
-		
-	}
-	
-    @Test
-    @Ignore
-	public void saveSubscriber_validSubscriber() {
-		
 	}
     
 }
