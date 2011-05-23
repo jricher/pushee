@@ -12,10 +12,11 @@ import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_URL;
 import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY;
 import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY_TOKEN;
 
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.List;
 
 import org.mitre.pushee.hub.exception.FeedNotFoundException;
+import org.mitre.pushee.hub.exception.SubscriberNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
@@ -51,6 +52,7 @@ public class PuSHEndpoint {
 	/**
 	 * Process a "subscribe" request
 	 * @param callback
+	 * @param mode
 	 * @param topic
 	 * @param verify
 	 * @param leaseSeconds
@@ -101,6 +103,11 @@ public class PuSHEndpoint {
 			Subscription subscript = new Subscription();
 			subscript.setFeed(f);
 			subscript.setSubscriber(sub);
+			if (leaseSeconds > 0) {
+				Calendar timeoutDate = Calendar.getInstance();
+				timeoutDate.setSeconds((int)(timeoutDate.getSeconds() + leaseSeconds));
+				subscript.setTimeout(timeoutDate);
+			}
 			//etc
 			// store the subscription details, overwriting old subscription if found
 			sub.addSubscription(subscript);
@@ -146,36 +153,43 @@ public class PuSHEndpoint {
 		// Load the subscriber from its callback url, if available
 		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);
 		
-		// get the feed object from the topic url
-		Feed f = hubService.getFeedByUrl(topic);
-		//   -- return 404 if not found, 403 if not allowed, etc
-		if (f == null) {
-			throw new FeedNotFoundException();
-		}
-		
-		/*
-		if (not allowed) {
-			throw new PermissionDeniedException();
-		}
-		*/
-		
-		// (for now, only support sync verification)
-		// do a sync post to the callback URL to verify
-		if (http.verifyCallback(callback, mode, topic, leaseSeconds, verifyToken)) {
+		if (sub != null) 
+		{
+			// get the feed object from the topic url
+			Feed f = hubService.getFeedByUrl(topic);
+			//   -- return 404 if not found, 403 if not allowed, etc
+			if (f == null) {
+				throw new FeedNotFoundException();
+			}
 			
-			// check verification contents, continue
-			// delete the subscription from our store
-			sub.removeSubscription(f);
+			/*
+			if (not allowed) {
+				throw new PermissionDeniedException();
+			}
+			*/
 			
-			hubService.saveSubscriber(sub);
-			// return a 204 for valid unsubscription
-			mav.setViewName(UNSUBSCRIPTION_SUCCESS_VIEW);
-			// TODO: if we do the callback async, return 202 instead
-			         //mav.setViewName("accepted");
-		} else {
-			// no verification, throw an error
+			// (for now, only support sync verification)
+			// do a sync post to the callback URL to verify
+			if (http.verifyCallback(callback, mode, topic, leaseSeconds, verifyToken)) {
+				
+				// check verification contents, continue
+				// delete the subscription from our store
+				sub.removeSubscription(f);
+				
+				hubService.saveSubscriber(sub);
+				// return a 204 for valid unsubscription
+				mav.setViewName(UNSUBSCRIPTION_SUCCESS_VIEW);
+				// TODO: if we do the callback async, return 202 instead
+				         //mav.setViewName("accepted");
+			} else {
+				// no verification, throw an error
+			}
+			return mav;
+		} 
+		else 
+		{
+			throw new SubscriberNotFoundException();
 		}
-		return mav;
 	}
 	
 	/**
@@ -186,7 +200,7 @@ public class PuSHEndpoint {
 	 */
 	@RequestMapping(params = {HUB_MODE_PUBLISH}, method=RequestMethod.POST)
 	public ModelAndView publish(
-			@RequestParam(HUB_URL) String url,
+			@RequestParam(HUB_URL) String url /*TODO This needs to accept a list of URLs */,
 			ModelAndView mav) {
 
 		// load feed for url

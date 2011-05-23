@@ -1,8 +1,18 @@
 package org.mitre.pushee.hub.model;
 
-import java.util.Date;
+import java.util.Calendar;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -24,7 +34,7 @@ public class Subscription {
 	private Long id;
 	
 	@Temporal(TemporalType.DATE)
-	private Date timeout;
+	private Calendar timeout;
 	
 	@Basic
 	private String secret;
@@ -104,14 +114,14 @@ public class Subscription {
 	/**
 	 * @param timeout the timeout to set
 	 */
-	public void setTimeout(Date timeout) {
+	public void setTimeout(Calendar timeout) {
 		this.timeout = timeout;
 	}
 
 	/**
 	 * @return the timeout
 	 */
-	public Date getTimeout() {
+	public Calendar getTimeout() {
 		return timeout;
 	}
 
