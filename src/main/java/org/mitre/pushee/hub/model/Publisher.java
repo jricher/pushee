@@ -13,6 +13,7 @@ import javax.persistence.*;
  *
  */
 @Entity
+@Table(name="publisher")
 @NamedQueries({
         @NamedQuery(name="Publisher.getByUrl", query = "select p from Publisher p where p.callbackURL = :url")
 })

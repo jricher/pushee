@@ -69,7 +69,7 @@ public class PuSHEndpoint {
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
 			@RequestParam(HUB_VERIFY) ClientVerify verify,
-			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
+			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") int leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,
 			ModelAndView modelAndView) {
@@ -105,7 +105,8 @@ public class PuSHEndpoint {
 			subscript.setSubscriber(sub);
 			if (leaseSeconds > 0) {
 				Calendar timeoutDate = Calendar.getInstance();
-				timeoutDate.setSeconds((int)(timeoutDate.getSeconds() + leaseSeconds));
+				//timeoutDate.setSeconds((int)(timeoutDate.getSeconds() + leaseSeconds));
+				timeoutDate.add(Calendar.SECOND, leaseSeconds);
 				subscript.setTimeout(timeoutDate);
 			}
 			//etc
@@ -119,7 +120,7 @@ public class PuSHEndpoint {
 			modelAndView.setViewName(SUBSCRIPTION_SUCCESS_VIEW);
 		} else {
 			// no verification, throw an error
-			
+			throw new SubscriberNotFoundException("Subscriber failed to verify");
 		}
 		// TODO: if we do the callback async, return 202 instead
 		         //modelAndView.setViewName("accepted");
@@ -145,7 +146,7 @@ public class PuSHEndpoint {
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
 			@RequestParam(HUB_VERIFY) ClientVerify verify,
-			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") long leaseSeconds,
+			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") int leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,			
 			ModelAndView mav) {

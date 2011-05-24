@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,6 +24,7 @@ import javax.persistence.TemporalType;
  * 		Created on 4/13/2011
  */
 @Entity
+@Table(name="subscription")
 @NamedQueries({
     @NamedQuery(name="Subscription.getByFeedId", query="SELECT s FROM Subscription s WHERE s.feed.id = :feedId"),
     @NamedQuery(name="Subscription.getSubscribersByFeedId", query="SELECT s FROM Subscription sub join sub.subscriber s WHERE sub.feed.id = :feedId")

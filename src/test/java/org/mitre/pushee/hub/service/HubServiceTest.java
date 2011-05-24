@@ -71,6 +71,7 @@ public class HubServiceTest {
     	publisherRepository = createNiceMock(PublisherRepository.class);
     	
     	hubService = new DefaultHubService(feedRepository, publisherRepository, subscriberRepository);
+    	//hubService = new DefaultHubService();
     	
     	subscriberURL = "http://example.com/subscriber";
     	publisherURL = "http://example.com/publisher";
@@ -140,7 +141,7 @@ public class HubServiceTest {
     	
     	assertThat(hubService.getSubscribersByFeed(feed), CoreMatchers.equalTo(subscribers));
     	
-    	verify(hubService);
+    	verify(subscriberRepository);
     }
     
     @Test
@@ -151,7 +152,7 @@ public class HubServiceTest {
     	
     	assertThat(hubService.getSubscriberByCallbackURL(subscriberURL), CoreMatchers.equalTo(subscriber));
     	
-    	verify(hubService);
+    	verify(subscriberRepository);
     }
     
     @Test
@@ -162,7 +163,7 @@ public class HubServiceTest {
     	
     	assertThat(hubService.getFeedByUrl(feedURL), CoreMatchers.equalTo(feed));
     	
-    	verify(hubService);
+    	verify(feedRepository);
     }
     
     @Test
@@ -173,7 +174,7 @@ public class HubServiceTest {
     	
     	assertThat(hubService.getFeedById(feedId), CoreMatchers.equalTo(feed));
     	
-    	verify(hubService);
+    	verify(feedRepository);
     }
 
     @Test
@@ -184,7 +185,7 @@ public class HubServiceTest {
 		
 		assertThat(hubService.getPublisherById(publisherId), CoreMatchers.equalTo(publisher));
 		
-		verify(hubService);
+		verify(publisherRepository);
 	}
 
     @Test
@@ -195,7 +196,7 @@ public class HubServiceTest {
 		
 		assertThat(hubService.getPublisherByUrl(publisherURL), CoreMatchers.equalTo(publisher));
 		
-		verify(hubService);
+		verify(publisherRepository);
 	}
     
 }

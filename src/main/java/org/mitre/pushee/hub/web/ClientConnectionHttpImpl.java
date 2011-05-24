@@ -9,17 +9,22 @@ import static org.mitre.pushee.hub.web.PuSHProtocolParameters.HUB_VERIFY_TOKEN;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
@@ -34,7 +39,13 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 	 */
 	@Override
 	public void fetchAndRepublishFeedToSubscribers(Feed feed, Collection<Subscriber> subscribers) {
-	
+
+		if (subscribers == null || subscribers.isEmpty()) {
+			// no subscribers, don't bother fetching
+			// TODO: do the fetch and throw it into cache? does anyone care?
+			return;
+		}
+		
 		HttpClient hc = new DefaultHttpClient();
 	
 		HttpGet get = new HttpGet(feed.getUrl());
@@ -100,22 +111,30 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 	 * @see org.mitre.pushee.hub.web.ClientConnection#verifyCallback(java.lang.String, java.lang.String, java.lang.String, long, java.lang.String)
 	 */
 	@Override
-	public boolean verifyCallback(String callback, String mode, String topic, long leaseSeconds, String verifyToken) {
+	public boolean verifyCallback(String callback, String mode, String topic, int leaseSeconds, String verifyToken) {
 		// make a call to callback with the appropriate parameters
 	
 		HttpClient hc = new DefaultHttpClient();
 		
 		HttpPost post = new HttpPost(callback);
-		HttpParams params = post.getParams();
+		//HttpParams params = post.getParams();
 	
 		UUID challenge = UUID.randomUUID();
 		
-		params.setParameter(HUB_MODE, mode);
-		params.setParameter(HUB_TOPIC, topic);
-		params.setParameter(HUB_CHALLENGE, challenge.toString());
-		params.setLongParameter(HUB_LEASE_SECONDS, leaseSeconds);
+		List<NameValuePair> args = new ArrayList<NameValuePair>();
+		args.add(new BasicNameValuePair(HUB_MODE, mode));
+		args.add(new BasicNameValuePair(HUB_TOPIC, topic));
+		args.add(new BasicNameValuePair(HUB_CHALLENGE, challenge.toString()));
+		args.add(new BasicNameValuePair(HUB_LEASE_SECONDS, Integer.toString(leaseSeconds)));
 		if (!Strings.isNullOrEmpty(verifyToken)) {
-			params.setParameter(HUB_VERIFY_TOKEN, verifyToken);
+			args.add(new BasicNameValuePair(HUB_VERIFY_TOKEN, verifyToken));
+		}
+		
+		try {
+			post.setEntity(new UrlEncodedFormEntity(args));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		try {

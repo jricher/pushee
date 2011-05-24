@@ -29,6 +29,10 @@ public class DefaultHubService implements HubService {
 	@Autowired
 	private SubscriberRepository subscriberRepository;
 	
+	public DefaultHubService() {
+		
+	}
+	
 	public DefaultHubService(FeedRepository fr, PublisherRepository pr, SubscriberRepository sr) {
 		this.feedRepository = fr;
 		this.publisherRepository = pr;

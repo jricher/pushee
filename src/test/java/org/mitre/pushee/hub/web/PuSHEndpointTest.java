@@ -47,7 +47,7 @@ public class PuSHEndpointTest {
         String callback = "http://callback.url";
         String topic = "http://topic.url";
         ClientVerify verify = ClientVerify.ASYNC;
-        String mode = "subscribe";
+        String mode = PuSHProtocolParameters.HUB_SUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
         int leaseSeconds = 0;
@@ -106,7 +106,7 @@ public class PuSHEndpointTest {
         String callback = "http://callback.url";
         String topic = "http://topic.url";
         ClientVerify verify = ClientVerify.ASYNC;
-        String mode = "unsubscribe";
+        String mode = PuSHProtocolParameters.HUB_UNSUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
         int leaseSeconds = 0;
@@ -175,7 +175,7 @@ public class PuSHEndpointTest {
         String callback = "http://callback.url";
         String topic = "http://topic.url";
         ClientVerify verify = ClientVerify.ASYNC;
-        String mode = "unsubscribe";
+        String mode = PuSHProtocolParameters.HUB_PUBLISH;
         String verifyToken = "verify";
         String secret = "secret";
         int leaseSeconds = 0;

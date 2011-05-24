@@ -18,6 +18,6 @@ public interface ClientConnection {
 
 	// utility functions, to be moved to utility class
 	public boolean verifyCallback(String callback, String mode, String topic,
-			long leaseSeconds, String verifyToken);
+			int leaseSeconds, String verifyToken);
 
 }

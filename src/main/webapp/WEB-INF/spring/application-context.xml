@@ -20,11 +20,11 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 	   <property name="exceptionMappings">
 	     <props>
-			<prop key="org.mitre.pushee.hub.ClientNotFoundException">clientNotFound</prop>
-			<prop key="org.mitre.pushee.hub.FeedNotFoundException">feedNotFound</prop>
-			<prop key="org.mitre.pushee.hub.SubscriberNotFoundException">subscriberNotFound</prop>
-			<prop key="org.mitre.pushee.hub.PublisherNotFoundException">publisherNotFound</prop>
-	        <prop key="org.mitre.pushee.hub.PermissionDeniedException">permissionDenied</prop>
+			<prop key="org.mitre.pushee.hub.exception.ClientNotFoundException">clientNotFound</prop>
+			<prop key="org.mitre.pushee.hub.exception.FeedNotFoundException">feedNotFound</prop>
+			<prop key="org.mitre.pushee.hub.exception.SubscriberNotFoundException">subscriberNotFound</prop>
+			<prop key="org.mitre.pushee.hub.exception.PublisherNotFoundException">publisherNotFound</prop>
+	        <prop key="org.mitre.pushee.hub.exception.PermissionDeniedException">permissionDenied</prop>
 	     </props>
 	   </property>
 	</bean>

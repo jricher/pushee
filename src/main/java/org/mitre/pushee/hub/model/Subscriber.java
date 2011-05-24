@@ -12,6 +12,7 @@ import javax.persistence.*;
  *
  */
 @Entity
+@Table(name="subscriber")
 @NamedQueries({
         @NamedQuery(name = "Subscriber.getByUrl", query = "select s from Subscriber s where s.postbackURL = :url")
         })
