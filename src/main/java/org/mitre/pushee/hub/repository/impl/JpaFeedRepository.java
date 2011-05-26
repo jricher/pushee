@@ -26,11 +26,13 @@ public class JpaFeedRepository implements FeedRepository {
     private EntityManager manager;
 
     @Override
+    @Transactional
     public Feed getById(long id) {
         return manager.find(Feed.class, id);
     }
 
     @Override
+    @Transactional
     public Feed getByUrl(String url) {
         TypedQuery<Feed> query = manager.createNamedQuery("Feed.getByUrl", Feed.class);
         query.setParameter("feedUrl", url);
@@ -38,6 +40,7 @@ public class JpaFeedRepository implements FeedRepository {
     }
 
     @Override
+    @Transactional
     public Feed save(Feed feed) {
         return saveOrUpdate(feed.getId(), manager, feed);
     }

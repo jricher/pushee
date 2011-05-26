@@ -26,8 +26,9 @@ public class JpaSubscriberRepository implements SubscriberRepository{
 
     @PersistenceContext
     private EntityManager manager;
-
+	
     @Override
+    @Transactional
     public Collection<Subscriber> getSubscribers(long feedId) {
         TypedQuery<Subscriber> namedQuery = manager.createNamedQuery("Subscription.getSubscribersByFeedId", Subscriber.class);
         namedQuery.setParameter("feedId", feedId);
@@ -35,6 +36,7 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     }
 
     @Override
+    @Transactional
     public Subscriber getByUrl(String callbackURL) {
         TypedQuery<Subscriber> query = manager.createNamedQuery("Subscriber.getByUrl", Subscriber.class);
         query.setParameter("url", callbackURL);

@@ -39,7 +39,7 @@ public class PuSHEndpoint {
 
 	public static final String SUBSCRIPTION_SUCCESS_VIEW = "validSubscription";
 
-	private final HubService hubService;
+	private HubService hubService;
 
 	private ClientConnection http;
 	

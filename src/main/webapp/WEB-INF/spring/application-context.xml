@@ -7,8 +7,8 @@
 
 	<import resource="data-context.xml" />
 		
-    <context:component-scan annotation-config="true" base-package="org.mitre.pushee" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
+    <context:component-scan annotation-config="true" base-package="org.mitre.pushee" />
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
@@ -28,11 +28,15 @@
 	     </props>
 	   </property>
 	</bean>
-	
+ 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
+	<!--
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+-->
 	<bean id="httpClientUtils" class="org.mitre.pushee.hub.web.ClientConnectionHttpImpl" />
 
 	<bean id="entityManagerFactory"
@@ -48,4 +52,6 @@
 			</map>
 		</property>
 	</bean>
+
+
 </beans>

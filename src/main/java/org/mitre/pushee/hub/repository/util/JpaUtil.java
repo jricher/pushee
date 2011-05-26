@@ -1,6 +1,7 @@
 package org.mitre.pushee.hub.repository.util;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,9 +26,12 @@ public class JpaUtil {
     public static <T, I> T saveOrUpdate(I id, EntityManager entityManager, T entity) {
         if (id == null) {
             entityManager.persist(entity);
+            entityManager.flush();
             return entity;
         } else {
-            return entityManager.merge(entity);
+            T tmp = entityManager.merge(entity);
+            entityManager.flush();
+            return tmp;
         }
     }
 }

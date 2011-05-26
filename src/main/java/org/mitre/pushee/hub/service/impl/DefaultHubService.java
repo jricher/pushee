@@ -11,6 +11,7 @@ import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author mfranklin
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  *         Time: 1:34 PM
  */
 @Service
+@Transactional
 public class DefaultHubService implements HubService {
 	
 	@Autowired
@@ -85,6 +87,7 @@ public class DefaultHubService implements HubService {
     }
 
     @Override
+    @Transactional
     public void saveSubscriber(Subscriber subscriber) {
         subscriberRepository.save(subscriber);
     }

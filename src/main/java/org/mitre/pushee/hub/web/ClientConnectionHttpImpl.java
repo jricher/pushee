@@ -63,7 +63,15 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 				String body = CharStreams.toString(new InputStreamReader(entity.getContent()));
 	
 				for (Subscriber subscriber : subscribers) {
-					postToSubscriber(body, subscriber, entity.getContentType().getValue(), entity.getContentEncoding().getValue(), hc);
+					String contentType = null;
+					if (entity.getContentType() != null) {
+						contentType = entity.getContentType().getValue();
+					}
+					String contentEncoding = null;
+					if (entity.getContentEncoding() != null) {
+						contentEncoding = entity.getContentEncoding().getValue();
+					}
+					postToSubscriber(body, subscriber, contentType, contentEncoding, hc);
 				}
 			}
 		} catch (ClientProtocolException e) {
@@ -93,7 +101,7 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 		try {
 			HttpResponse resp = hc.execute(post);
 			
-			// TODO: handle response
+			// TODO: handle response, but for now we don't care
 			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
