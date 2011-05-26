@@ -4,6 +4,7 @@ import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
@@ -23,7 +24,7 @@ import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 @Repository
 public class JpaSubscriberRepository implements SubscriberRepository{
 
-    @PersistenceContext(type = PersistenceContextType.TRANSACTION)
+    @PersistenceContext
     private EntityManager manager;
 
     @Override
@@ -41,6 +42,7 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     }
     
     @Override
+    @Transactional
     public Subscriber save(Subscriber subscriber) {
         return saveOrUpdate(subscriber.getId(), manager, subscriber);
     }

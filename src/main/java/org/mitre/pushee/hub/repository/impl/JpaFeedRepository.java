@@ -22,7 +22,7 @@ import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 @Repository
 public class JpaFeedRepository implements FeedRepository {
 
-    @PersistenceContext(type = PersistenceContextType.TRANSACTION)
+    @PersistenceContext
     private EntityManager manager;
 
     @Override
