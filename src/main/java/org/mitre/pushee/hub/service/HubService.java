@@ -94,4 +94,25 @@ public interface HubService {
 	 */
 	public void saveSubscriber(Subscriber subscriber);
 	
+	/**
+	 * Remove a feed from the database
+	 * 
+	 * @param feedId
+	 */
+	public void removeFeedById(Long feedId);
+	
+	/**
+	 * Remove a publisher from the database
+	 * 
+	 * @param publisherId
+	 */
+	public void removePublisherById(Long publisherId);
+	
+	/**
+	 * Remove a subscriber from the database
+	 * 
+	 * @param subscriberId
+	 */
+	public void removeSubscriberById(Long subscriberId);
+	
 }

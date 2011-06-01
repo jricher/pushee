@@ -2,6 +2,7 @@ package org.mitre.pushee.hub.service.impl;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
@@ -90,5 +91,23 @@ public class DefaultHubService implements HubService {
     @Transactional
     public void saveSubscriber(Subscriber subscriber) {
         subscriberRepository.save(subscriber);
+    }
+    
+    @Override
+    public void removeFeedById(Long feedId) {
+    	throw new NotImplementedException();
+    	//TODO: need remove method in feed repository or JpaUtil
+    }
+    
+    @Override
+    public void removePublisherById(Long publisherId) {
+    	throw new NotImplementedException();
+    	//TODO: need remove method in publisher repository or JpaUtil
+    }
+    
+    @Override
+    public void removeSubscriberById(Long subscriberId) {
+    	throw new NotImplementedException();
+    	//TODO: need remove method in subscriber repository or JpaUtil
     }
 }
