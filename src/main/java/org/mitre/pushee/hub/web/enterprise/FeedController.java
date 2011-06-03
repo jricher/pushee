@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/manager/feed")
+@RequestMapping("/manager/feeds")
 public class FeedController {
 
 	private HubService hubService;
@@ -22,6 +22,17 @@ public class FeedController {
 	public FeedController(HubService hubService) {
 		this.setHubService(hubService);
 	}
+	
+	@RequestMapping(value="/")
+	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
+		
+		//TODO: Implement
+		
+		modelAndView.setViewName("/management/feedIndex");
+		
+		return modelAndView;
+	}
+	
 	
 	@RequestMapping(value="/viewFeed")
 	public ModelAndView viewFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
@@ -34,6 +45,7 @@ public class FeedController {
 		
 		//TODO: Implement
 		
+		modelAndView.setViewName("/management/viewFeed");
 		return modelAndView;
 	}
 	
@@ -55,6 +67,7 @@ public class FeedController {
 		
 		hubService.saveFeed(theFeed);
 		
+		modelAndView.setViewName("management/createFeed");
 		return modelAndView;
 	}
 	
@@ -69,6 +82,7 @@ public class FeedController {
 		
 		//TODO: Implement
 		
+		modelAndView.setViewName("/management/editFeed");
 		return modelAndView;
 	}
 	
@@ -78,6 +92,7 @@ public class FeedController {
 		//TODO: backend does not support this yet
 		hubService.removeFeedById(feedId);
 		
+		modelAndView.setViewName("management/feedIndex");
 		return modelAndView;
 	}
 
