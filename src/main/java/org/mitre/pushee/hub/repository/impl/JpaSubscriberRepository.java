@@ -1,5 +1,6 @@
 package org.mitre.pushee.hub.repository.impl;
 
+import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.repository.SubscriberRepository;
@@ -29,7 +30,7 @@ public class JpaSubscriberRepository implements SubscriberRepository{
 	
     @Override
     @Transactional
-    public Collection<Subscriber> getSubscribers(long feedId) {
+    public Collection<Subscriber> getSubscribers(Long feedId) {
         TypedQuery<Subscriber> namedQuery = manager.createNamedQuery("Subscription.getSubscribersByFeedId", Subscriber.class);
         namedQuery.setParameter("feedId", feedId);
         return namedQuery.getResultList();
@@ -48,4 +49,12 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     public Subscriber save(Subscriber subscriber) {
         return saveOrUpdate(subscriber.getId(), manager, subscriber);
     }
+    
+    @Override
+    @Transactional
+    public void removeById(Long id) {
+    	Subscriber s = manager.find(Subscriber.class, id);
+    	manager.remove(s);
+    }
+    
 }

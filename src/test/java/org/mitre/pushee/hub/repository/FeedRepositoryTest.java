@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 public class FeedRepositoryTest  {
 
 
-    private static final long ID = 1L;
+    private static final Long ID = 1L;
 
     @Autowired
     private FeedRepository repository;

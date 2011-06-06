@@ -47,10 +47,10 @@ public class HubServiceTest {
 	private String publisherURL;
 	private String feedURL;
 	
-	private long feedId;
-	private long publisherId;
-	private long subscriberId;
-	private long subscriptionId;
+	private Long feedId;
+	private Long publisherId;
+	private Long subscriberId;
+	private Long subscriptionId;
 	
 	//Some objects to manipulate
 	Subscriber subscriber;

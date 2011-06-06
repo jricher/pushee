@@ -27,7 +27,7 @@ public class JpaFeedRepository implements FeedRepository {
 
     @Override
     @Transactional
-    public Feed getById(long id) {
+    public Feed getById(Long id) {
         return manager.find(Feed.class, id);
     }
 
@@ -43,5 +43,12 @@ public class JpaFeedRepository implements FeedRepository {
     @Transactional
     public Feed save(Feed feed) {
         return saveOrUpdate(feed.getId(), manager, feed);
+    }
+    
+    @Override
+    @Transactional
+    public void removeById(Long id) {
+    	Feed f = getById(id);
+    	manager.remove(f);
     }
 }

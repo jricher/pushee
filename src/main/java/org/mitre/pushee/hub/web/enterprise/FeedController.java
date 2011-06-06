@@ -60,7 +60,7 @@ public class FeedController {
 		}
 		
 		Feed theFeed = new Feed();
-		theFeed.setId(id);
+		theFeed.setId(feedId);
 		theFeed.setPublisher(publisher);
 		theFeed.setType(type);
 		theFeed.setUrl(url);
@@ -89,7 +89,6 @@ public class FeedController {
 	@RequestMapping(value="/remove")
 	public ModelAndView removeFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
-		//TODO: backend does not support this yet
 		hubService.removeFeedById(feedId);
 		
 		modelAndView.setViewName("management/feedIndex");

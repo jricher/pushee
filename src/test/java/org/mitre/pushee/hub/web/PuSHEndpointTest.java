@@ -111,10 +111,12 @@ public class PuSHEndpointTest {
         String secret = "secret";
         int leaseSeconds = 0;
         ModelAndView mav = new ModelAndView();
+        Long feedID = 1L;
+        long subID = 1L;
 
         //Define expected return objects from domain requests
         Feed feed = new Feed();
-        feed.setId(1L);
+        feed.setId(feedID);
         feed.setUrl(topic);
 
         //hubService.saveFeed(feed);
@@ -122,12 +124,12 @@ public class PuSHEndpointTest {
         
         Set<Subscriber> subscribers = new HashSet<Subscriber>();
         Subscriber s = new Subscriber();
-        s.setId(1L);       
+        s.setId(subID);       
 
         Subscription subscript = new Subscription();
         subscript.setFeed(feed);
         subscript.setSubscriber(s);
-        subscript.setId(1L);
+        subscript.setId(subID);
         
         s.addSubscription(subscript);
 
@@ -180,10 +182,11 @@ public class PuSHEndpointTest {
         String secret = "secret";
         int leaseSeconds = 0;
         ModelAndView mav = new ModelAndView();
-
+        Long feedID = 1L;
+        
         //Define expected return objects from domain requests
         Feed feed = new Feed();
-        feed.setId(1L);
+        feed.setId(feedID);
         feed.setUrl(topic);
 
         //hubService.saveFeed(feed);
@@ -191,12 +194,12 @@ public class PuSHEndpointTest {
         
         Set<Subscriber> subscribers = new HashSet<Subscriber>();
         Subscriber s = new Subscriber();
-        s.setId(1L);       
+        s.setId(feedID);       
 
         Subscription subscript = new Subscription();
         subscript.setFeed(feed);
         subscript.setSubscriber(s);
-        subscript.setId(1L);
+        subscript.setId(feedID);
         
         s.addSubscription(subscript);
 

@@ -27,7 +27,7 @@ public class JpaPublisherRepository implements PublisherRepository{
 
     @Override
     @Transactional
-    public Publisher getById(long id) {
+    public Publisher getById(Long id) {
         return manager.find(Publisher.class, id);
     }
 
@@ -44,4 +44,12 @@ public class JpaPublisherRepository implements PublisherRepository{
     public Publisher save(Publisher publisher) {
        return saveOrUpdate(publisher.getId(), manager, publisher);
     }
+    
+    @Override
+    @Transactional
+    public void removeById(Long id) {
+    	Publisher p = getById(id);
+    	manager.remove(p);
+    }
+    
 }

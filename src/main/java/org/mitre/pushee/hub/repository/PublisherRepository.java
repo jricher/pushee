@@ -15,7 +15,7 @@ public interface PublisherRepository {
      * @param id the id of the feed
      * @return a valid Publisher if exists; null otherwise;
      */
-    public Publisher getById(long id);
+    public Publisher getById(Long id);
 
     /**
      * Gets a Publisher by its unique URL
@@ -33,4 +33,11 @@ public interface PublisherRepository {
      * @return persisted Publisher
      */
     public Publisher save(Publisher publisher);
+    
+    /**
+     * Removes a Publisher from the repository
+     * @param id the id of the Publisher to remove
+     */
+    public void removeById(Long id);    
+    
 }

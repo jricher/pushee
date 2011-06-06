@@ -15,7 +15,7 @@ public interface FeedRepository {
      * @param id the id of the feed
      * @return a valid Feed if exists; null otherwise;
      */
-    public Feed getById(long id);
+    public Feed getById(Long id);
 
     /**
      * Gets a feed by its unique URL
@@ -32,4 +32,10 @@ public interface FeedRepository {
      * @return the persisted entity
      */
     public Feed save(Feed feed);
+    
+    /**
+     * Removes a Feed from the repository
+     * @param id the id of the feed to remove
+     */
+    public void removeById(Long id);
 }

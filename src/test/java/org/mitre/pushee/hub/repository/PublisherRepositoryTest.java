@@ -28,7 +28,7 @@ import static org.junit.Assert.assertThat;
 public class PublisherRepositoryTest {
 
     private static final String URL = "http://example.com/pub/1";
-    private static final long ID = 1L;
+    private static final Long ID = 1L;
     @Autowired
     private PublisherRepository repository;
 

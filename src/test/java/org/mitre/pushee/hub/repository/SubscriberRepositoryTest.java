@@ -1,25 +1,27 @@
 package org.mitre.pushee.hub.repository;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
+
+import java.util.Collection;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Collection;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author mfranklin
@@ -43,14 +45,15 @@ public class SubscriberRepositoryTest {
 
     @Test
     public void getSubscribers_validFeed_validResult() {
-        Collection<Subscriber> subscribers = repository.getSubscribers(1L);
-        assertThat(subscribers, is(notNullValue()));
+        Collection<Subscriber> subscribers = repository.getSubscribers(ID);
+        assertThat(subscribers, is(not(nullValue())));
         assertThat(subscribers.size(), is(equalTo(2)));
     }
 
     @Test
     public void getSubscribers_invalidFeed_emptyResult() {
-        Collection<Subscriber> subscribers = repository.getSubscribers(2L);
+    	Long subID = 2L;
+        Collection<Subscriber> subscribers = repository.getSubscribers(subID);
         assertThat(subscribers, CoreMatchers.<Object>notNullValue());
         assertThat(subscribers.isEmpty(), is(true));
     }

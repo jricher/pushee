@@ -103,7 +103,7 @@ public class SqlFileParser {
                 stateStack.push(State.INIT);
                 Resource child = resource.createRelative(line.replace(CHILD_SCRIPT_INDICATOR, ""));
                 sql.append(processResource(child));
-                //Read File lines do not have a terminal character but are by definition only one line long
+                //Read File lines do not have a terminal character but are by definition only one line Long
                 stateStack.pop();
                 stateStack.push(State.INIT);
                 break;

@@ -19,7 +19,7 @@ public interface SubscriberRepository {
      * @param feedId the id of the feed
      * @return a list of valid Subscribers if any are found; Empty list otherwise
      */
-    public Collection<Subscriber> getSubscribers(long feedId);
+    public Collection<Subscriber> getSubscribers(Long feedId);
 
     /**
      * Get a single subscriber via its callback URL
@@ -37,4 +37,11 @@ public interface SubscriberRepository {
      * @return persisted subscriber
      */
     public Subscriber save(Subscriber subscriber);
+    
+    /**
+     * Removes a Subscriber from the repository
+     * @param id the id of the Subscriber to remove
+     */
+    public void removeById(Long id);
+    
 }
