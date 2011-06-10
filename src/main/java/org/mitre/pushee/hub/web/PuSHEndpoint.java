@@ -68,11 +68,13 @@ public class PuSHEndpoint {
 			@RequestParam(HUB_MODE) String mode,
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
-			@RequestParam(HUB_VERIFY) ClientVerify verify,
+			@RequestParam(HUB_VERIFY) String verifyString,
 			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") int leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,
 			ModelAndView modelAndView) {
+
+		ClientVerify verify = Enum.valueOf(ClientVerify.class, verifyString.toUpperCase());		
 
 		// Load the subscriber from its callback url, if available
 		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);
@@ -145,11 +147,13 @@ public class PuSHEndpoint {
 			@RequestParam(HUB_MODE) String mode,
 			@RequestParam(HUB_CALLBACK) String callback,
 			@RequestParam(HUB_TOPIC) String topic,
-			@RequestParam(HUB_VERIFY) ClientVerify verify,
+			@RequestParam(HUB_VERIFY) String verifyString,
 			@RequestParam(value=HUB_LEASE_SECONDS, required=false, defaultValue="0") int leaseSeconds,
 			@RequestParam(value=HUB_SECRET, required=false) String secret,
 			@RequestParam(value=HUB_VERIFY_TOKEN, required=false) String verifyToken,			
 			ModelAndView mav) {
+		
+		ClientVerify verify = Enum.valueOf(ClientVerify.class, verifyString.toUpperCase());
 		
 		// Load the subscriber from its callback url, if available
 		Subscriber sub = hubService.getSubscriberByCallbackURL(callback);

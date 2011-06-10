@@ -46,7 +46,7 @@ public class PuSHEndpointTest {
         //Define Parameter Values to Pass to controller action (Can be done in setup method if common)
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        ClientVerify verify = ClientVerify.ASYNC;
+        String verify = ClientVerify.ASYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_SUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
@@ -105,7 +105,7 @@ public class PuSHEndpointTest {
     	//Define Parameter Values to Pass to controller action (Can be done in setup method if common)
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        ClientVerify verify = ClientVerify.ASYNC;
+        String verify = ClientVerify.ASYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_UNSUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
@@ -176,7 +176,7 @@ public class PuSHEndpointTest {
     public void publish() {
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        ClientVerify verify = ClientVerify.ASYNC;
+        String verify = ClientVerify.ASYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_PUBLISH;
         String verifyToken = "verify";
         String secret = "secret";
