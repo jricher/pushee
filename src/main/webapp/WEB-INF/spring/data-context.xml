@@ -5,7 +5,9 @@
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		
+		<property name="url" value="DB_URL" />
+		<property name="username" value="DB_USER" />
+		<property name="password" value="DB_PASSWORD" />		
 	</bean>
 
 </beans>
