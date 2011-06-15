@@ -57,6 +57,11 @@ public class DefaultHubService implements HubService {
     }
 
     @Override
+    public Collection<Feed> getAllFeeds() {
+    	return feedRepository.getAll();
+    }
+    
+    @Override
     public Feed getFeedByUrl(String feedURL) {
       return feedRepository.getByUrl(feedURL);
     }

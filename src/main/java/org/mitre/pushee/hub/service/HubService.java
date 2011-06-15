@@ -42,6 +42,13 @@ public interface HubService {
 	public Subscriber getSubscriberByCallbackURL(String url);
 	
 	/**
+	 * Get a collection of all feeds managed by this HubService.
+	 * 
+	 * @return the collection of all feeds
+	 */
+	public Collection<Feed> getAllFeeds();
+	
+	/**
 	 * Get the feed with the given URL.
 	 * 
 	 * @param feedURL the URL of the feed to get

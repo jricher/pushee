@@ -16,7 +16,8 @@ import javax.persistence.*;
 @Entity
 @Table(name="feed")
 @NamedQueries({
-        @NamedQuery(name = "Feed.getByUrl", query = "select f from Feed f where f.url = :feedUrl")
+        @NamedQuery(name = "Feed.getByUrl", query = "select f from Feed f where f.url = :feedUrl"),
+        @NamedQuery(name = "Feed.getAll", query = "select f from Feed f")
 })
 public class Feed {
 
