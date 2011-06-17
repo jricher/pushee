@@ -70,7 +70,7 @@ public class Subscription {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((secret == null) ? 0 : secret.hashCode());
 		result = prime * result
-				+ ((subscriber == null) ? 0 : subscriber.getPostbackURL().hashCode());
+				+ ((subscriber == null) ? 0 : subscriber.hashCode());
 		result = prime * result + ((timeout == null) ? 0 : timeout.hashCode());
 		return result;
 	}

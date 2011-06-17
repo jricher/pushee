@@ -174,7 +174,6 @@ public class SubscriberRepositoryTest {
 
     @Test
     @Rollback
-    @Ignore
     public void save_validExisting() {
         Subscriber existing = new Subscriber();
         existing.setId(ID);
