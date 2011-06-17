@@ -57,4 +57,22 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     	manager.remove(s);
     }
     
+    @Override
+    @Transactional
+    public void remove(Subscriber s) {
+    	Subscriber found = manager.find(Subscriber.class, s.getId());
+    	if (found != null) {
+    		manager.remove(s);
+    	} else {
+    		throw new IllegalArgumentException();
+    	}
+    }
+    
+    @Override
+    @Transactional
+    public Collection<Subscriber> getAll() {
+    	TypedQuery<Subscriber> query = manager.createNamedQuery("Subscriber.getAll", Subscriber.class);
+        return (List<Subscriber>) query.getResultList();
+    }
+    
 }

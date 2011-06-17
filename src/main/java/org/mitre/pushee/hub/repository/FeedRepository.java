@@ -43,9 +43,16 @@ public interface FeedRepository {
     public void removeById(Long id);
     
     /**
+     * Removes the given Feed from the repository.
+     * 
+     * @param f the feed object to remove
+     */
+    public void remove(Feed f);
+    
+    /**
      * Return a collection of all feeds managed by this repository
      * 
-     * @return the feed collection
+     * @return the feed collection, or null
      */
     public Collection<Feed> getAll();
 }

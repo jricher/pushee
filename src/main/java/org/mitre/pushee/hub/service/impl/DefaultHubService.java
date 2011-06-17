@@ -41,6 +41,11 @@ public class DefaultHubService implements HubService {
 		this.subscriberRepository = sr;
 	}
 	
+	@Override
+	public Collection<Subscriber> getAllSubscribers() {
+		return subscriberRepository.getAll();
+	}
+	
     @Override
     public Collection<Subscriber> getSubscribersByFeedId(Long feedID) {
         return subscriberRepository.getSubscribers(feedID);
@@ -71,6 +76,12 @@ public class DefaultHubService implements HubService {
        return feedRepository.getById(feedID);
     }
 
+    
+    @Override
+    public Collection<Publisher> getAllPublishers() {
+    	return publisherRepository.getAll();
+    }
+    
     @Override
     public Publisher getPublisherById(Long publisherID) {
        return publisherRepository.getById(publisherID);

@@ -1,6 +1,9 @@
 package org.mitre.pushee.hub.repository;
 
+import java.util.Collection;
+
 import org.mitre.pushee.hub.model.Publisher;
+import org.mitre.pushee.hub.model.Subscriber;
 
 /**
  * @author Matt Franklin
@@ -8,7 +11,15 @@ import org.mitre.pushee.hub.model.Publisher;
  *         Provides query and persistence operations for {@link org.mitre.pushee.hub.model.Publisher} instances
  */
 public interface PublisherRepository {
-    /**
+   
+	/**
+	 * Get the collection of all publishers in the repository
+	 * 
+	 * @return the collection of all publishers, or null
+	 */
+	public Collection<Publisher> getAll();
+	
+	/**
      * Gets a Publisher by its unique id
      *
      *
@@ -39,5 +50,12 @@ public interface PublisherRepository {
      * @param id the id of the Publisher to remove
      */
     public void removeById(Long id);    
+    
+    /**
+     * Removes the given Publisher from the repository
+     * 
+     * @param p the Publisher to remove
+     */
+    public void remove(Publisher p);
     
 }

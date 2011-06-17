@@ -15,6 +15,13 @@ import org.mitre.pushee.hub.model.Subscriber;
 public interface HubService {
 
 	/**
+	 * Get a collection of all subscribers managed by this HubService.
+	 * 
+	 * @return the collection of all subscribers, or null
+	 */
+	public Collection<Subscriber> getAllSubscribers();
+	
+	/**
 	 * Get a list of subscribers subscribed to the given feed ID.
 	 * 
 	 *
@@ -44,7 +51,7 @@ public interface HubService {
 	/**
 	 * Get a collection of all feeds managed by this HubService.
 	 * 
-	 * @return the collection of all feeds
+	 * @return the collection of all feeds, or null
 	 */
 	public Collection<Feed> getAllFeeds();
 	
@@ -63,6 +70,13 @@ public interface HubService {
 	 * @return the feed
 	 */
 	public Feed getFeedById(Long feedID);
+	
+	/**
+	 * Get a collection of all publishers managed by this HubService
+	 * 
+	 * @return the collection of all publishers, or null
+	 */
+	public Collection<Publisher> getAllPublishers();
 	
 	/**
 	 * Get the publisher with the given ID.

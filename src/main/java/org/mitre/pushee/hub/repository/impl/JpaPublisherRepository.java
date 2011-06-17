@@ -1,5 +1,9 @@
 package org.mitre.pushee.hub.repository.impl;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.repository.PublisherRepository;
 import org.springframework.stereotype.Repository;
@@ -50,6 +54,24 @@ public class JpaPublisherRepository implements PublisherRepository{
     public void removeById(Long id) {
     	Publisher p = getById(id);
     	manager.remove(p);
+    }
+    
+    @Override
+    @Transactional
+    public void remove(Publisher p) {
+    	Publisher found = manager.find(Publisher.class, p.getId());
+    	if (found != null) {
+    		manager.remove(p);
+    	} else {
+    		throw new IllegalArgumentException();
+    	}
+    }
+    
+    @Override
+    @Transactional
+    public Collection<Publisher> getAll() {
+    	TypedQuery<Publisher> query = manager.createNamedQuery("Publisher.getAll", Publisher.class);
+        return (List<Publisher>) query.getResultList();
     }
     
 }

@@ -30,7 +30,7 @@ public class FeedController {
 		this.setHubService(hubService);
 	}
 	
-	@RequestMapping(value="/")
+	@RequestMapping(value="")
 	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
 		
 		List<Feed> listOfFeeds = apiGetAllFeeds();

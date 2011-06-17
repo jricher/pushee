@@ -1,5 +1,20 @@
 package org.mitre.pushee.hub.repository;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,12 +24,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author mfranklin
@@ -37,6 +46,42 @@ public class FeedRepositoryTest  {
     @PersistenceContext
     private EntityManager sharedManager;
 
+    @Test
+    @Rollback
+    public void getAll() {
+    	
+    	Feed feed2 = new Feed();
+    	feed2.setId(2L);
+    	feed2.setUrl("http://example.com/2");
+    	feed2.setType(Feed.FeedType.RSS);
+    	
+    	Feed feed3 = new Feed();
+    	feed3.setId(3L);
+    	feed3.setUrl("http://example.com/3");
+    	feed3.setType(Feed.FeedType.ATOM);
+    	
+    	List<Feed> beforeList = new ArrayList<Feed>();
+    	beforeList.add(repository.getById(ID)); //The repository already contains 1 entry
+    	beforeList.add(feed2);
+    	beforeList.add(feed3);
+    	
+    	repository.save(feed2);
+    	repository.save(feed3);
+        sharedManager.flush();
+        
+        List<Feed> retrievedList = (List<Feed>) repository.getAll();
+        
+        if (retrievedList.size() != beforeList.size()) {
+        	fail("beforeList and retrievedList are not of the same size!");
+        }
+        
+        for (Feed f : retrievedList) {
+        	if (!beforeList.contains(f)) {
+        		fail("beforeList and retrievedList are unequal");
+        	} 
+        }
+    	//If we get to this point w/o failing, it's good!
+    }
 
     @Test
     public void getById_validId_validResult() {
@@ -66,6 +111,58 @@ public class FeedRepositoryTest  {
         assertThat(feed, is(nullValue()));
     }
 
+    @Test
+    public void removeById_existingFeed() {
+    	
+    	Long feedId = 22L;
+    	
+    	//Create a feed 
+    	Feed newFeed = new Feed();
+        newFeed.setUrl("http://example.com/3");
+        newFeed.setType(Feed.FeedType.ATOM);
+        newFeed.setId(feedId);
+        repository.save(newFeed);
+        sharedManager.flush();
+        
+        //Remove the feed
+        repository.removeById(feedId);
+        
+        //Assert that the feed is no longer in the repository
+        Feed doesNotExist = repository.getById(feedId);
+        assertThat(doesNotExist, is(nullValue()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void removeById_nonexistingFeed() {
+    	repository.removeById(42L);
+    }
+    
+    @Test
+    public void remove_existingFeed() {
+    	Long feedId = 22L;
+    	
+    	//Create a feed 
+    	Feed newFeed = new Feed();
+        newFeed.setUrl("http://example.com/3");
+        newFeed.setType(Feed.FeedType.ATOM);
+        newFeed.setId(feedId);
+        Feed saved = repository.save(newFeed);
+        sharedManager.flush();
+        
+        //Remove the feed
+        repository.remove(saved);
+        
+        //Assert that the feed is no longer in the repository
+        Feed doesNotExist = repository.getById(feedId);
+        assertThat(doesNotExist, is(nullValue()));	
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void remove_nonexistingFeed() {
+    	Feed newFeed = new Feed();
+    	repository.remove(newFeed);
+    }
+    
     @Test
     @Rollback
     public void save_validNew() {

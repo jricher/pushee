@@ -3,17 +3,20 @@ package org.mitre.pushee.hub.repository;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Subscriber;
@@ -44,6 +47,42 @@ public class SubscriberRepositoryTest {
 
 
     @Test
+    @Rollback
+    public void getAll() {
+    	
+    	Subscriber sub2 = new Subscriber();
+    	sub2.setId(2L);
+    	sub2.setPostbackURL("http://example.com/sub/2");
+    	
+    	Subscriber sub3 = new Subscriber();
+    	sub3.setId(3L);
+    	sub3.setPostbackURL("http://example.com/sub/3");
+    	
+    	List<Subscriber> beforeList = new ArrayList<Subscriber>();
+    	beforeList.add(repository.getByUrl(URL)); //This one is already in the repository
+    	beforeList.add(sub2);
+    	beforeList.add(sub3);
+    	
+    	repository.save(sub2);
+    	repository.save(sub3);
+    	sharedManager.flush();
+    	
+    	List<Subscriber> retrievedList = (List<Subscriber>) repository.getAll();
+    	
+    	if (retrievedList.size() != beforeList.size()) {
+    		fail("Retrieved list and before list should be the same size!");
+    	}
+    	
+    	for (Subscriber s : retrievedList) {
+    		if (!beforeList.contains(s)) {
+    			fail("Retrieved list and before list contain unequal items!");
+    		}
+    	}
+    	
+    }
+    
+    
+    @Test
     public void getSubscribers_validFeed_validResult() {
         Collection<Subscriber> subscribers = repository.getSubscribers(ID);
         assertThat(subscribers, is(not(nullValue())));
@@ -72,7 +111,54 @@ public class SubscriberRepositoryTest {
         assertThat(subscriber, is(nullValue()));
     }
     
-      
+    @Test
+    @Rollback
+    public void remove_existingSubscriber() {
+    	
+    	String theUrl = "http://example.com/pub/3";
+    	
+    	Subscriber newSubscriber = new Subscriber();
+        newSubscriber.setPostbackURL(theUrl);
+        Subscriber saved = repository.save(newSubscriber);
+        sharedManager.flush();
+        
+        repository.remove(saved);
+        Subscriber doesNotExist = repository.getByUrl(theUrl);
+        
+        assertThat(doesNotExist, is(nullValue()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    @Rollback
+    public void remove_nonexistingSubscriber() {
+    	Subscriber newSubscriber = new Subscriber();
+    	repository.remove(newSubscriber);
+    }
+    
+    @Test
+    @Rollback
+    public void removeById_existingSubscriber() {
+    	
+    	Long theId = 22L;
+    	String theUrl = "http://example.com/pub/3";
+    	
+    	Subscriber newSubscriber = new Subscriber();
+        newSubscriber.setPostbackURL(theUrl);
+        newSubscriber.setId(theId);
+        repository.save(newSubscriber);
+        sharedManager.flush();
+        
+        repository.removeById(theId);
+        Subscriber doesNotExist = repository.getByUrl(theUrl);
+        
+        assertThat(doesNotExist, is(nullValue()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    @Rollback
+    public void removeById_nonexistingSubscriber() {
+    	repository.removeById(42L);
+    }
 
     @Test
     @Rollback
@@ -88,6 +174,7 @@ public class SubscriberRepositoryTest {
 
     @Test
     @Rollback
+    @Ignore
     public void save_validExisting() {
         Subscriber existing = new Subscriber();
         existing.setId(ID);

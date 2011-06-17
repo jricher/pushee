@@ -1,20 +1,27 @@
 package org.mitre.pushee.hub.repository;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author mfranklin
@@ -35,6 +42,42 @@ public class PublisherRepositoryTest {
     @PersistenceContext
     private EntityManager sharedManager;
 
+    @Test
+    @Rollback
+    public void getAll() {
+    	
+    	Publisher pub2 = new Publisher();
+    	pub2.setId(2L);
+    	pub2.setCallbackURL("http://example.com/pub/2");
+    	
+    	Publisher pub3 = new Publisher();
+    	pub3.setId(3L);
+    	pub3.setCallbackURL("http://example.com/pub/3");
+    	
+    	List<Publisher> beforeList = new ArrayList<Publisher>();
+    	beforeList.add(repository.getById(ID)); //Already in repository
+    	beforeList.add(pub2);
+    	beforeList.add(pub3);
+    	
+    	repository.save(pub2);
+    	repository.save(pub3);
+    	sharedManager.flush();
+    	
+    	List<Publisher> retrievedList = (List<Publisher>) repository.getAll();
+    	
+    	if (retrievedList.size() != beforeList.size()) {
+    		fail("Retrieved list and before list should be the same size!");
+    	}
+    	
+    	for (Publisher p : beforeList) {
+    		if (!retrievedList.contains(p)) {
+    			fail("Retrieved list and before list have unequal items!");
+    		}
+    	}
+    	
+    }
+    
+    
     @Test
     public void getById_validId_validResult() {
         Publisher publisher = repository.getById(ID);
@@ -60,6 +103,44 @@ public class PublisherRepositoryTest {
         assertThat(publisher, is(nullValue()));
     }  
 
+    @Test
+    public void remove_existingPublisher() {
+    	Publisher newPublisher = new Publisher();
+        newPublisher.setCallbackURL("http://example.com/pub/3");
+        Publisher saved = repository.save(newPublisher);
+        sharedManager.flush();
+        
+        repository.remove(saved);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void remove_nonexistingPublisher() {
+    	Publisher notStored = new Publisher();
+    	repository.remove(notStored);
+    }
+    
+    @Test
+    public void removeById_existingPublisher() {
+    	
+    	Long pubId = 22L;
+    	
+    	Publisher newPublisher = new Publisher();
+        newPublisher.setCallbackURL("http://example.com/pub/3");
+        newPublisher.setId(pubId);
+        repository.save(newPublisher);
+        sharedManager.flush();
+        
+        repository.removeById(pubId);
+        Publisher doesNotExist = repository.getById(pubId);
+        
+        assertThat(doesNotExist, is(nullValue()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void removeById_nonexistingPublisher() {
+    	repository.removeById(42L);
+    }
+    
     @Test
     @Rollback
     public void save_validNew() {

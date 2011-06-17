@@ -11,6 +11,13 @@ import java.util.Collection;
  */
 public interface SubscriberRepository {
 
+	/**
+	 * Get the collection of all subscribers in the repository
+	 * 
+	 * @return the collection of all subscribers, or null
+	 */
+	public Collection<Subscriber> getAll();
+	
     /**
      * Gets a list of subscribers for the given feed
      *
@@ -43,5 +50,12 @@ public interface SubscriberRepository {
      * @param id the id of the Subscriber to remove
      */
     public void removeById(Long id);
+    
+    /**
+     * Remove the given Subscriber from the repository
+     * 
+     * @param s the Subscriber object to remove
+     */
+    public void remove(Subscriber s);
     
 }

@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Subscription representation. A single subscription links a single subscriber to
@@ -49,56 +52,71 @@ public class Subscription {
     @JoinColumn(name = "subscriber_id")
 	private Subscriber subscriber;
 	
+	
+	private static final Logger logger = LoggerFactory.getLogger(Subscription.class);
+	
 	public Subscription() {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Subscription other = (Subscription) obj;
-		if (feed == null) {
-			if (other.feed != null) {
-				return false;
-			}
-		} else if (!feed.equals(other.feed)) {
-			return false;
-		}
-		if (subscriber == null) {
-			if (other.subscriber != null) {
-				return false;
-			}
-		} else if (!subscriber.equals(other.subscriber)) {
-			return false;
-		}
-		return true;
-	}
 	
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
+		logger.info("subscription - hashcode");
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((feed == null) ? 0 : feed.hashCode());
+		result = prime * result + ((feed == null) ? 0 : feed.getUrl().hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((secret == null) ? 0 : secret.hashCode());
 		result = prime * result
-				+ ((subscriber == null) ? 0 : subscriber.hashCode());
+				+ ((subscriber == null) ? 0 : subscriber.getPostbackURL().hashCode());
+		result = prime * result + ((timeout == null) ? 0 : timeout.hashCode());
 		return result;
 	}
-	
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		logger.info("Subscription - equals");
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Subscription other = (Subscription) obj;
+		if (feed == null) {
+			if (other.feed != null)
+				return false;
+		} else if (!feed.equals(other.feed))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (secret == null) {
+			if (other.secret != null)
+				return false;
+		} else if (!secret.equals(other.secret))
+			return false;
+		if (subscriber == null) {
+			if (other.subscriber != null)
+				return false;
+		} else if (!subscriber.equals(other.subscriber))
+			return false;
+		if (timeout == null) {
+			if (other.timeout != null)
+				return false;
+		} else if (!timeout.equals(other.timeout))
+			return false;
+		return true;
+	}
+
+
+
 	/**
 	 * @param id the id to set
 	 */

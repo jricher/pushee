@@ -3,7 +3,20 @@ package org.mitre.pushee.hub.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Feed representation. Feed objects contain a collection of the subscribers
@@ -21,43 +34,55 @@ import javax.persistence.*;
 })
 public class Feed {
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+	private static final Logger logger = LoggerFactory.getLogger(Feed.class);
+
+	
+
 	@Override
 	public int hashCode() {
+		logger.info("Feed - hashcode");
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((publisher == null) ? 0 : publisher.getCallbackURL().hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		logger.info("Feed - equals");
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Feed other = (Feed) obj;
-		if (type != other.type) {
-			return false;
-		}
-		if (url == null) {
-			if (other.url != null) {
+		if (id == null) {
+			if (other.id != null)
 				return false;
-			}
-		} else if (!url.equals(other.url)) {
+		} else if (!id.equals(other.id))
 			return false;
-		}
+		if (publisher == null) {
+			if (other.publisher != null)
+				return false;
+		} else if (!publisher.equals(other.publisher))
+			return false;
+		if (subscriptions == null) {
+			if (other.subscriptions != null)
+				return false;
+		} else if (!subscriptions.equals(other.subscriptions))
+			return false;
+		if (type != other.type)
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
 		return true;
 	}
 

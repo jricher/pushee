@@ -54,8 +54,18 @@ public class JpaFeedRepository implements FeedRepository {
     	manager.remove(f);
     }
     
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
+    @Transactional
+    public void remove(Feed f) {
+    	Feed found = manager.find(Feed.class, f.getId());
+    	if (found != null) {
+    		manager.remove(f);
+    	} else {
+    		throw new IllegalArgumentException();
+    	}
+    }
+    
+    @Override
     @Transactional
     public Collection<Feed> getAll() {
     	TypedQuery<Feed> query = manager.createNamedQuery("Feed.getAll", Feed.class);
