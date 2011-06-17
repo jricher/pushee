@@ -3,8 +3,11 @@ package org.mitre.pushee.hub.service;
 
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
@@ -12,6 +15,7 @@ import java.util.HashSet;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Feed;
@@ -24,6 +28,7 @@ import org.mitre.pushee.hub.repository.SubscriberRepository;
 import org.mitre.pushee.hub.service.impl.DefaultHubService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -198,5 +203,157 @@ public class HubServiceTest {
 		
 		verify(publisherRepository);
 	}
+    
+    @Test
+    @Rollback
+    public void savePublisher() {
+
+    	Publisher newpub = new Publisher();
+    	newpub.setCallbackURL("http://example.com/newpub");
+    	newpub.setId(22L);
+    	
+    	expect(publisherRepository.getById(22L)).andReturn(newpub).once();
+    	replay(publisherRepository);
+    	
+    	hubService.savePublisher(newpub);
+    	
+    	assertThat(hubService.getPublisherById(22L), CoreMatchers.equalTo(newpub));
+    	
+    	verify(publisherRepository);
+    }
+    
+    @Test
+    @Rollback
+    public void saveFeed() {
+    	Feed newFeed = new Feed();
+    	newFeed.setId(22L);
+    	newFeed.setPublisher(publisher);
+    	newFeed.setType(Feed.FeedType.RSS);
+    	newFeed.setUrl("http://example.com/newFeed");
+    	
+    	expect(feedRepository.getById(22L)).andReturn(newFeed).once();
+    	replay(feedRepository);
+    	
+    	hubService.saveFeed(newFeed);
+    	
+    	assertThat(hubService.getFeedById(22L), CoreMatchers.equalTo(newFeed));
+    	
+    	verify(feedRepository);
+    }
+    
+    @Test
+    @Rollback
+    public void saveSubscriber() {
+    	Subscriber newSub = new Subscriber();
+    	newSub.setId(22L);
+    	newSub.setPostbackURL("http://example.com/newSub");
+    	
+    	expect(subscriberRepository.getByUrl("http://example.com/newSub")).andReturn(newSub).once();
+    	replay(subscriberRepository);
+    	
+    	hubService.saveSubscriber(newSub);
+    	
+    	assertThat(hubService.getSubscriberByCallbackURL("http://example.com/newSub"), CoreMatchers.equalTo(newSub));
+    	
+    	verify(subscriberRepository);
+    }
+    
+    @Test
+    @Rollback
+    @Ignore
+    public void removeFeedById_validID() {
+    	Feed newFeed = new Feed();
+    	newFeed.setId(22L);
+    	newFeed.setPublisher(publisher);
+    	newFeed.setType(Feed.FeedType.RSS);
+    	newFeed.setUrl("http://example.com/newFeed");
+    	
+    	expect(feedRepository.getById(22L)).andReturn(newFeed).once();
+    	replay(feedRepository);
+    	
+    	hubService.saveFeed(newFeed);
+    	assertThat(hubService.getFeedById(22L), CoreMatchers.equalTo(newFeed));
+    	
+    	verify(feedRepository);
+    	
+    	expect(feedRepository.getById(22L)).andReturn(null).once();
+    	replay(feedRepository);
+    	
+    	hubService.removeFeedById(22L);
+    	assertThat(hubService.getFeedById(22L), is(nullValue()));
+    	
+    	verify(feedRepository);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void removeFeedById_invalidID() {
+    	IllegalArgumentException iae = new IllegalArgumentException();
+    	
+    	feedRepository.removeById(42L);
+    	expectLastCall().andThrow(iae);
+    	replay(feedRepository);
+    	
+    	hubService.removeFeedById(42L);
+    	
+    	verify(feedRepository);
+    }
+    
+    @Test
+    @Rollback
+    @Ignore
+    public void removePublisherById_validID() {
+    	Publisher newpub = new Publisher();
+    	newpub.setCallbackURL("http://example.com/newpub");
+    	newpub.setId(22L);
+    	
+    	hubService.savePublisher(newpub);
+    	assertThat(hubService.getPublisherById(22L), CoreMatchers.equalTo(newpub));
+    	
+    	hubService.removePublisherById(22L);
+    	assertThat(hubService.getPublisherById(22L), is(nullValue()));
+    	
+    	
+    }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void removePublisherById_invalidID() {
+    	IllegalArgumentException iae = new IllegalArgumentException();
+    	
+    	publisherRepository.removeById(42L);
+    	expectLastCall().andThrow(iae);
+    	replay(publisherRepository);
+    	
+    	hubService.removePublisherById(42L);
+    	
+    	verify(publisherRepository);
+    }
+    
+    @Test
+    @Rollback
+    @Ignore
+    public void removeSubscriberById_validID() {
+    	Subscriber newSub = new Subscriber();
+    	newSub.setId(22L);
+    	newSub.setPostbackURL("http://example.com/newSub");
+    	
+    	hubService.saveSubscriber(newSub);
+    	assertThat(hubService.getSubscriberByCallbackURL("http://example.com/newSub"), CoreMatchers.equalTo(newSub));
+    	
+    	hubService.removeSubscriberById(22L);
+    	assertThat(hubService.getSubscriberByCallbackURL("http://example.com/newSub"), is(nullValue()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class) 
+    public void removeSubscriberById_invalidID() {
+    	IllegalArgumentException iae = new IllegalArgumentException();
+    	
+    	subscriberRepository.removeById(42L);
+    	expectLastCall().andThrow(iae);
+    	replay(subscriberRepository);
+    	
+    	hubService.removeSubscriberById(42L);
+    	
+    	verify(subscriberRepository);
+    }
     
 }
