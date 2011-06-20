@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -64,6 +65,16 @@ public class PublisherRepositoryTest {
     	sharedManager.flush();
     	
     	List<Publisher> retrievedList = (List<Publisher>) repository.getAll();
+    	
+    	System.out.println("Before List : ");
+        for (Publisher p : beforeList) {
+        	System.out.println(p.toString());
+        }
+        
+        System.out.println("Retrieved List : ");
+        for (Publisher p : retrievedList) {
+        	System.out.println(p.toString());
+        }
     	
     	if (retrievedList.size() != beforeList.size()) {
     		fail("Retrieved list and before list are not the same size! Retrieved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());

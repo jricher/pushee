@@ -71,6 +71,16 @@ public class FeedRepositoryTest  {
         
         List<Feed> retrievedList = (List<Feed>) repository.getAll();
         
+        System.out.println("Before List : ");
+        for (Feed f : beforeList) {
+        	System.out.println(f.toString());
+        }
+        
+        System.out.println("Retrieved List : ");
+        for (Feed f : retrievedList) {
+        	System.out.println(f.toString());
+        }
+        
         if (retrievedList.size() != beforeList.size()) {
         	fail("beforeList and retrievedList are not of the same size! retreved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());
         }

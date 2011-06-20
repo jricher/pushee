@@ -19,6 +19,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -68,6 +69,16 @@ public class SubscriberRepositoryTest {
     	sharedManager.flush();
     	
     	List<Subscriber> retrievedList = (List<Subscriber>) repository.getAll();
+    	
+    	System.out.println("Before List : ");
+        for (Subscriber s : beforeList) {
+        	System.out.println(s.toString());
+        }
+        
+        System.out.println("Retrieved List : ");
+        for (Subscriber s : retrievedList) {
+        	System.out.println(s.toString());
+        }
     	
     	if (retrievedList.size() != beforeList.size()) {
     		fail("Retrieved list and before list are not the same size! Retrieved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());
