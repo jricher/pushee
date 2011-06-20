@@ -48,38 +48,39 @@ public class PublisherRepositoryTest {
     @Rollback
     public void getAll() {
     	
-    	Publisher pub2 = new Publisher();
-    	pub2.setId(2L);
-    	pub2.setCallbackURL("http://example.com/pub/2");
-    	
     	Publisher pub3 = new Publisher();
     	pub3.setId(3L);
     	pub3.setCallbackURL("http://example.com/pub/3");
     	
+    	Publisher pub4 = new Publisher();
+    	pub4.setId(4L);
+    	pub4.setCallbackURL("http://example.com/pub/4");
+    	
     	List<Publisher> beforeList = new ArrayList<Publisher>();
     	beforeList.add(repository.getById(ID)); //Already in repository
-    	beforeList.add(pub2);
+    	beforeList.add(repository.getById(2L)); //Already in repository
     	beforeList.add(pub3);
+    	beforeList.add(pub4);
     	
     	List<Publisher> preGetAll = (List<Publisher>)repository.getAll();
     	System.out.println("Before adding anything, contents of repository are : ");
         for (Publisher s : preGetAll) {
         	System.out.println(s.toString());
-        	beforeList.add(s);
         }
     	
-    	repository.save(pub2);
     	repository.save(pub3);
+    	repository.save(pub4);
     	sharedManager.flush();
     	
     	List<Publisher> retrievedList = (List<Publisher>) repository.getAll();
     	
+    	System.out.println("After saving additional Publishers, contents of lists are :");
     	System.out.println("Before List : ");
         for (Publisher p : beforeList) {
         	System.out.println(p.toString());
         }
         
-        System.out.println("Retrieved List : ");
+        System.out.println("Retrieved List (from repository.getAll()) : ");
         for (Publisher p : retrievedList) {
         	System.out.println(p.toString());
         }

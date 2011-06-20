@@ -51,40 +51,41 @@ public class FeedRepositoryTest  {
     @Rollback
     public void getAll() {
     	
-    	Feed feed2 = new Feed();
-    	feed2.setId(2L);
-    	feed2.setUrl("http://example.com/2");
-    	feed2.setType(Feed.FeedType.RSS);
-    	
     	Feed feed3 = new Feed();
     	feed3.setId(3L);
     	feed3.setUrl("http://example.com/3");
-    	feed3.setType(Feed.FeedType.ATOM);
+    	feed3.setType(Feed.FeedType.RSS);
+    	
+    	Feed feed4 = new Feed();
+    	feed4.setId(4L);
+    	feed4.setUrl("http://example.com/4");
+    	feed4.setType(Feed.FeedType.ATOM);
     	
     	List<Feed> beforeList = new ArrayList<Feed>();
-    	beforeList.add(repository.getById(ID)); //The repository already contains 1 entry
-    	beforeList.add(feed2);
+    	beforeList.add(repository.getById(ID)); //The repository already contains 
+    	beforeList.add(repository.getById(2L)); //2 entries
     	beforeList.add(feed3);
+    	beforeList.add(feed4);
     	
     	List<Feed> preGetAll = (List<Feed>)repository.getAll();
     	System.out.println("Before adding anything, contents of repository are : ");
         for (Feed s : preGetAll) {
         	System.out.println(s.toString());
-        	beforeList.add(s);
         }
     	
-    	repository.save(feed2);
     	repository.save(feed3);
+    	repository.save(feed4);
         sharedManager.flush();
         
         List<Feed> retrievedList = (List<Feed>) repository.getAll();
         
+        System.out.println("After saving additional Feeds, contents of lists are: ");
         System.out.println("Before List : ");
         for (Feed f : beforeList) {
         	System.out.println(f.toString());
         }
         
-        System.out.println("Retrieved List : ");
+        System.out.println("Retrieved list (from repository.getAll()): ");
         for (Feed f : retrievedList) {
         	System.out.println(f.toString());
         }

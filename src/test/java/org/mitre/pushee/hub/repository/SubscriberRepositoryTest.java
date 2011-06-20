@@ -51,38 +51,39 @@ public class SubscriberRepositoryTest {
     @Rollback
     public void getAll() {
 
-    	Subscriber sub2 = new Subscriber();
-    	sub2.setId(2L);
-    	sub2.setPostbackURL("http://example.com/sub/2");
-    	
     	Subscriber sub3 = new Subscriber();
     	sub3.setId(3L);
     	sub3.setPostbackURL("http://example.com/sub/3");
     	
+    	Subscriber sub4 = new Subscriber();
+    	sub4.setId(4L);
+    	sub4.setPostbackURL("http://example.com/sub/4");
+    	
     	List<Subscriber> beforeList = new ArrayList<Subscriber>();
     	beforeList.add(repository.getByUrl(URL)); //This one is already in the repository
-    	beforeList.add(sub2);
+    	beforeList.add(repository.getByUrl("http://example.com/sub/2")); //Already in repository
     	beforeList.add(sub3);
+    	beforeList.add(sub4);
     	
     	List<Subscriber> preGetAll = (List<Subscriber>)repository.getAll();
     	System.out.println("Before adding anything, contents of repository are : ");
         for (Subscriber s : preGetAll) {
         	System.out.println(s.toString());
-        	beforeList.add(s);
         }
     	
-        repository.save(sub2);
-    	repository.save(sub3);
+        repository.save(sub3);
+    	repository.save(sub4);
     	sharedManager.flush();
     	
     	List<Subscriber> retrievedList = (List<Subscriber>) repository.getAll();
     	
+    	System.out.println("After saving additional Subscribers, contents of lists are as follows:");
     	System.out.println("Before List : ");
         for (Subscriber s : beforeList) {
         	System.out.println(s.toString());
         }
         
-        System.out.println("Retrieved List : ");
+        System.out.println("Retrieved List (from repository.getAll()) : ");
         for (Subscriber s : retrievedList) {
         	System.out.println(s.toString());
         	
