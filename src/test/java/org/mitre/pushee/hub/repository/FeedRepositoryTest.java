@@ -19,6 +19,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Feed;
+import org.mitre.pushee.hub.model.Subscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -64,6 +65,13 @@ public class FeedRepositoryTest  {
     	beforeList.add(repository.getById(ID)); //The repository already contains 1 entry
     	beforeList.add(feed2);
     	beforeList.add(feed3);
+    	
+    	List<Feed> preGetAll = (List<Feed>)repository.getAll();
+    	System.out.println("Before adding anything, contents of repository are : ");
+        for (Feed s : preGetAll) {
+        	System.out.println(s.toString());
+        	beforeList.add(s);
+        }
     	
     	repository.save(feed2);
     	repository.save(feed3);

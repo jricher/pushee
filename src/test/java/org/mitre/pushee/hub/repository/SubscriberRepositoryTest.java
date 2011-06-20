@@ -50,7 +50,7 @@ public class SubscriberRepositoryTest {
     @Test
     @Rollback
     public void getAll() {
-    	
+
     	Subscriber sub2 = new Subscriber();
     	sub2.setId(2L);
     	sub2.setPostbackURL("http://example.com/sub/2");
@@ -64,7 +64,14 @@ public class SubscriberRepositoryTest {
     	beforeList.add(sub2);
     	beforeList.add(sub3);
     	
-    	repository.save(sub2);
+    	List<Subscriber> preGetAll = (List<Subscriber>)repository.getAll();
+    	System.out.println("Before adding anything, contents of repository are : ");
+        for (Subscriber s : preGetAll) {
+        	System.out.println(s.toString());
+        	beforeList.add(s);
+        }
+    	
+        repository.save(sub2);
     	repository.save(sub3);
     	sharedManager.flush();
     	
@@ -78,6 +85,7 @@ public class SubscriberRepositoryTest {
         System.out.println("Retrieved List : ");
         for (Subscriber s : retrievedList) {
         	System.out.println(s.toString());
+        	
         }
     	
     	if (retrievedList.size() != beforeList.size()) {

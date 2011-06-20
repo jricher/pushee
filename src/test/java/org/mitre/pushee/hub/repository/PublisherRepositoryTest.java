@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
+import org.mitre.pushee.hub.model.Subscriber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -59,6 +60,13 @@ public class PublisherRepositoryTest {
     	beforeList.add(repository.getById(ID)); //Already in repository
     	beforeList.add(pub2);
     	beforeList.add(pub3);
+    	
+    	List<Publisher> preGetAll = (List<Publisher>)repository.getAll();
+    	System.out.println("Before adding anything, contents of repository are : ");
+        for (Publisher s : preGetAll) {
+        	System.out.println(s.toString());
+        	beforeList.add(s);
+        }
     	
     	repository.save(pub2);
     	repository.save(pub3);
