@@ -68,6 +68,16 @@ public class Publisher {
 
 
 	@Override
+	public String toString() {
+		return "Publisher [id=" + id + ", callbackURL=" + callbackURL
+				+ ", feeds=" + feeds + "]";
+	}
+
+
+
+
+
+	@Override
 	public boolean equals(Object obj) {
 		logger.info("Publisher - equals");
 		if (this == obj)

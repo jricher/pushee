@@ -63,6 +63,12 @@ public class Subscriber {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return "Subscriber [id=" + id + ", postbackURL=" + postbackURL
+				+ ", subscriptions=" + subscriptions + "]";
+	}
+
 	/**
 	 * Remove a subscription, if it exists.
 	 * 

@@ -66,12 +66,12 @@ public class PublisherRepositoryTest {
     	List<Publisher> retrievedList = (List<Publisher>) repository.getAll();
     	
     	if (retrievedList.size() != beforeList.size()) {
-    		fail("Retrieved list and before list should be the same size!");
+    		fail("Retrieved list and before list are not the same size! Retrieved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());
     	}
     	
-    	for (Publisher p : beforeList) {
-    		if (!retrievedList.contains(p)) {
-    			fail("Retrieved list and before list have unequal items!");
+    	for (Publisher p : retrievedList) {
+    		if (!beforeList.contains(p)) {
+    			fail("Retrieved list and before list contain unequal items! Before list does not contain " + p.toString());
     		}
     	}
     	

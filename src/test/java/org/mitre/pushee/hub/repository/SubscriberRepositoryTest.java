@@ -70,12 +70,12 @@ public class SubscriberRepositoryTest {
     	List<Subscriber> retrievedList = (List<Subscriber>) repository.getAll();
     	
     	if (retrievedList.size() != beforeList.size()) {
-    		fail("Retrieved list and before list should be the same size!");
+    		fail("Retrieved list and before list are not the same size! Retrieved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());
     	}
     	
     	for (Subscriber s : retrievedList) {
     		if (!beforeList.contains(s)) {
-    			fail("Retrieved list and before list contain unequal items!");
+    			fail("Retrieved list and before list contain unequal items! Beforelist does not contain " + s.toString());
     		}
     	}
     	

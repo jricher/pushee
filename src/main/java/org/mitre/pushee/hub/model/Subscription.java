@@ -78,6 +78,15 @@ public class Subscription {
 
 
 	@Override
+	public String toString() {
+		return "Subscription [id=" + id + ", timeout=" + timeout + ", secret="
+				+ secret + ", feedId=" + (feed == null ? "none" : feed.getId()) + ", subscriberId=" + (subscriber == null ? "none" : subscriber.getId())
+				+ "]";
+	}
+
+
+
+	@Override
 	public boolean equals(Object obj) {
 		logger.info("Subscription - equals");
 		if (this == obj)

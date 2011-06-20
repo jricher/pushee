@@ -72,12 +72,13 @@ public class FeedRepositoryTest  {
         List<Feed> retrievedList = (List<Feed>) repository.getAll();
         
         if (retrievedList.size() != beforeList.size()) {
-        	fail("beforeList and retrievedList are not of the same size!");
+        	fail("beforeList and retrievedList are not of the same size! retreved.size = " + retrievedList.size() + ", before.size = " + beforeList.size());
         }
         
         for (Feed f : retrievedList) {
         	if (!beforeList.contains(f)) {
-        		fail("beforeList and retrievedList are unequal");
+        	
+        		fail("beforeList and retrievedList contain unequal items! beforeList does not contain item " + f.toString());
         	} 
         }
     	//If we get to this point w/o failing, it's good!

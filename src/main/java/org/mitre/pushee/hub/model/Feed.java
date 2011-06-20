@@ -86,6 +86,13 @@ public class Feed {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Feed [id=" + id + ", url=" + url + ", type=" + type
+				+ ", publisherId=" + (publisher == null ? "none" : publisher.getId()) + ", subscriptions="
+				+ subscriptions + "]";
+	}
+
 	public enum FeedType {
 		ATOM, RSS
 	}
