@@ -52,11 +52,11 @@ public class SubscriberRepositoryTest {
     public void getAll() {
 
     	Subscriber sub3 = new Subscriber();
-    	sub3.setId(3L);
+    	//sub3.setId(3L);
     	sub3.setPostbackURL("http://example.com/sub/3");
     	
     	Subscriber sub4 = new Subscriber();
-    	sub4.setId(4L);
+    	//sub4.setId(4L);
     	sub4.setPostbackURL("http://example.com/sub/4");
     	
     	List<Subscriber> beforeList = new ArrayList<Subscriber>();

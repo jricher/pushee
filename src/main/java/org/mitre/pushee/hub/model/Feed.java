@@ -45,7 +45,7 @@ public class Feed {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
-				+ ((publisher == null) ? 0 : publisher.getCallbackURL().hashCode());
+				+ ((publisher == null) ? 0 : publisher.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;

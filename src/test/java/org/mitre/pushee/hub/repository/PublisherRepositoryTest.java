@@ -49,11 +49,11 @@ public class PublisherRepositoryTest {
     public void getAll() {
     	
     	Publisher pub3 = new Publisher();
-    	pub3.setId(3L);
+    	//pub3.setId(3L);
     	pub3.setCallbackURL("http://example.com/pub/3");
     	
     	Publisher pub4 = new Publisher();
-    	pub4.setId(4L);
+    	//pub4.setId(4L);
     	pub4.setCallbackURL("http://example.com/pub/4");
     	
     	List<Publisher> beforeList = new ArrayList<Publisher>();
