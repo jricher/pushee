@@ -52,12 +52,12 @@ public class FeedRepositoryTest  {
     public void getAll() {
     	
     	Feed feed3 = new Feed();
-    	feed3.setId(3L);
+    	//feed3.setId(3L);
     	feed3.setUrl("http://example.com/3");
     	feed3.setType(Feed.FeedType.RSS);
     	
     	Feed feed4 = new Feed();
-    	feed4.setId(4L);
+    	//feed4.setId(4L);
     	feed4.setUrl("http://example.com/4");
     	feed4.setType(Feed.FeedType.ATOM);
     	
