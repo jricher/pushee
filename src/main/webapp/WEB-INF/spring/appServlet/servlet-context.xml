@@ -18,10 +18,13 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2"/>
 	</beans:bean>
 	
 	<!-- Resolve views based on string names -->
-	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" >
+		<beans:property name="order" value="1"/>
+	</beans:bean>
 
 	<!-- json view, capable of converting any POJO to json format -->
 	<beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/> 
