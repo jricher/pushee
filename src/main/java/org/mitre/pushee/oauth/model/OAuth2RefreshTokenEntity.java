@@ -23,6 +23,10 @@ import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
 @Entity
 public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 
+	private ClientDetailsEntity client;
+
+	private  Set<String> scope; // we save the scope issued to the refresh token so that we can reissue a new access token	
+	
 	/**
 	 * 
 	 */
@@ -73,16 +77,11 @@ public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 		return getExpiration() == null || System.currentTimeMillis() > getExpiration().getTime();
 	}
 	
-	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private ClientDetailsEntity client;
-
-	@ElementCollection
-	private  Set<String> scope; // we save the scope issued to the refresh token so that we can reissue a new access token	
-	
 	/**
      * @return the client
      */
+	@ManyToOne
+	@JoinColumn(name = "client_id")
     public ClientDetailsEntity getClient() {
     	return client;
     }
@@ -98,6 +97,7 @@ public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 	/**
      * @return the scope
      */
+	@ElementCollection
     public Set<String> getScope() {
     	return scope;
     }

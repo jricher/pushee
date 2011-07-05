@@ -31,16 +31,14 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 })
 public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 
-	@ManyToOne
-	@JoinColumn(name = "client_id")
 	private ClientDetailsEntity client;
 	
-	@Basic
 	OAuth2Authentication authentication; // the authentication that made this access
 	
 	/**
      * @return the authentication
      */
+	@Basic
     public OAuth2Authentication getAuthentication() {
     	return authentication;
     }
@@ -57,6 +55,8 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 	/**
      * @return the client
      */
+	@ManyToOne
+	@JoinColumn(name = "client_id")
     public ClientDetailsEntity getClient() {
     	return client;
     }
@@ -142,9 +142,17 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
     @Override
     @ManyToOne
     @JoinColumn(name="refresh_token_value")
-    public OAuth2RefreshToken getRefreshToken() {
+    public OAuth2RefreshTokenEntity getRefreshToken() {
 	    // TODO Auto-generated method stub
-	    return super.getRefreshToken();
+	    return (OAuth2RefreshTokenEntity) super.getRefreshToken();
+    }
+
+	/* (non-Javadoc)
+     * @see org.springframework.security.oauth2.common.OAuth2AccessToken#setRefreshToken(org.springframework.security.oauth2.common.OAuth2RefreshToken)
+     */
+    public void setRefreshToken(OAuth2RefreshTokenEntity refreshToken) {
+	    // TODO Auto-generated method stub
+	    super.setRefreshToken(refreshToken);
     }
 
 	/* (non-Javadoc)
@@ -152,10 +160,10 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      */
     @Override
     public void setRefreshToken(OAuth2RefreshToken refreshToken) {
-	    // TODO Auto-generated method stub
-	    super.setRefreshToken(refreshToken);
+    	// force a pass through to the entity version
+    	setRefreshToken((OAuth2RefreshTokenEntity)refreshToken);
     }
-
+	
 	/* (non-Javadoc)
      * @see org.springframework.security.oauth2.common.OAuth2AccessToken#getScope()
      */
@@ -178,5 +186,6 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 	public boolean isExpired() {
 		return getExpiration() == null || System.currentTimeMillis() > getExpiration().getTime();
 	}
-	
+
+
 }
