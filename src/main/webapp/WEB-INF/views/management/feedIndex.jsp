@@ -14,10 +14,11 @@
 <br>
 
 <c:forEach items="${feeds}" var="feed">
-	Feed ${feed.getId()}: 
-		URL = ${feed.getUrl()}
-		Type = ${feed.getType()}
-		Publisher ID = ${feed.getPublisher().getId()}
-	<br/>
+<br/>Feed ${feed.getId()}:<br/> 
+.....URL = ${feed.getUrl()}<br/>
+.....Type = ${feed.getType()}<br/>
+.....Publisher ID = ${feed.getPublisher().getId()}<br/>
+<hr/>
+<br/>
 </c:forEach>
 </body>

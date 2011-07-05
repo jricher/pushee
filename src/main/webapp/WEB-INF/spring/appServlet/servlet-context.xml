@@ -20,6 +20,12 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!-- Resolve views based on string names -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+
+	<!-- json view, capable of converting any POJO to json format -->
+	<beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/> 
+	
 	<!-- Imports user-defined @Controller beans that process client requests -->
 	<beans:import resource="controllers.xml" />
 	
