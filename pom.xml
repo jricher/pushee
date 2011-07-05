@@ -304,8 +304,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <executions>
+					<execution>
+						<id>prepare-war</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
                 <configuration>
                     <warName>pushEE</warName>
+                    <useCache>true</useCache>
                 </configuration>
             </plugin>
             <plugin>

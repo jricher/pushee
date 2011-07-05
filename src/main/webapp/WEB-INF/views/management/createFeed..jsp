@@ -13,8 +13,9 @@
 <br/>
 <h3>Enter feed details:</h3>
 <form>
-Feed URL: <input type-"text" name="feedurl"/><br/>
-Feed ID: <input type="text" name="feedid"/><br/>
+Feed URL: <input type="text" name="feedurl"/><br/>
+
+
 </form>
 </body>
 </html>
