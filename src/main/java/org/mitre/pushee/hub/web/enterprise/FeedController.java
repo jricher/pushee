@@ -57,7 +57,7 @@ public class FeedController {
 	public ModelAndView apiGetAllFeeds() {	
 		List<Feed> feeds = (List<Feed>)hubService.getAllFeeds();
 
-		return new ModelAndView("jsonView", "feeds", feeds);
+		return new ModelAndView("jsonFeedView", "feeds", feeds);
 	}
 	
 	/**
@@ -85,18 +85,16 @@ public class FeedController {
 	 * @return              JSON representation of the feed
 	 */
 	@RequestMapping(value="/api/getFeed")
-	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
+	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId) {
 		
 		Feed f = getExistingFeed(feedId);
-		modelAndView.addObject("feed", f);
-		modelAndView.setViewName("json");
-		return modelAndView;
+		
+		return new ModelAndView("jsonFeedView", "feed", f);
 	}
 	
 	/**
 	 * Add a feed. 
 	 * 
-	 * @param feedId        ID of the new feed  
 	 * @param publisherId   ID of this feed's publisher
 	 * @param type          FeedType enum, RSS or ATOM
 	 * @param url           url of this feed
@@ -104,10 +102,10 @@ public class FeedController {
 	 * @return              createFeed page with the new feed's info displayed 
 	 */
 	@RequestMapping(value="/add")
-	public ModelAndView addFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
+	public ModelAndView addFeed(@RequestParam("publisherId") Long publisherId,
 								@RequestParam("type") FeedType type, @RequestParam("url") String url, ModelAndView modelAndView) {
 		
-		Feed newFeed = addFeed(feedId, publisherId, type, url);
+		Feed newFeed = addFeed( publisherId, type, url);
 		
 		modelAndView.addObject("newFeed", newFeed);
 		modelAndView.setViewName("management/createFeed");
@@ -125,15 +123,12 @@ public class FeedController {
 	 * @return              JSON representation of the newly created feed
 	 */
 	@RequestMapping(value="/api/add")
-	public ModelAndView apiAddFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
-								@RequestParam("type") FeedType type, @RequestParam("url") String url, ModelAndView modelAndView) {
+	public ModelAndView apiAddFeed(@RequestParam("publisherId") Long publisherId,
+								@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
-		Feed theFeed = addFeed(feedId, publisherId, type, url);
+		Feed theFeed = addFeed(publisherId, type, url);
 		
-		modelAndView.addObject("newFeed", theFeed);
-		modelAndView.setViewName("json");
-		
-		return modelAndView;
+		return new ModelAndView("jsonFeedView", "newFeed", theFeed);
 	}
 	
 	/**
@@ -168,18 +163,15 @@ public class FeedController {
 	 */
 	@RequestMapping(value="/api/edit")
 	public ModelAndView apiEditFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
-			@RequestParam("type") FeedType type, @RequestParam("url") String url, ModelAndView modelAndView) {
+			@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
 		Feed theFeed = getExistingFeed(feedId);
 		
 		theFeed.setPublisher(hubService.getPublisherById(publisherId));
 		theFeed.setType(type);
-		theFeed.setUrl(url);
+		theFeed.setUrl(url);	
 		
-		modelAndView.addObject("feed", theFeed);
-		modelAndView.setViewName("json");		
-		
-		return modelAndView;
+		return new ModelAndView("jsonFeedView", "feed", theFeed);
 	}
 	
 	/**
@@ -237,13 +229,12 @@ public class FeedController {
 	/**
 	 * Utility function to add a feed with the specified parameters.
 	 * 
-	 * @param feedId       the id of the feed
 	 * @param publisherId  the id of the feed's publisher (must be a valid, existing publisher)
 	 * @param type         FeedType enum, RSS or ATOM
 	 * @param url          the URL of this feed
 	 * @return             the newly created feed
 	 */
-	private Feed addFeed(Long feedId, Long publisherId, FeedType type, String url) {
+	private Feed addFeed(Long publisherId, FeedType type, String url) {
 		
 		Publisher publisher = hubService.getPublisherById(publisherId);
 		
@@ -252,7 +243,6 @@ public class FeedController {
 		}
 		
 		Feed theFeed = new Feed();
-		theFeed.setId(feedId);
 		theFeed.setPublisher(publisher);
 		theFeed.setType(type);
 		theFeed.setUrl(url);

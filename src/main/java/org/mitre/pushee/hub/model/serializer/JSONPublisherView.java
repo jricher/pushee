@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mitre.pushee.hub.model.Feed;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.google.gson.ExclusionStrategy;
@@ -32,17 +34,26 @@ public class JSONPublisherView extends AbstractView {
 				
 				@Override
 				public boolean shouldSkipField(FieldAttributes f) {
-					
+					if (f.getDeclaringClass().equals(Feed.class)) {
+						if (f.getName().equals("publisher")) {
+							return true;
+						}
+						else if (f.getName().equals("subscriptions")) {
+							return true;
+						}
+					}
 					return false;
 				}
 				
 				@Override
 				public boolean shouldSkipClass(Class<?> clazz) {
-					
+					// skip the JPA binding wrapper
+					if (clazz.equals(BeanPropertyBindingResult.class)) {
+						return true;
+					}
 					return false;
 				}
-				
-				
+
 			}).create();
 
 		response.setContentType("application/json");
