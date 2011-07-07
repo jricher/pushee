@@ -8,13 +8,16 @@ import java.util.UUID;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
+import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntityFactory;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
+import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntityFactory;
 import org.mitre.pushee.oauth.repository.OAuth2TokenRepository;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.provider.token.ExpiredOAuthTokenException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.ClientAuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -35,19 +38,26 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 	@Autowired
 	private ClientDetailsEntityService clientDetailsService;
 	
+	@Autowired
+	private OAuth2AccessTokenEntityFactory accessTokenFactory;
+	
+	@Autowired
+	private OAuth2RefreshTokenEntityFactory refreshTokenFactory;
+	
 	@Override
     public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
-		if (authentication.getClientAuthentication() != null && authentication.getClientAuthentication() instanceof ClientAuthenticationToken) {
+		if (authentication != null && 
+				authentication.getClientAuthentication() != null && 
+				authentication.getClientAuthentication() instanceof ClientAuthenticationToken) {
 			// look up our client
 			ClientAuthenticationToken clientAuth = (ClientAuthenticationToken) authentication.getClientAuthentication();
 			ClientDetailsEntity client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
 		
-			// create our token container
-			OAuth2AccessTokenEntity token = new OAuth2AccessTokenEntity();
+			if (client == null) {
+				throw new InvalidClientException("Client not found: " + clientAuth.getClientId());
+			}
 			
-			// set a random value (TODO: support JWT)
-		    String tokenValue = UUID.randomUUID().toString();
-		    token.setValue(tokenValue);
+			OAuth2AccessTokenEntity token = accessTokenFactory.createNewAccessToken();
 		    
 		    // attach the client
 	    	token.setClient(client);
@@ -68,11 +78,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 	    	
 	    	// attach a refresh token, if this client is allowed to request them
 	    	if (client.isAllowRefresh()) {
-	    		OAuth2RefreshTokenEntity refreshToken = new OAuth2RefreshTokenEntity();
-	    		
-	    		// set a random value for the refresh
-	    		String refreshTokenValue = UUID.randomUUID().toString();
-	    		refreshToken.setValue(refreshTokenValue);
+	    		OAuth2RefreshTokenEntity refreshToken = refreshTokenFactory.createNewRefreshToken();
 	    		
 	    		// make it expire if necessary
 	    		if (client.getRefreshTokenTimeout() != null) {
@@ -123,9 +129,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 		// TODO: have the option to recycle the refresh token here, too
 		// for now, we just reuse it as long as it's valid, which is the original intent
 
-		OAuth2AccessTokenEntity token = new OAuth2AccessTokenEntity();
-	    String tokenValue = UUID.randomUUID().toString();
-	    token.setValue(tokenValue);
+		OAuth2AccessTokenEntity token = accessTokenFactory.createNewAccessToken();
 	    
 	    // TODO: we should get the scope of this request passed in so that we can re-scope the access token
 	    // else pass through to the old scope
@@ -141,6 +145,8 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
     	}
     	
     	token.setRefreshToken(refreshToken);
+    	
+    	tokenRepository.saveAccessToken(token);
     	
     	return token;
 		
@@ -163,6 +169,49 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 	    return accessToken.getAuthentication();
     }
 
+
+	/**
+	 * Get a builder object for this class (for tests)
+	 * @return
+	 */
+	public static DefaultOAuth2ProviderTokenServicesBuilder makeBuilder() {
+		return new DefaultOAuth2ProviderTokenServicesBuilder();
+	}
+	
+	/**
+	 * Builder class for test harnesses.
+	 */
+	public static class DefaultOAuth2ProviderTokenServicesBuilder {
+		private DefaultOAuth2ProviderTokenService instance;
+		
+		private DefaultOAuth2ProviderTokenServicesBuilder() {
+			instance = new DefaultOAuth2ProviderTokenService();
+		}
+		
+		public DefaultOAuth2ProviderTokenServicesBuilder setTokenRepository(OAuth2TokenRepository tokenRepository) {
+			instance.tokenRepository = tokenRepository;
+			return this;
+		}
+		
+		public DefaultOAuth2ProviderTokenServicesBuilder setClientDetailsService(ClientDetailsEntityService clientDetailsService) {
+			instance.clientDetailsService = clientDetailsService;
+			return this;
+		}
+		
+		public DefaultOAuth2ProviderTokenServicesBuilder setAccessTokenFactory(OAuth2AccessTokenEntityFactory accessTokenFactory) {
+			instance.accessTokenFactory = accessTokenFactory;
+			return this;
+		}
+		
+		public DefaultOAuth2ProviderTokenServicesBuilder setRefreshTokenFactory(OAuth2RefreshTokenEntityFactory refreshTokenFactory) {
+			instance.refreshTokenFactory = refreshTokenFactory;
+			return this;
+		}
+		
+		public DefaultOAuth2ProviderTokenService finish() {
+			return instance;
+		}
+	}
 	
 	
 }

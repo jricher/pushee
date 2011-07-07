@@ -7,15 +7,20 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -26,6 +31,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
  *
  */
 @Entity
+@Table(name="accesstoken")
 @NamedQueries({
 	@NamedQuery(name = "OAuth2AccessTokenEntity.getByRefreshToken", query = "select a from OAuth2AccessTokenEntity a where a.refreshToken = :refreshToken")
 })
@@ -36,8 +42,17 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 	OAuth2Authentication authentication; // the authentication that made this access
 	
 	/**
+	 * 
+	 */
+	public OAuth2AccessTokenEntity() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	/**
      * @return the authentication
      */
+	@Lob
 	@Basic
     public OAuth2Authentication getAuthentication() {
     	return authentication;
@@ -70,12 +85,7 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
     }
 
 
-	/**
-	 * 
-	 */
-	public OAuth2AccessTokenEntity() {
-		// TODO Auto-generated constructor stub
-	}
+
 
 	
 	/* (non-Javadoc)
@@ -83,6 +93,7 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      */
     @Override
     @Id
+    @Column(name="id")
     public String getValue() {
 	    // TODO Auto-generated method stub
 	    return super.getValue();
@@ -141,7 +152,7 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      */
     @Override
     @ManyToOne
-    @JoinColumn(name="refresh_token_value")
+    @JoinColumn(name="refresh_token_id")
     public OAuth2RefreshTokenEntity getRefreshToken() {
 	    // TODO Auto-generated method stub
 	    return (OAuth2RefreshTokenEntity) super.getRefreshToken();
@@ -160,6 +171,10 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      */
     @Override
     public void setRefreshToken(OAuth2RefreshToken refreshToken) {
+    	if (!(refreshToken instanceof OAuth2RefreshTokenEntity)) {
+    		// TODO: make a copy constructor instead....
+    		throw new IllegalArgumentException("Not a storable refresh token entity!");
+    	}
     	// force a pass through to the entity version
     	setRefreshToken((OAuth2RefreshTokenEntity)refreshToken);
     }
@@ -169,6 +184,10 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      */
     @Override
     @ElementCollection
+    @CollectionTable(
+    		joinColumns=@JoinColumn(name="owner_id"),
+    		name="scope"
+    )
     public Set<String> getScope() {
 	    // TODO Auto-generated method stub
 	    return super.getScope();
@@ -183,8 +202,9 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 	    super.setScope(scope);
     }
 
+    @Transient
 	public boolean isExpired() {
-		return getExpiration() == null || System.currentTimeMillis() > getExpiration().getTime();
+		return getExpiration() == null ? false : System.currentTimeMillis() > getExpiration().getTime();
 	}
 
 

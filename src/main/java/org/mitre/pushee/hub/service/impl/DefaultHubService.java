@@ -34,13 +34,7 @@ public class DefaultHubService implements HubService {
 	public DefaultHubService() {
 		
 	}
-	
-	public DefaultHubService(FeedRepository fr, PublisherRepository pr, SubscriberRepository sr) {
-		this.feedRepository = fr;
-		this.publisherRepository = pr;
-		this.subscriberRepository = sr;
-	}
-	
+
 	@Override
 	public Collection<Subscriber> getAllSubscribers() {
 		return subscriberRepository.getAll();
@@ -122,4 +116,47 @@ public class DefaultHubService implements HubService {
     public void removeSubscriberById(Long subscriberId) {
     	subscriberRepository.removeById(subscriberId);
     }
+
+	/**
+	 * Create a builder for use in test harnesses
+	 * @return
+	 */
+	public static DefaultHubServiceBuilder makeBuilder() {
+		return new DefaultHubServiceBuilder();
+	}
+
+	/**
+	 * Builder class for use in test harnesses. The normal use of the 
+	 * {@link DefaultHubService} class should make use of the Spring 
+	 * {@link Autowired} capability.
+	 * @author jricher
+	 *
+	 */
+	public static class DefaultHubServiceBuilder {
+		private DefaultHubService instance;
+		
+		private DefaultHubServiceBuilder() {
+			instance = new DefaultHubService();
+		}
+		
+		public DefaultHubServiceBuilder setFeedRepository(FeedRepository feedRepository) {
+			instance.feedRepository = feedRepository;
+			return this;
+		}
+		
+		public DefaultHubServiceBuilder setPublisherRepository(PublisherRepository publisherRepository) {
+			instance.publisherRepository = publisherRepository;
+			return this;
+		}
+		
+		public DefaultHubServiceBuilder setSubscriberRepository(SubscriberRepository subscriberRepository) {
+			instance.subscriberRepository = subscriberRepository;
+			return this;
+		}
+		
+		public DefaultHubService finish() {
+			return instance;
+		}
+	}
+	
 }

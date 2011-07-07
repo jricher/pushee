@@ -8,10 +8,19 @@
         <property name="databaseName" value="pushee"/>
         <property name="scriptLocations" >
             <list>
+            	<!-- PuSHEE Data model -->
                 <value>file:src/main/db/tables/feed.sql</value>
                 <value>file:src/main/db/tables/publisher.sql</value>
                 <value>file:src/main/db/tables/subscriber.sql</value>
                 <value>file:src/main/db/tables/subscription.sql</value>
+                <!-- OAuth2 Data model -->
+                <value>file:src/main/db/tables/accesstoken.sql</value>
+                <value>file:src/main/db/tables/authorities.sql</value>
+                <value>file:src/main/db/tables/clientdetails.sql</value>
+                <value>file:src/main/db/tables/granttypes.sql</value>
+                <value>file:src/main/db/tables/refreshtoken.sql</value>
+                <value>file:src/main/db/tables/scope.sql</value>
+                <!-- Preloaded data -->
                 <value>classpath:test-data.sql</value>
             </list>
         </property>

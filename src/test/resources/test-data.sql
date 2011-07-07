@@ -9,3 +9,4 @@ INSERT INTO SUBSCRIPTION (id, feed_id, subscriber_id, postbackURL) VALUES (2, 1,
 
 INSERT INTO PUBLISHER (id, callbackURL) VALUES (1, 'http://example.com/pub/1');
 INSERT INTO PUBLISHER (id, callbackURL) VALUES (2, 'http://example.com/pub/2');
+

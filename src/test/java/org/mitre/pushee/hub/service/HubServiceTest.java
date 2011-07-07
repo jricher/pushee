@@ -32,6 +32,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.common.collect.Sets;
+
 /**
  * @author mfranklin
  *         Date: 4/1/11
@@ -58,9 +60,9 @@ public class HubServiceTest {
 	private Long subscriptionId;
 	
 	//Some objects to manipulate
-	Subscriber subscriber;
-	Publisher publisher;
-	Feed feed;
+	private Subscriber subscriber;
+	private Publisher publisher;
+	private Feed feed;
 	Subscription subscription;
 	
     @Before
@@ -75,8 +77,11 @@ public class HubServiceTest {
     	subscriberRepository = createNiceMock(SubscriberRepository.class);
     	publisherRepository = createNiceMock(PublisherRepository.class);
     	
-    	hubService = new DefaultHubService(feedRepository, publisherRepository, subscriberRepository);
-    	//hubService = new DefaultHubService();
+    	hubService = DefaultHubService.makeBuilder()
+    					.setFeedRepository(feedRepository)
+    					.setSubscriberRepository(subscriberRepository)
+    					.setPublisherRepository(publisherRepository)
+    					.finish();
     	
     	subscriberURL = "http://example.com/subscriber";
     	publisherURL = "http://example.com/publisher";
@@ -120,8 +125,7 @@ public class HubServiceTest {
     public void getSubscribersByFeedId_validId() {
     	logger.info("Starting get subscribers by feed ID test");
     	//Create subscribers list; the expected result of this shot
-    	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
-    	subscribers.add(subscriber);
+    	Collection<Subscriber> subscribers = Sets.newHashSet(subscriber);
     	
     	//Place expectations, replays and verifies on repository mocks (look 
     	//at internal calls in DefaultHubService)
@@ -137,8 +141,7 @@ public class HubServiceTest {
     
     @Test
     public void getSubscribersByFeed_validFeed() {
-    	Collection<Subscriber> subscribers = new HashSet<Subscriber>();
-    	subscribers.add(subscriber);
+    	Collection<Subscriber> subscribers = Sets.newHashSet(subscriber);
     	
     	expect(subscriberRepository.getSubscribers(feedId)).andReturn(subscribers).once();
     	

@@ -7,9 +7,12 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -21,6 +24,7 @@ import com.google.common.collect.Sets;
  * 
  */
 @Entity
+@Table(name="clientdetails")
 public class ClientDetailsEntity implements ClientDetails {
 
 	/**
@@ -70,15 +74,27 @@ public class ClientDetailsEntity implements ClientDetails {
 	private String clientSecret;
 	
 	@ElementCollection
+	@CollectionTable(
+			name="scope",
+			joinColumns=@JoinColumn(name="owner_id")
+	)
 	private List<String> scope;
 	
 	@ElementCollection
+	@CollectionTable(
+			name="granttypes",
+			joinColumns=@JoinColumn(name="owner_id")
+	)
 	private List<String> authorizedGrantTypes;
 	
 	@Basic
 	private String webServerRedirectUri;
 	
 	@ElementCollection
+	@CollectionTable(
+			name="authorities",
+			joinColumns=@JoinColumn(name="owner_id")
+	)
 	private List<GrantedAuthority> authorities = Collections.emptyList();
 
 	@Basic
