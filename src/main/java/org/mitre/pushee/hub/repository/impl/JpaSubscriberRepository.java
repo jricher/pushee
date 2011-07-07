@@ -46,6 +46,13 @@ public class JpaSubscriberRepository implements SubscriberRepository{
     
     @Override
     @Transactional
+    public Subscriber getById(Long subscriberID) {
+    	Subscriber s = manager.find(Subscriber.class, subscriberID);
+    	return s;
+    }
+    
+    @Override
+    @Transactional
     public Subscriber save(Subscriber subscriber) {
         return saveOrUpdate(subscriber.getId(), manager, subscriber);
     }

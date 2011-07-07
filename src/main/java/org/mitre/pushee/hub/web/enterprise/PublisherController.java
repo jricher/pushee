@@ -1,7 +1,6 @@
 package org.mitre.pushee.hub.web.enterprise;
 
-import java.awt.List;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.mitre.pushee.hub.exception.PublisherNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
@@ -41,7 +40,7 @@ public class PublisherController {
 	@RequestMapping("/")
 	public ModelAndView viewAllPublishers(ModelAndView modelAndView) {
 		
-		modelAndView.addObject("publishers", getHubService().getAllPublishers());
+		modelAndView.addObject("publishers", hubService.getAllPublishers());
 		modelAndView.setViewName("management/publisherIndex");
 		
 		return modelAndView;
@@ -52,10 +51,10 @@ public class PublisherController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/api/getAllPublishers")
+	@RequestMapping("/api/getAll")
 	public ModelAndView apiGetAllPublishers() {
 		
-		return new ModelAndView("jsonPublisherView", "publishers", getHubService().getAllPublishers());
+		return new ModelAndView("jsonPublisherView", "publishers", hubService.getAllPublishers());
 
 	}
 	
@@ -66,8 +65,8 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@RequestMapping("/viewPublisher")
-	public ModelAndView viewPublisher(@RequestParam("publisherID") Long pubId, ModelAndView modelAndView) {
+	@RequestMapping("/view")
+	public ModelAndView viewPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
 		Publisher p = getExistingPublisher(pubId);
 		
@@ -83,8 +82,8 @@ public class PublisherController {
 	 * @param pubId
 	 * @return
 	 */
-	@RequestMapping("/api/getPublisher")
-	public ModelAndView apiGetPublisher(@RequestParam("publisherID") Long pubId) {
+	@RequestMapping("/api/get")
+	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long pubId) {
 		
 		return new ModelAndView("jsonPublisherView", "publisher", getExistingPublisher(pubId));
 	
@@ -98,7 +97,7 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("add")
-	public ModelAndView addPublisher(@RequestParam("callbackURL") String url, ModelAndView modelAndView) {
+	public ModelAndView addPublisher(@RequestParam("callbackUrl") String url, ModelAndView modelAndView) {
 		
 		Publisher p = addPublisher(url);
 		
@@ -115,7 +114,7 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("api/add")
-	public ModelAndView apiAddPublisher(@RequestParam("callbackURL") String url) {
+	public ModelAndView apiAddPublisher(@RequestParam("callbackUrl") String url) {
 
 		return new ModelAndView("jsonPublisherView", "publisher", addPublisher(url));
 		
@@ -129,7 +128,7 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/edit")
-	public ModelAndView editPublisher(@RequestParam("publisherID") Long pubId, ModelAndView modelAndView) {
+	public ModelAndView editPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
 		modelAndView.addObject("publisher", getExistingPublisher(pubId));
 		modelAndView.setViewName("management/editPublisher");
@@ -145,7 +144,7 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/api/editUrl")
-	public ModelAndView apiEditPublisherUrl(@RequestParam("publisherID") Long pubId, @RequestParam("callbackURL") String url) {
+	public ModelAndView apiEditPublisherUrl(@RequestParam("publisherId") Long pubId, @RequestParam("callbackURL") String url) {
 		
 		Publisher p = getExistingPublisher(pubId);
 		p.setCallbackURL(url);
@@ -161,10 +160,12 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/remove")
-	public ModelAndView removePublisher(@RequestParam("publisherID") Long pubId, ModelAndView modelAndView) {
+	public ModelAndView removePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
 		deletePublisherAndAssociatedFeeds(pubId);
-		modelAndView.setViewName("removeSuccess");
+		
+		modelAndView.addObject("publishers", hubService.getAllPublishers());
+		modelAndView.setViewName("publisherIndex");
 		
 		return modelAndView;
 	}
@@ -176,11 +177,11 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/api/remove")
-	public ModelAndView apiRemovePublisher(@RequestParam("publisherID") Long pubId) {
+	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId) {
 
 		deletePublisherAndAssociatedFeeds(pubId);
 		
-		return new ModelAndView("removeSuccess");
+		return new ModelAndView("management/successfullyRemoved");
 	}
 	
 	/**
@@ -191,7 +192,7 @@ public class PublisherController {
 	 * @return the publisher, if found
 	 */
 	private Publisher getExistingPublisher(Long pubId) {
-		Publisher thePublisher = getHubService().getPublisherById(pubId);
+		Publisher thePublisher = hubService.getPublisherById(pubId);
 		
 		if (thePublisher == null) {
 			throw new PublisherNotFoundException();
@@ -224,8 +225,8 @@ public class PublisherController {
 	 * @param pubId the ID of the publisher to delete
 	 */
 	private void deletePublisherAndAssociatedFeeds(Long pubId) {
-		
-		for (Feed f : hubService.getPublisherById(pubId).getFeeds()) {
+		List<Feed> feeds =  (List<Feed>) hubService.getPublisherById(pubId).getFeeds();
+		for (Feed f : feeds) {
 			hubService.removeFeedById(f.getId());
 		}
 		

@@ -46,6 +46,11 @@ public class DefaultHubService implements HubService {
     }
 
     @Override
+    public Subscriber getSubscriberById(Long subscriberID) {
+    	return subscriberRepository.getById(subscriberID);
+    }
+    
+    @Override
     public Subscriber getSubscriberByCallbackURL(String url) {
     	return subscriberRepository.getByUrl(url);
     }

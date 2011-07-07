@@ -57,5 +57,13 @@ public interface SubscriberRepository {
      * @param s the Subscriber object to remove
      */
     public void remove(Subscriber s);
+
+    /**
+     * Get a single subscriber via its id
+     * 
+     * @param subscriberID the ID of the subscriber
+     * @return the subscriber if found, or null
+     */
+	public Subscriber getById(Long subscriberID);
     
 }

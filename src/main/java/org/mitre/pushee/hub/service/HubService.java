@@ -40,6 +40,14 @@ public interface HubService {
 	public Collection<Subscriber> getSubscribersByFeed(Feed f);
 	
 	/**
+	 * Get a subscriber by it's id
+	 * 
+	 * @param subscriberID the id of the subscriber to get
+	 * @return the subscriber if found, or null
+	 */
+	public Subscriber getSubscriberById(Long subscriberID);
+	
+	/**
 	 * Get a subscriber by its callback url, if we already have this subscriber
 	 * saved to the database.
 	 * 

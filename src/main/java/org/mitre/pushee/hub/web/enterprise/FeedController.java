@@ -52,7 +52,7 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return JSON representation of feed list
 	 */
-	@RequestMapping(value="api/getAllFeeds")
+	@RequestMapping(value="api/getAll")
 	public ModelAndView apiGetAllFeeds() {	
 		List<Feed> feeds = (List<Feed>)hubService.getAllFeeds();
 
@@ -66,7 +66,7 @@ public class FeedController {
 	 * @param modelAndView  MAV object
 	 * @return              viewFeed page
 	 */
-	@RequestMapping(value="/viewFeed")
+	@RequestMapping(value="/view")
 	public ModelAndView viewFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
 		Feed theFeed = getExistingFeed(feedId);
@@ -83,7 +83,7 @@ public class FeedController {
 	 * @param modelAndView  MAV object
 	 * @return              JSON representation of the feed
 	 */
-	@RequestMapping(value="/api/getFeed")
+	@RequestMapping(value="/api/get")
 	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId) {
 		
 		Feed f = getExistingFeed(feedId);
@@ -187,6 +187,7 @@ public class FeedController {
 		
 		hubService.removeFeedById(feedId);
 		
+		modelAndView.addObject("feeds", hubService.getAllFeeds());
 		modelAndView.setViewName("management/feedIndex");
 		return modelAndView;
 	}
@@ -194,16 +195,19 @@ public class FeedController {
 	/**
 	 * API access to remove a feed.
 	 * 
-	 * @param feedId        ID of the feed to delete
-	 * @param modelAndView  MAV object
-	 * @return              removeSuccess 
+	 * @param  feedId        ID of the feed to delete
+	 * @param  modelAndView  MAV object
+	 * @return removeSuccess 
 	 */
 	@RequestMapping(value="/api/remove")
 	public ModelAndView apiRemoveFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
+		//First verify that the feed exists
+		getExistingFeed(feedId);
+		
 		hubService.removeFeedById(feedId);
 		
-		modelAndView.setViewName("removeSuccess");
+		modelAndView.setViewName("management/successfullyRemoved");
 		return modelAndView;
 	}
 	
@@ -249,7 +253,7 @@ public class FeedController {
 		hubService.saveFeed(theFeed);
 		Feed saved = hubService.getFeedByUrl(url);
 		
-		publisher.getFeeds().add(saved);
+		publisher.addFeed(saved);
 		hubService.savePublisher(publisher);
 		
 		return hubService.getFeedByUrl(url);
