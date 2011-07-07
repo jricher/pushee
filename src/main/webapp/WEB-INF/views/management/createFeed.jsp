@@ -15,7 +15,7 @@
 <form>
 Feed URL: <input type="text" name="feedurl"/><br/>
 Feed Type: <input type="radio" name="feedtype" value=RSS/> RSS <input type="radio" name="feedtype" value=ATOM/> ATOM<br/>
-Publisher: </br>
+Publisher: <br\>
 <input type="submit" value="Create"/>
 </form>
 </body>

@@ -8,6 +8,10 @@
 </head>
 <body>
 <h1>View Feed Details</h1>
-<!-- Get desired feed, display details -->
+<h3>Feed ${feed.getId()}</h3>
+URL = ${feed.getURL()}<br/>
+Type = ${feed.getType()}<br/>
+Publisher ID = ${feed.getPublisher().getId()}<br/>
+<hr/>
 </body>
 </html>

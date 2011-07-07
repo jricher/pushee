@@ -35,7 +35,7 @@ public class FeedController {
 	 * Root page. This page should display the list of current feeds.
 	 * 
 	 * @param  modelAndView  MAV object
-	 * @return               feedIndex page
+	 * @return feedIndex page
 	 */
 	@RequestMapping(value="/")
 	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
@@ -50,8 +50,7 @@ public class FeedController {
 	 * API access to get the list of all feeds.
 	 * 
 	 * @param  modelAndView  MAV object
-	 * @return 
-	 * @return               JSON representation of feed list
+	 * @return JSON representation of feed list
 	 */
 	@RequestMapping(value="api/getAllFeeds")
 	public ModelAndView apiGetAllFeeds() {	
@@ -248,6 +247,10 @@ public class FeedController {
 		theFeed.setUrl(url);
 		
 		hubService.saveFeed(theFeed);
+		Feed saved = hubService.getFeedByUrl(url);
+		
+		publisher.getFeeds().add(saved);
+		hubService.savePublisher(publisher);
 		
 		return hubService.getFeedByUrl(url);
 	}

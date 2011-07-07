@@ -5,20 +5,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Feed Manager</title>
+<title>Publisher Details</title>
 </head>
 <body>
-<h1>Feed Manager</h1>
-<h2>Available feeds:</h2>
-
-<c:forEach items="${feeds}" var="feed">
-Feed ${feed.getId()}:<br/> 
-.....URL = ${feed.getUrl()}<br/>
-.....Type = ${feed.getType()}<br/>
-.....Publisher ID = ${feed.getPublisher().getId()}
-<br/>
-<br/>
-<hr/>
-<br/>
+<h1>View Publisher Details</h1>
+<h3>Publisher ${publisher.getId()}</h3>
+URL = ${publisher.getCallbackURL()}<br/>
+<c:forEach items="${publisher.getFeeds()}" var="feed">
+.....Feed ${feed.getId()}: <br/>
+........URL = ${feed.getUrl()}<br/>
+........Type = ${feed.getType()}<br/>
 </c:forEach>
+<hr/>
 </body>
+</html>
