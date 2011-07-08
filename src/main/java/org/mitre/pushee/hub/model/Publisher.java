@@ -1,7 +1,7 @@
 package org.mitre.pushee.hub.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -39,13 +39,13 @@ public class Publisher {
 	private String callbackURL;
 	
 	@OneToMany(mappedBy = "publisher")
-	private List<Feed> feeds;
+	private Set<Feed> feeds;
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(Publisher.class);
 	
 	public Publisher() {
-		feeds = new ArrayList<Feed>();
+		feeds = new HashSet<Feed>();
 	}
 
 	
@@ -114,20 +114,23 @@ public class Publisher {
 	 * @param f
 	 */
 	public void addFeed(Feed f) {
-		feeds.add(f);
+		if (!feeds.contains(f)) {
+			logger.info("Publisher - adding feed " + f.toString());
+			feeds.add(f);
+		}
 	}
 	
 	/**
 	 * @param feed the feed to set
 	 */
-	public void setFeeds(List<Feed> feeds) {
+	public void setFeeds(Set<Feed> feeds) {
 		this.feeds = feeds;
 	}
 
 	/**
 	 * @return the feed
 	 */
-	public List<Feed> getFeeds() {
+	public Set<Feed> getFeeds() {
 		return feeds;
 	}
 

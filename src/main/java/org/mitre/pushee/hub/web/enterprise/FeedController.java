@@ -183,13 +183,11 @@ public class FeedController {
 	 * @return
 	 */
 	@RequestMapping(value="/remove")
-	public ModelAndView removeFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
+	public Object removeFeed(@RequestParam("feedId") Long feedId) {
 		
 		hubService.removeFeedById(feedId);
 		
-		modelAndView.addObject("feeds", hubService.getAllFeeds());
-		modelAndView.setViewName("management/feedIndex");
-		return modelAndView;
+		return "redirect:/manager/feeds/";
 	}
 
 	/**

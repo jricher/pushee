@@ -69,7 +69,7 @@ public class Feed {
 		if (publisher == null) {
 			if (other.publisher != null)
 				return false;
-		} else if (!publisher.equals(other.publisher))
+		} else if (!publisher.getId().equals(other.publisher.getId()))
 			return false;
 		if (subscriptions == null) {
 			if (other.subscriptions != null)
@@ -121,12 +121,24 @@ public class Feed {
 	/**
 	 * Add a subscriber to the Collection
 	 * 
-	 * @param s the subscriber to add
+	 * @param s the subscription to add
 	 */
 	public void addSubscription(Subscription s) {
 		
 		subscriptions.add(s); 
 	
+	}
+	
+	/**
+	 * Remove a subscription
+	 * 
+	 * @param s the subscription to remove
+	 */
+	public void removeSubscription(Subscription s) {
+		
+		if (subscriptions.contains(s)) {
+			subscriptions.remove(s);
+		}
 	}
 
 	/**

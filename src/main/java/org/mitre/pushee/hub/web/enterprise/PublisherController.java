@@ -1,6 +1,6 @@
 package org.mitre.pushee.hub.web.enterprise;
 
-import java.util.List;
+import java.util.Set;
 
 import org.mitre.pushee.hub.exception.PublisherNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
@@ -160,14 +160,11 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/remove")
-	public ModelAndView removePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
+	public Object removePublisher(@RequestParam("publisherId") Long pubId) {
 		
 		deletePublisherAndAssociatedFeeds(pubId);
 		
-		modelAndView.addObject("publishers", hubService.getAllPublishers());
-		modelAndView.setViewName("publisherIndex");
-		
-		return modelAndView;
+		return "redirect:/manager/publishers/";
 	}
 	
 	/**
@@ -177,11 +174,12 @@ public class PublisherController {
 	 * @return
 	 */
 	@RequestMapping("/api/remove")
-	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId) {
+	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 
 		deletePublisherAndAssociatedFeeds(pubId);
+		modelAndView.setViewName("management/successfullyRemoved");
 		
-		return new ModelAndView("management/successfullyRemoved");
+		return modelAndView;
 	}
 	
 	/**
@@ -194,7 +192,7 @@ public class PublisherController {
 	private Publisher getExistingPublisher(Long pubId) {
 		Publisher thePublisher = hubService.getPublisherById(pubId);
 		
-		if (thePublisher == null) {
+		if (thePublisher == null) {;
 			throw new PublisherNotFoundException();
 		}
 		
@@ -225,7 +223,8 @@ public class PublisherController {
 	 * @param pubId the ID of the publisher to delete
 	 */
 	private void deletePublisherAndAssociatedFeeds(Long pubId) {
-		List<Feed> feeds =  (List<Feed>) hubService.getPublisherById(pubId).getFeeds();
+		Publisher pub = hubService.getPublisherById(pubId);
+		Set<Feed> feeds = pub.getFeeds();
 		for (Feed f : feeds) {
 			hubService.removeFeedById(f.getId());
 		}
