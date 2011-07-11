@@ -1,4 +1,4 @@
-CREATE TABLE granttypes (
+CREATE TABLE authorizedgranttypes (
 	owner_id VARCHAR(256),
-	granttypes VARCHAR(2000)
+	authorizedgranttypes VARCHAR(2000)
 );

@@ -10,8 +10,11 @@ import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +28,9 @@ import com.google.common.collect.Sets;
  */
 @Entity
 @Table(name="clientdetails")
+@NamedQueries({
+	@NamedQuery(name = "ClientDetailsEntity.findAll", query = "SELECT c FROM ClientDetailsEntity c")
+})
 public class ClientDetailsEntity implements ClientDetails {
 
 	/**
@@ -33,39 +39,6 @@ public class ClientDetailsEntity implements ClientDetails {
 	public ClientDetailsEntity() {
 		
 	}
-	
-	/**
-	 * Create a new ClientDetailsEntity with all of its fields filled in
-     * @param clientId The OAuth2 client_id, must be unique to this client 
-     * @param clientSecret the OAuth2 client_secret (optional)
-     * @param scope the set of scopes allowed to be issued to this client
-     * @param authorizedGrantTypes the OAuth2 grant types that this client is allowed to use  
-     * @param webServerRedirectUri The pre-registered redirect URI if necessary
-     * @param authorities the Spring Security authorities this client is given
-     * @param clientName Human-readable name of the client (optional)
-     * @param clientDescription Human-readable long description of the client (optional)
-     * @param allowRefresh Whether to allow for issuance of refresh tokens or not (defaults to false)
-     * @param accessTokenTimeout Lifetime of access tokens, in seconds (optional - leave null for no timeout)
-     * @param refreshTokenTimeout Lifetime of refresh tokens, in seconds (optional - leave null for no timeout)
-     * @param owner User ID of the person who registered this client (optional)
-     */
-    public ClientDetailsEntity(String clientId, String clientSecret, List<String> scope, 
-    		List<String> authorizedGrantTypes, String webServerRedirectUri, 
-    		List<GrantedAuthority> authorities, String clientName, String clientDescription, 
-    		boolean allowRefresh, Long accessTokenTimeout, Long refreshTokenTimeout, String owner) {
-	    this.clientId = clientId;
-	    this.clientSecret = clientSecret;
-	    this.scope = scope;
-	    this.authorizedGrantTypes = authorizedGrantTypes;
-	    this.webServerRedirectUri = webServerRedirectUri;
-	    this.authorities = authorities;
-	    this.clientName = clientName;
-	    this.clientDescription = clientDescription;
-	    this.allowRefresh = allowRefresh;
-	    this.accessTokenTimeout = accessTokenTimeout;
-	    this.refreshTokenTimeout = refreshTokenTimeout;
-	    this.owner = owner;
-    }
 
 	@Id
 	private String clientId;
@@ -73,16 +46,16 @@ public class ClientDetailsEntity implements ClientDetails {
 	@Basic
 	private String clientSecret;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="scope",
 			joinColumns=@JoinColumn(name="owner_id")
 	)
 	private List<String> scope;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
-			name="granttypes",
+			name="authorizedgranttypes",
 			joinColumns=@JoinColumn(name="owner_id")
 	)
 	private List<String> authorizedGrantTypes;
@@ -90,7 +63,7 @@ public class ClientDetailsEntity implements ClientDetails {
 	@Basic
 	private String webServerRedirectUri;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			name="authorities",
 			joinColumns=@JoinColumn(name="owner_id")
@@ -129,7 +102,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param clientId the clientId to set
+     * @param clientId The OAuth2 client_id, must be unique to this client 
      */
     public void setClientId(String clientId) {
     	this.clientId = clientId;
@@ -143,7 +116,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param clientSecret the clientSecret to set
+     * @param clientSecret the OAuth2 client_secret (optional)
      */
     public void setClientSecret(String clientSecret) {
     	this.clientSecret = clientSecret;
@@ -157,7 +130,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param scope the scope to set
+     * @param scope the set of scopes allowed to be issued to this client
      */
     public void setScope(List<String> scope) {
     	this.scope = scope;
@@ -171,7 +144,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param authorizedGrantTypes the authorizedGrantTypes to set
+     * @param authorizedGrantTypes the OAuth2 grant types that this client is allowed to use  
      */
     public void setAuthorizedGrantTypes(List<String> authorizedGrantTypes) {
     	this.authorizedGrantTypes = authorizedGrantTypes;
@@ -185,7 +158,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param webServerRedirectUri the webServerRedirectUri to set
+     * @param webServerRedirectUri The pre-registered redirect URI if necessary
      */
     public void setWebServerRedirectUri(String webServerRedirectUri) {
     	this.webServerRedirectUri = webServerRedirectUri;
@@ -199,7 +172,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param authorities the authorities to set
+     * @param authorities the Spring Security authorities this client is given
      */
     public void setAuthorities(List<GrantedAuthority> authorities) {
     	this.authorities = authorities;
@@ -229,7 +202,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param clientName the clientName to set
+     * @param clientName Human-readable name of the client (optional)
      */
     public void setClientName(String clientName) {
     	this.clientName = clientName;
@@ -243,7 +216,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param clientDescription the clientDescription to set
+     * @param clientDescription Human-readable long description of the client (optional)
      */
     public void setClientDescription(String clientDescription) {
     	this.clientDescription = clientDescription;
@@ -257,14 +230,14 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param allowRefresh the allowRefresh to set
+     * @param allowRefresh Whether to allow for issuance of refresh tokens or not (defaults to false)
      */
     public void setAllowRefresh(boolean allowRefresh) {
     	this.allowRefresh = allowRefresh;
     }
 
 	/**
-     * @return the accessTokenTimeout
+     * @param accessTokenTimeout Lifetime of access tokens, in seconds (optional - leave null for no timeout)
      */
     public Long getAccessTokenTimeout() {
     	return accessTokenTimeout;
@@ -285,7 +258,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param refreshTokenTimeout the refreshTokenTimeout to set
+     * @param refreshTokenTimeout Lifetime of refresh tokens, in seconds (optional - leave null for no timeout)
      */
     public void setRefreshTokenTimeout(Long refreshTokenTimeout) {
     	this.refreshTokenTimeout = refreshTokenTimeout;
@@ -299,7 +272,7 @@ public class ClientDetailsEntity implements ClientDetails {
     }
 
 	/**
-     * @param owner the owner to set
+     * @param owner User ID of the person who registered this client (optional)
      */
     public void setOwner(String owner) {
     	this.owner = owner;
@@ -349,6 +322,133 @@ public class ClientDetailsEntity implements ClientDetails {
 	    return true;
     }
 
-	
+    public static ClientDetailsEntityBuilder makeBuilder() {
+    	return new ClientDetailsEntityBuilder();
+    }
+    
+	public static class ClientDetailsEntityBuilder {
+		private ClientDetailsEntity instance;
+		
+		private ClientDetailsEntityBuilder() {
+			instance = new ClientDetailsEntity();
+		}
+
+		/**
+         * @param clientId
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setClientId(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setClientId(String clientId) {
+	        instance.setClientId(clientId);
+			return this;
+        }
+
+		/**
+         * @param clientSecret
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setClientSecret(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setClientSecret(String clientSecret) {
+	        instance.setClientSecret(clientSecret);
+			return this;
+        }
+
+		/**
+         * @param scope
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setScope(java.util.List)
+         */
+        public ClientDetailsEntityBuilder setScope(List<String> scope) {
+	        instance.setScope(scope);
+			return this;
+        }
+
+		/**
+         * @param authorizedGrantTypes
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setAuthorizedGrantTypes(java.util.List)
+         */
+        public ClientDetailsEntityBuilder setAuthorizedGrantTypes(List<String> authorizedGrantTypes) {
+	        instance.setAuthorizedGrantTypes(authorizedGrantTypes);
+			return this;
+        }
+
+		/**
+         * @param webServerRedirectUri
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setWebServerRedirectUri(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setWebServerRedirectUri(String webServerRedirectUri) {
+	        instance.setWebServerRedirectUri(webServerRedirectUri);
+			return this;
+        }
+
+		/**
+         * @param authorities
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setAuthorities(java.util.List)
+         */
+        public ClientDetailsEntityBuilder setAuthorities(List<GrantedAuthority> authorities) {
+	        instance.setAuthorities(authorities);
+			return this;
+        }
+
+		/**
+         * @param clientName
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setClientName(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setClientName(String clientName) {
+	        instance.setClientName(clientName);
+			return this;
+        }
+
+		/**
+         * @param clientDescription
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setClientDescription(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setClientDescription(String clientDescription) {
+	        instance.setClientDescription(clientDescription);
+			return this;
+        }
+
+		/**
+         * @param allowRefresh
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setAllowRefresh(boolean)
+         */
+        public ClientDetailsEntityBuilder setAllowRefresh(boolean allowRefresh) {
+	        instance.setAllowRefresh(allowRefresh);
+			return this;
+        }
+
+		/**
+         * @param accessTokenTimeout
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setAccessTokenTimeout(java.lang.Long)
+         */
+        public ClientDetailsEntityBuilder setAccessTokenTimeout(Long accessTokenTimeout) {
+	        instance.setAccessTokenTimeout(accessTokenTimeout);
+			return this;
+        }
+
+		/**
+         * @param refreshTokenTimeout
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setRefreshTokenTimeout(java.lang.Long)
+         */
+        public ClientDetailsEntityBuilder setRefreshTokenTimeout(Long refreshTokenTimeout) {
+	        instance.setRefreshTokenTimeout(refreshTokenTimeout);
+			return this;
+        }
+
+		/**
+         * @param owner
+         * @see org.mitre.pushee.oauth.model.ClientDetailsEntity#setOwner(java.lang.String)
+         */
+        public ClientDetailsEntityBuilder setOwner(String owner) {
+	        instance.setOwner(owner);
+			return this;
+        }
+		
+        /**
+         * Complete the builder
+         * @return
+         */
+		public ClientDetailsEntity finish() {
+			return instance;
+		}
+		
+	}
 	
 }

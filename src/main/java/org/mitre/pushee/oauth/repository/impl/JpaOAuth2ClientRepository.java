@@ -3,19 +3,25 @@
  */
 package org.mitre.pushee.oauth.repository.impl;
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.mitre.pushee.hub.repository.util.JpaUtil;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.repository.OAuth2ClientRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author jricher
  *
  */
 @Repository
+@Transactional
 public class JpaOAuth2ClientRepository implements OAuth2ClientRepository {
 
 	@PersistenceContext
@@ -53,6 +59,12 @@ public class JpaOAuth2ClientRepository implements OAuth2ClientRepository {
 	@Override
     public ClientDetailsEntity updateClient(String clientId, ClientDetailsEntity client) {
 	    return JpaUtil.saveOrUpdate(clientId, manager, client);
+    }
+
+	@Override
+    public Collection<ClientDetailsEntity> getAllClients() {
+		TypedQuery<ClientDetailsEntity> query = manager.createNamedQuery("ClientDetailsEntity.findAll", ClientDetailsEntity.class);
+		return query.getResultList();
     }
 
 }

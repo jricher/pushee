@@ -1,5 +1,6 @@
 package org.mitre.pushee.oauth.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
@@ -35,12 +36,17 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
     		Long refreshTokenTimeout, String owner) {
 		
 		// TODO: check "owner" locally?
-		
-		// TODO: switch to builder method instead of megaconstructor
-		ClientDetailsEntity client = new ClientDetailsEntity(clientId, clientSecret, 
-				scope, grantTypes, redirectUri, authorities, 
-				name, description, allowRefresh, accessTokenTimeout, 
-				refreshTokenTimeout, owner);
+
+		// TODO: make a factory?
+		ClientDetailsEntity client = ClientDetailsEntity.makeBuilder()
+										.setClientId(clientId).setClientSecret(clientSecret)
+										.setScope(scope).setAuthorizedGrantTypes(grantTypes)
+										.setWebServerRedirectUri(redirectUri)
+										.setAuthorities(authorities)
+										.setClientName(name).setClientDescription(description)
+										.setAllowRefresh(allowRefresh)
+										.setAccessTokenTimeout(accessTokenTimeout).setRefreshTokenTimeout(refreshTokenTimeout)
+										.setOwner(owner).finish();
 
 		clientRepository.saveClient(client);
 		
@@ -61,6 +67,11 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 			return clientRepository.updateClient(oldClient.getClientId(), newClient);
 		}
 		return null;
+    }
+
+	@Override
+    public Collection<ClientDetailsEntity> getAllClients() {
+		return clientRepository.getAllClients();
     }
 
 }

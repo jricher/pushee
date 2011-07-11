@@ -105,9 +105,13 @@ public class ProviderTokenServiceTest {
 		List<String> authorizedGrantTypes = Lists.newArrayList("authorization_code", "refresh_token");
 		String webServerRedirectUri = "http://localhost/return";
 		
-		clientDetails = new ClientDetailsEntity(clientId, clientSecret, Lists.newArrayList(scope), 
-												authorizedGrantTypes, webServerRedirectUri, 
-												authorities, null, null, true, null, null, null);
+		clientDetails = ClientDetailsEntity.makeBuilder()
+							.setClientId(clientId).setClientSecret(clientSecret)
+							.setScope(Lists.newArrayList(scope))
+							.setAllowRefresh(true)
+							.setAuthorizedGrantTypes(authorizedGrantTypes)
+							.setWebServerRedirectUri(webServerRedirectUri)
+							.setAuthorities(authorities).finish();
 		
 		// we fake the auth for now, the underlying bits mostly just care about the client auth
 		userAuthentication = new TestingAuthenticationToken(clientId, clientSecret);

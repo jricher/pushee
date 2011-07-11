@@ -69,6 +69,6 @@ public class JpaFeedRepository implements FeedRepository {
     @Transactional
     public Collection<Feed> getAll() {
     	TypedQuery<Feed> query = manager.createNamedQuery("Feed.getAll", Feed.class);
-        return (List<Feed>) query.getResultList();
+        return query.getResultList();
     }
 }

@@ -1,5 +1,6 @@
 package org.mitre.pushee.oauth.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
@@ -16,4 +17,6 @@ public interface ClientDetailsEntityService extends ClientDetailsService {
 	public void deleteClient(ClientDetailsEntity client);
 	
 	public ClientDetailsEntity updateClient(ClientDetailsEntity oldClient, ClientDetailsEntity newClient);
+
+	public Collection<ClientDetailsEntity> getAllClients();
 }
