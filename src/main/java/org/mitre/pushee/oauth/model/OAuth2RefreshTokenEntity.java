@@ -11,9 +11,12 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
@@ -26,6 +29,9 @@ import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
  */
 @Entity
 @Table(name="refreshtoken")
+@NamedQueries({
+	@NamedQuery(name = "OAuth2RefreshTokenEntity.getByClient", query = "select r from OAuth2RefreshTokenEntity r where r.client = :client")
+})
 public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 
 	private ClientDetailsEntity client;
@@ -78,7 +84,11 @@ public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 	    // TODO Auto-generated method stub
 	    super.setExpiration(expiration);
     }
-	
+
+    /**
+     * Has this token expired?
+     * @return true if it has a timeout set and the timeout has passed
+     */
     @Transient
 	public boolean isExpired() {
 		return getExpiration() == null ? false : System.currentTimeMillis() > getExpiration().getTime();
@@ -87,7 +97,7 @@ public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 	/**
      * @return the client
      */
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "client_id")
     public ClientDetailsEntity getClient() {
     	return client;
@@ -104,7 +114,7 @@ public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 	/**
      * @return the scope
      */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(
 			joinColumns=@JoinColumn(name="owner_id"),
 			name="scope"

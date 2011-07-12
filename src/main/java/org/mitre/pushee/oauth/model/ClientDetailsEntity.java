@@ -20,8 +20,6 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
-import com.google.common.collect.Sets;
-
 /**
  * @author jricher
  * 

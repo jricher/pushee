@@ -33,13 +33,14 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 @Entity
 @Table(name="accesstoken")
 @NamedQueries({
-	@NamedQuery(name = "OAuth2AccessTokenEntity.getByRefreshToken", query = "select a from OAuth2AccessTokenEntity a where a.refreshToken = :refreshToken")
+	@NamedQuery(name = "OAuth2AccessTokenEntity.getByRefreshToken", query = "select a from OAuth2AccessTokenEntity a where a.refreshToken = :refreshToken"),
+	@NamedQuery(name = "OAuth2AccessTokenEntity.getByClient", query = "select a from OAuth2AccessTokenEntity a where a.client = :client")
 })
 public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
 
 	private ClientDetailsEntity client;
 	
-	OAuth2Authentication authentication; // the authentication that made this access
+	private OAuth2Authentication authentication; // the authentication that made this access
 	
 	/**
 	 * 

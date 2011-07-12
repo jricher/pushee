@@ -19,21 +19,26 @@ $(document).ready(function() {
 		data.clientId = $('#clientId').val();
 		
 		$.post('../api/delete', data)
-		.success(function () {
-			console.log("Success!");
-			window.location.replace("../");
-		})
-		.error(function () {
-			console.log("Error!");
-			alert("The client was not deleted");
-			window.location.replace("../");
-		});
+			.success(function () {
+				console.log("Success!");
+				// go back to the list
+				window.location.href = "../";		
+			})
+			.error(function () {
+				console.log("Error!");
+				alert("The client was not deleted");
+				// TODO: where should we go on an error?
+				//window.location.href = "../";		
+				//window.location.replace("../");
+			});
 		
 	});
 	
 	$('#no').click(function(event) {
 		event.preventDefault();
-		window.location.replace("../");		
+		// go back to the list
+		// no harm, no foul
+		window.location.href = "../";
 		
 	});
 
@@ -44,7 +49,6 @@ You are about to delete this client:
 
 <div>
 Client: <a href="edit/${client.clientId}">${client.clientId}</a><br />
-&nbsp;&nbsp;&nbsp;&nbsp;Secret: ${client.clientSecret}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;webServerRedirectUri: ${client.webServerRedirectUri}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Scope: ${client.scope}<br />

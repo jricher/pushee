@@ -8,9 +8,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
 <title>Add an OAuth2 Client</title>
+<style type="text/css">
+#error, .error {
+	border: 2px red solid;
+}
+</style>
 <script type="text/javascript">
 
 $(document).ready(function() {
+
+	$('#error').hide();
+	
 	$('.plus').click(function(event) {
 		event.preventDefault();
 		$(this).before('<span><input type="text" /><button class="minus">-</button><br /></span>');
@@ -21,25 +29,61 @@ $(document).ready(function() {
 		$(this).parent().remove();
 	});
 	
+	$('#cancel').click(function(event) {
+		event.preventDefault();
+		// go back to the root list
+		window.location.href = './';
+	});
+	
 	$('#addClient').submit(function(event) {
 		event.preventDefault();
+		
+		// clear our error text
+		$('.error').removeClass('error');
+		$('#error').hide();
+		$('#error').html('');
+		
+		var valid = true;
+		var errors = [];
 		
 		var data = {};
 		
 		data.clientId = $('#clientId').val();
+		if (!data.clientId) {
+			$('#clientId').addClass('error');
+			valid = false;
+			errors.push('Client ID cannot be left blank');
+		}
 		data.clientSecret = $('#clientSecret').val();
+		if (!data.clientSecret) {
+			$('#clientSecret').addClass('error');
+			valid = false;
+			errors.push('Client Secret cannot be left blank');
+		}
 		
 		var grantTypes = [];
-		$('#addClient [name=authorizedGrantTypes]:checked').each(function() {
+		$('[name=authorizedGrantTypes]:checked').each(function() {
 			grantTypes.push($(this).val());
 		});
-		data.grantTypes = grantTypes.join(" ");
+		if (grantTypes.length < 1) {
+			$('#grantType').addClass('error');
+			valid = false;
+			errors.push('You must select at least one grant type');
+		} else {
+			data.grantTypes = grantTypes.join(" ");
+		}
 		
 		var scope = [];
 		$('#scope input').each(function() {
 			scope.push($(this).val());
 		});
-		data.scope = scope.join(" ");
+		if (scope.length < 1) {
+			$('#scope').addClass('error');
+			valid = false;
+			errors.push('You must enter at least scope');
+		} else {
+			data.scope = scope.join(" ");
+		}
 		
 		data.redirectUri = $('#webServerRedirectUri').val();
 		
@@ -47,7 +91,13 @@ $(document).ready(function() {
 		$('#authorities input').each(function() {
 			authorities.push($(this).val());
 		});
-		data.authorities = authorities.join(" ");
+		if (authorities.length < 1) {
+			$('#authorities').addClass('error');
+			valid = false;
+			errors.push('You must enter at least one authority');
+		} else {
+			data.authorities = authorities.join(" ");
+		}
 		
 		data.name = $('#clientName').val();
 		data.description = $('#clientDescription').val();
@@ -58,15 +108,23 @@ $(document).ready(function() {
 		
 		console.log(data);
 		
-		$.post('../api/add', data)
-			.success(function () {
-				console.log("Success!");
-				window.location.replace("../");
-			})
-			.error(function () {
-				console.log("Error!");
-				alert("There was an error saving your client");
-			});
+		if (valid) {
+		
+			$.post('./api/add', data)
+				.success(function () {
+					//console.log("Success!");
+					// go back to listing
+					window.location.href = "./";
+				})
+				.error(function () {
+					//console.log("Error!");
+					alert("There was an error saving your client");
+					// for now, don't go back
+				});
+		} else {
+			$('#error').html(errors.join('<br />\n'));
+			$('#error').show();
+		}
 		
 		return false;
 	});
@@ -80,27 +138,30 @@ $(document).ready(function() {
 
 <h1>Add a New OAuth2 Client</h1>
 
+<div id="error"></div>
+
 <f:form modelAttribute="client" id="addClient">
 
 	Id: <f:input path="clientId"/><br />
+<!-- 	<input type="checkbox" id="generateClientId" name="generateClientId" /><br /> -->
+	
 	Secret: <f:input path="clientSecret"/><br />
+<!-- 	<input type="checkbox" id="generateClientSecret" name="generateClientSecret" /><br /> -->
 
 	<div id="scope">Scope:
-	<c:forEach items="${client.scope}" var="scope">
-		<span><input type="text" value="${scope}" /><button class="minus">-</button><br /></span>
-	</c:forEach>
+	<span><input type="text" value="read" /><button class="minus">-</button><br /></span>
 	<button class="plus">+</button>
 	</div> 
 
+	<div id="grantType">
 	Grant Types: <f:checkboxes items="${availableGrantTypes}" path="authorizedGrantTypes" /><br />
-
+	</div>
+	
 	Redirect URI: <f:input path="webServerRedirectUri" /><br />
 
 	<div id="authorities">
 	Authorities: 
-	<c:forEach items="${client.authorities}">
-		<span><input type="text" value="${scope}" /><button class="minus">-</button><br /></span>
-	</c:forEach>
+	<span><input type="text" value="ROLE_CLIENT" /><button class="minus">-</button><br /></span>
 	<button class="plus">+</button>
 	</div>
 
@@ -116,7 +177,7 @@ $(document).ready(function() {
 	
 	<hr />
 	<input type="submit" value="Create client" />
-	
+	<button id="cancel">Cancel changes</button>
 
 </f:form>
 

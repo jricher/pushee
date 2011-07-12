@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.mitre.pushee.hub.repository.util.JpaUtil;
+import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
 import org.mitre.pushee.oauth.repository.OAuth2TokenRepository;
@@ -76,8 +77,25 @@ public class JpaOAuth2TokenRepository implements OAuth2TokenRepository {
 			manager.remove(found);
 		} else {
 			throw new IllegalArgumentException("Refresh token not found: " + refreshToken);
-		}
-	    
+		}	    
     }
+
+	@Override
+	@Transactional
+    public void clearTokensForClient(ClientDetailsEntity client) {
+		TypedQuery<OAuth2AccessTokenEntity> queryA = manager.createNamedQuery("OAuth2AccessTokenEntity.getByClient", OAuth2AccessTokenEntity.class);
+		queryA.setParameter("client", client);
+	    List<OAuth2AccessTokenEntity> accessTokens = queryA.getResultList();
+	    for (OAuth2AccessTokenEntity accessToken : accessTokens) {
+	        removeAccessToken(accessToken);
+        }
+		TypedQuery<OAuth2RefreshTokenEntity> queryR = manager.createNamedQuery("OAuth2RefreshTokenEntity.getByClient", OAuth2RefreshTokenEntity.class);
+		queryR.setParameter("client", client);
+	    List<OAuth2RefreshTokenEntity> refreshTokens = queryR.getResultList();
+	    for (OAuth2RefreshTokenEntity refreshToken : refreshTokens) {
+	        removeRefreshToken(refreshToken);
+        }	    
+    }
+	
 
 }

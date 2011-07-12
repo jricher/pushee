@@ -14,8 +14,9 @@
 
 <h2>Available Clients:</h2>
 <c:forEach items="${clients}" var="client">
-Client: <a href="edit/${client.clientId}">${client.clientId}</a><br />
-&nbsp;&nbsp;&nbsp;&nbsp;Secret: ${client.clientSecret}<br />
+Client ID: ${client.clientId} <a href="view/${client.clientId}">View</a>
+ | <a href="edit/${client.clientId}">Edit</a>
+ | <a href="delete/${client.clientId}">Delete</a><br />
 &nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;webServerRedirectUri: ${client.webServerRedirectUri}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Scope: ${client.scope}<br />

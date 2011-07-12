@@ -9,11 +9,25 @@
 </head>
 <body>
 <div>
-Client: <a href="edit/${client.clientId}">${client.clientId}</a><br />
+Client: <a href="../edit/${client.clientId}">${client.clientId}</a><br />
 &nbsp;&nbsp;&nbsp;&nbsp;Secret: ${client.clientSecret}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;webServerRedirectUri: ${client.webServerRedirectUri}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Scope: ${client.scope}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Grant Types: ${client.authorizedGrantTypes}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Redirect URI: ${client.webServerRedirectUri}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Authorities: ${client.authorities}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Name: ${client.clientName}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Description: ${client.clientDescription}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Allow Refresh?: ${client.allowRefresh}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Timeout for Access Tokens: ${client.accessTokenTimeout}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Timeout for Refresh Tokens: ${client.refreshTokenTimeout}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Owner: ${client.owner}<br />
 </div>
+
+<ul id="nav">
+<li><a href="../">View All</a></li>
+<li><a href="../edit/${client.clientId}">Edit</a></li>
+<li><a href="../delete/${client.clientId}">Delete</a></li>
+</ul>
+
 </body>
 </html>
