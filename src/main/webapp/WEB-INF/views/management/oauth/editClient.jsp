@@ -49,22 +49,38 @@ $(document).ready(function() {
 		if (!data.clientId) {
 			$('#clientId').addClass('error');
 			valid = false;
-			errors += 'Client ID cannot be left blank';
+			errors.push('Client ID cannot be left blank');
 		}
 		data.clientSecret = $('#clientSecret').val();
+		if (!data.clientSecret) {
+			$('#clientSecret').addClass('error');
+			valid = false;
+			errors.push('Client Secret cannot be left blank');
+		}
 		
-		// collect our grant types
 		var grantTypes = [];
-		$('#addClient [name=authorizedGrantTypes]:checked').each(function() {
+		$('[name=authorizedGrantTypes]:checked').each(function() {
 			grantTypes.push($(this).val());
 		});
-		data.grantTypes = grantTypes.join(" ");
+		if (grantTypes.length < 1) {
+			$('#grantType').addClass('error');
+			valid = false;
+			errors.push('You must select at least one grant type');
+		} else {
+			data.grantTypes = grantTypes.join(" ");
+		}
 		
 		var scope = [];
 		$('#scope input').each(function() {
 			scope.push($(this).val());
 		});
-		data.scope = scope.join(" ");
+		if (scope.length < 1) {
+			$('#scope').addClass('error');
+			valid = false;
+			errors.push('You must enter at least scope');
+		} else {
+			data.scope = scope.join(" ");
+		}
 		
 		data.redirectUri = $('#webServerRedirectUri').val();
 		
@@ -72,7 +88,13 @@ $(document).ready(function() {
 		$('#authorities input').each(function() {
 			authorities.push($(this).val());
 		});
-		data.authorities = authorities.join(" ");
+		if (authorities.length < 1) {
+			$('#authorities').addClass('error');
+			valid = false;
+			errors.push('You must enter at least one authority');
+		} else {
+			data.authorities = authorities.join(" ");
+		}
 		
 		data.name = $('#clientName').val();
 		data.description = $('#clientDescription').val();
@@ -82,19 +104,24 @@ $(document).ready(function() {
 		data.owner = $('#owner').val();
 		
 		console.log(data);
-		
-		$.post('../api/update', data)
-			.success(function () {
-				console.log("Success!");
-				
-				var clientId = $('#clientId').val();
-				
-				window.location.replace("../view/" + clientId);
-			})
-			.error(function () {
-				console.log("Error!");
-				alert("There was an error saving your client");
-			});
+
+		if (valid) {
+			$.post('../api/update', data)
+				.success(function () {
+					console.log("Success!");
+					
+					var clientId = $('#clientId').val();
+					
+					window.location.replace("../view/" + clientId);
+				})
+				.error(function () {
+					console.log("Error!");
+					alert("There was an error saving your client");
+				});
+		} else {
+			$('#error').html(errors.join('<br />\n'));
+			$('#error').show();
+		}
 		
 		return false;
 	});
