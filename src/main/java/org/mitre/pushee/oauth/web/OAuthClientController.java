@@ -4,15 +4,20 @@
 package org.mitre.pushee.oauth.web;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.oauth2.provider.DefaultOAuth2GrantManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.common.collect.Lists;
 
 
 /**
@@ -59,10 +64,26 @@ public class OAuthClientController {
 	}
 	
 	@RequestMapping("/add")
+	public ModelAndView redirectAdd(ModelAndView modelAndView) {
+		modelAndView.setViewName("redirect:/manager/oauth/clients/add/");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/add/")
 	public ModelAndView addClientPage(ModelAndView modelAndView) {
-		modelAndView.setViewName("/management/oauth/addClient");
+		
+		List<GrantedAuthority> auth = Lists.newArrayList();
+		auth.add(new GrantedAuthorityImpl("ROLE_CLIENT"));
+		
+		ClientDetailsEntity client = ClientDetailsEntity.makeBuilder()
+				.setScope(Lists.newArrayList("scope"))
+				.setAuthorities(auth) // WTF?
+				.setAuthorizedGrantTypes(Lists.newArrayList(DefaultOAuth2GrantManager.GrantType.authorization_code.toString()))
+				.finish();
 		modelAndView.addObject("availableGrantTypes", DefaultOAuth2GrantManager.GrantType.values());
-		modelAndView.addObject("client", new ClientDetailsEntity());
+		modelAndView.addObject("client", client);
+		
+		modelAndView.setViewName("/management/oauth/editClient");
 		return modelAndView;
 	}
 	

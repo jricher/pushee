@@ -23,7 +23,7 @@ Client ID: ${client.clientId} <a href="view/${client.clientId}">View</a>
 <hr />
 </c:forEach>
 
-<a href="add">Add a new client</a>
+<a href="add/">Add a new client</a>
 
 </body>
 </html>

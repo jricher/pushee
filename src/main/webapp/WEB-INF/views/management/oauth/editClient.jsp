@@ -38,10 +38,12 @@ $(document).ready(function() {
 		event.preventDefault();
 		
 		// clear our error text
+		$('.error').removeClass('error');
 		$('#error').html('');
+		$('#error').hide();
 		
 		var valid = true;
-		var errors = '';
+		var errors = [];
 		
 		var data = {};
 		
@@ -106,18 +108,7 @@ $(document).ready(function() {
 		console.log(data);
 
 		if (valid) {
-			$.post('../api/update', data)
-				.success(function () {
-					console.log("Success!");
-					
-					var clientId = $('#clientId').val();
-					
-					window.location.replace("../view/" + clientId);
-				})
-				.error(function () {
-					console.log("Error!");
-					alert("There was an error saving your client");
-				});
+			sendData(data);
 		} else {
 			$('#error').html(errors.join('<br />\n'));
 			$('#error').show();
@@ -128,6 +119,46 @@ $(document).ready(function() {
 });
 
 </script>
+<c:choose>
+<c:when test="${client.clientId != null}">
+<script type="text/javascript">
+// Send code for edit
+function sendData(data) {
+	$.post('../api/update', data)
+		.success(function () {
+			console.log("Success!");
+			
+			var clientId = $('#clientId').val();
+			
+			window.location.replace("../view/" + clientId);
+		})
+		.error(function () {
+			console.log("Error!");
+			alert("There was an error saving your client");
+		});
+}
+
+</script>
+</c:when>
+<c:otherwise>
+<script type="text/javascript">
+// Send code for add
+function sendData(data) {
+	$.post('../api/add', data)
+		.success(function () {
+			//console.log("Success!");
+			// go back to listing
+			window.location.href = "../";
+		})
+		.error(function () {
+			//console.log("Error!");
+			alert("There was an error saving your client");
+			// for now, don't go back
+		});
+}
+</script>
+</c:otherwise>
+</c:choose>
 
 
 </head>
