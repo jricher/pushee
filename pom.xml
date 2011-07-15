@@ -387,8 +387,9 @@
             	</executions>
             	<!-- Replace database key/value pairs if there -->
             	<configuration>
-            		<file>target/${project.artifactId}-${project.version}/WEB-INF/spring/data-context.xml</file>
+            		<filesToInclude>target/${project.artifactId}-${project.version}/WEB-INF/spring/data-context.xml,target/${project.artifactId}-${project.version}/WEB-INF/spring/security-context.xml</filesToInclude>
             		<tokenValueMap>local-db.conf</tokenValueMap>
+            		<tokenValueMap>local-openid.conf</tokenValueMap>
             	</configuration>
             </plugin>
         </plugins>

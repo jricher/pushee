@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<import resource="data-context.xml" />
+	<import resource="security-context.xml" />
 		
 	<tx:annotation-driven transaction-manager="transactionManager" />
     <context:component-scan annotation-config="true" base-package="org.mitre.pushee" />
