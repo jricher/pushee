@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-<title>Delete Client</title>
+<title>Delete Publisher</title>
 </head>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -16,7 +16,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var data = {};
 		
-		data.clientId = $('#clientId').val();
+		data.publisherId = $('#publisherId').val();
 		
 		$.post('../api/delete', data)
 			.success(function () {
@@ -26,7 +26,7 @@ $(document).ready(function() {
 			})
 			.error(function () {
 				console.log("Error!");
-				alert("The client was not deleted");
+				alert("The publisher was not deleted");
 				// TODO: where should we go on an error?
 				//window.location.href = "../";		
 				//window.location.replace("../");
@@ -45,19 +45,22 @@ $(document).ready(function() {
 });
 </script>
 <body>
-You are about to delete this client:
+You are about to delete this publisher:
 
 <div>
-Client: <a href="edit/${client.clientId}">${client.clientId}</a><br />
-&nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;webServerRedirectUri: ${client.webServerRedirectUri}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;Scope: ${client.scope}<br />
+Publisher: <a href="edit/${publisher.getId()}">${publisher.getId()}</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;URL: ${publisher.getCallbackURL()}<br />
+<c:forEach items="${publisher.getFeeds()}" var="feed">
+&nbsp;&nbsp;&nbsp;&nbsp;Feed ${feed.getId()}: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL: ${feed.getUrl()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: ${feed.getType()}<br/>
+</c:forEach>
 </div>
 
 This action cannot be undone. Are you sure?
 
-<f:form modelAttribute="client">
-	<f:hidden path="clientId"/>
+<f:form modelAttribute="publisher">
+	<f:hidden path="publisherId"/>
 	
 	<button id="yes">Yes</button>
 	

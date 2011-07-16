@@ -13,7 +13,7 @@
 URL = ${subscriber.getPostbackURL()}<br/>
 Feed Subscriptions:<br/>
 <c:forEach items="${subscriber.getSubscriptions()}" var="subscription">
-.....ID: ${subscription.getFeed().getId()}: <br/>
+.....ID: ${subscription.getFeed().getId()}<br/>
 .....URL: ${subscription.getFeed().getUrl()}<br/>
 </c:forEach>
 <hr/>

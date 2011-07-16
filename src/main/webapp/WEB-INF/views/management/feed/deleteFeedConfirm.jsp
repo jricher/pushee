@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-<title>Delete Client</title>
+<title>Delete Feed</title>
 </head>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -16,7 +16,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var data = {};
 		
-		data.clientId = $('#clientId').val();
+		data.clientId = $('#feedId').val();
 		
 		$.post('../api/delete', data)
 			.success(function () {
@@ -26,7 +26,7 @@ $(document).ready(function() {
 			})
 			.error(function () {
 				console.log("Error!");
-				alert("The client was not deleted");
+				alert("The feed was not deleted");
 				// TODO: where should we go on an error?
 				//window.location.href = "../";		
 				//window.location.replace("../");
@@ -45,19 +45,19 @@ $(document).ready(function() {
 });
 </script>
 <body>
-You are about to delete this client:
+You are about to delete this feed:
 
 <div>
-Client: <a href="edit/${client.clientId}">${client.clientId}</a><br />
-&nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;webServerRedirectUri: ${client.webServerRedirectUri}<br />
-&nbsp;&nbsp;&nbsp;&nbsp;Scope: ${client.scope}<br />
+Feed: <a href="/edit?feedId=${feed.getId()}">${feed.getId()}</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL:${feed.getURL()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Type = ${feed.getType()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Publisher ID = ${feed.getPublisher().getId()}<br/>
 </div>
 
 This action cannot be undone. Are you sure?
 
-<f:form modelAttribute="client">
-	<f:hidden path="clientId"/>
+<f:form modelAttribute="feed">
+	<f:hidden path="feedId"/>
 	
 	<button id="yes">Yes</button>
 	
