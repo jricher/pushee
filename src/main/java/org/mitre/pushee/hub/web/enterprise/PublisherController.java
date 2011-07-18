@@ -27,7 +27,7 @@ public class PublisherController {
 	@Autowired
 	public PublisherController(HubService hubService) {
 		
-		this.setHubService(hubService);
+		this.hubService = hubService;
 		
 	}
 	
@@ -106,7 +106,7 @@ public class PublisherController {
 		
 		Publisher pub = EnterpriseUtils.getExistingPublisher(pubId);
 		
-		modelAndView.addObject("publisher", publisher);
+		modelAndView.addObject("publisher", pub);
 		modelAndView.setViewName("/management/deletePublisherConfirm");
 		return modelAndView;
 	}

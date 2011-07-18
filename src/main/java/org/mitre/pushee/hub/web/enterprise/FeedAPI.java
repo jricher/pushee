@@ -27,7 +27,7 @@ public class FeedAPI {
 	
 	@Autowired
 	public FeedAPI(HubService hubService) {
-		this.setHubService(hubService);
+		this.hubService = hubService;
 	}
 	
 	/**

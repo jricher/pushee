@@ -26,7 +26,7 @@ public class PublisherAPI {
 	@Autowired
 	public PublisherAPI(HubService hubService) {
 		
-		this.setHubService(hubService);
+		this.hubService = hubService;
 		
 	}
 	

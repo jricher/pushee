@@ -21,7 +21,7 @@ public class SubscriberController {
 	
 	@Autowired
 	public SubscriberController(HubService hubService) {
-		this.setHubService(hubService);
+		this.hubService = hubService;
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class SubscriberController {
 	@RequestMapping("/edit")
 	public ModelAndView editSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", getExistingSubscriber(subId));
+		modelAndView.addObject("subscriber", EnterpriseUtils.getExistingSubscriber(subId));
 		modelAndView.setViewName("management/editSubscriber");
 		
 		return modelAndView;

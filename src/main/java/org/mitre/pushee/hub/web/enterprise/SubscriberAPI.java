@@ -27,7 +27,7 @@ public class SubscriberAPI {
 	
 	@Autowired
 	public SubscriberAPI(HubService hubService) {
-		this.setHubService(hubService);
+		this.hubService = hubService;
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class SubscriberAPI {
 	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url) {
 		
 		Subscriber s = new Subscriber();
-		s.setPostbackURL(postbackURL);
+		s.setPostbackURL(url);
 		hubService.saveSubscriber(s);
 		
 		return new ModelAndView("jsonSubscriberView", "subscriber", hubService.getSubscriberByCallbackURL(url));

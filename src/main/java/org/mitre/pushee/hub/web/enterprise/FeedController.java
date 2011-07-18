@@ -24,7 +24,7 @@ public class FeedController {
 	
 	@Autowired
 	public FeedController(HubService hubService) {
-		this.setHubService(hubService);
+		this.hubService = hubService;
 	}
 	
 	/**
