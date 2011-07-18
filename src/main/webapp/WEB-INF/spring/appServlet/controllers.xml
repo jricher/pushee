@@ -9,6 +9,6 @@
 
 	<!-- Scans within the base package of the application for @Components to configure as beans -->
 	<context:component-scan base-package="org.mitre.pushee.hub.web" />
-	<context:component-scan base-package="org.mitre.pushee.hub.web.enterprise" /> 
+	<context:component-scan base-package="org.mitre.pushee.enterprise.web" /> 
 	<context:component-scan base-package="org.mitre.pushee.oauth.web" /> 
 </beans>

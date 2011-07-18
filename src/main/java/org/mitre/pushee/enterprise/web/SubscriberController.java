@@ -1,4 +1,4 @@
-package org.mitre.pushee.hub.web.enterprise;
+package org.mitre.pushee.enterprise.web;
 
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;

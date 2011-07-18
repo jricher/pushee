@@ -1,4 +1,4 @@
-package org.mitre.pushee.hub.web.enterprise;
+package org.mitre.pushee.enterprise.web;
 
 import java.util.List;
 

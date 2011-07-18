@@ -1,4 +1,4 @@
-package org.mitre.pushee.hub.web.enterprise;
+package org.mitre.pushee.enterprise.web;
 
 import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.exception.PublisherNotFoundException;
@@ -23,7 +23,7 @@ public class EnterpriseUtils {
 	 * @param pubId ID of the publisher to find
 	 * @return the publisher, if found
 	 */
-	public static Publisher getExistingPublisher(Long pubId) {
+	public static Publisher getExistingPublisher(Long pubId) throws PublisherNotFoundException {
 		
 		Publisher thePublisher = hubService.getPublisherById(pubId);
 		
@@ -40,7 +40,7 @@ public class EnterpriseUtils {
 	 * @param feedId the ID of the feed to find
 	 * @return the feed, if found
 	 */
-	public static Feed getExistingFeed(Long feedId) {
+	public static Feed getExistingFeed(Long feedId) throws FeedNotFoundException {
 		
 		Feed theFeed = hubService.getFeedById(feedId);
 		
@@ -57,7 +57,7 @@ public class EnterpriseUtils {
 	 * @param subId the ID of the subscriber to find
 	 * @return the subscriber, if found
 	 */
-	public static Subscriber getExistingSubscriber(Long subId) {
+	public static Subscriber getExistingSubscriber(Long subId) throws SubscriberNotFoundException {
 		
 		Subscriber theSub = hubService.getSubscriberById(subId);
 		
