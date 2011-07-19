@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.mitre.pushee.hub.exception.ClientNotFoundException;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.ClientAuthenticationToken;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.verification.ClientAuthenticationCache;
@@ -30,8 +31,8 @@ public class OAuthConfirmationController {
 	@Autowired
 	private ClientAuthenticationCache authenticationCache;
 	
-	
-	@RequestMapping("/oauth/approve")
+	// TODO: really want to have a security annotation here...
+	@RequestMapping("/oauth/user/approve")
 	public ModelAndView confimAccess(HttpServletRequest request, HttpServletResponse response, 
 			ModelAndView modelAndView) {
 		
@@ -49,7 +50,7 @@ public class OAuthConfirmationController {
 		
 		modelAndView.addObject("auth_request", clientAuth);
 	    modelAndView.addObject("client", client);
-	    modelAndView.setViewName("oauth/authorize");
+	    modelAndView.setViewName("oauth/approve");
 	    
 	    return modelAndView;
 	}

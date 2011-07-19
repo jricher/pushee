@@ -8,8 +8,11 @@
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.4.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<security:http>
-		<security:openid-login login-page="/j_spring_openid_security_check?OPENID_IDENTIFIER" />
+	<security:global-method-security pre-post-annotations="enabled"/>
+
+	<security:http use-expressions="true">
+		<security:intercept-url pattern="/oauth/user/**" access="hasRole('ROLE_USER')"/>
+		<security:openid-login login-page="/j_spring_openid_security_check?openid_identifier=OPENID_IDENTIFIER" />
 	</security:http>
 
 	<bean id="userDetailsService" 
@@ -37,6 +40,6 @@
 	
 	<oauth2:provider client-details-service-ref="defaultOAuth2ClientDetailsEntityService" 
 	token-services-ref="defaultOAuth2ProviderTokenService" authorization-url="/oauth/authorize">
-		<oauth2:verification-code user-approval-page="/oauth/approve"/>
+		<oauth2:verification-code user-approval-page="/oauth/user/approve"/>
 	</oauth2:provider>
 </beans>
