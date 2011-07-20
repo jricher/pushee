@@ -51,7 +51,7 @@ public class PublisherAPI {
 	@RequestMapping("/get")
 	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long pubId) {
 		
-		return new ModelAndView("jsonPublisherView", "publisher", EnterpriseUtils.getExistingPublisher(pubId));
+		return new ModelAndView("jsonPublisherView", "publisher", hubService.getExistingPublisher(pubId));
 	
 	}
 	
@@ -84,7 +84,7 @@ public class PublisherAPI {
 	@RequestMapping("/editUrl")
 	public ModelAndView apiEditPublisherUrl(@RequestParam("publisherId") Long pubId, @RequestParam("callbackURL") String url) {
 		
-		Publisher p = EnterpriseUtils.getExistingPublisher(pubId);
+		Publisher p = hubService.getExistingPublisher(pubId);
 		p.setCallbackURL(url);
 		
 		return new ModelAndView("jsonPublisherView", "publisher", p);

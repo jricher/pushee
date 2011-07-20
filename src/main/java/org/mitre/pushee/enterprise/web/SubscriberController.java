@@ -48,7 +48,7 @@ public class SubscriberController {
 	@RequestMapping("/view")
 	public ModelAndView viewSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", EnterpriseUtils.getExistingSubscriber(subId));
+		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
 		modelAndView.setViewName("management/viewSubscriber");
 		
 		return modelAndView;
@@ -78,7 +78,7 @@ public class SubscriberController {
 	@RequestMapping("/edit")
 	public ModelAndView editSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", EnterpriseUtils.getExistingSubscriber(subId));
+		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
 		modelAndView.setViewName("management/editSubscriber");
 		
 		return modelAndView;
@@ -94,7 +94,7 @@ public class SubscriberController {
 	@RequestMapping("/remove")
 	public ModelAndView removeSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", EnterpriseUtils.getExistingSubscriber(subId));
+		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
 		modelAndView.setViewName("/management/deleteSubscriberConfirm");
 		
 		return modelAndView;

@@ -2,6 +2,9 @@ package org.mitre.pushee.hub.service.impl;
 
 import java.util.Collection;
 
+import org.mitre.pushee.hub.exception.FeedNotFoundException;
+import org.mitre.pushee.hub.exception.PublisherNotFoundException;
+import org.mitre.pushee.hub.exception.SubscriberNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.model.Subscriber;
@@ -121,7 +124,40 @@ public class DefaultHubService implements HubService {
     public void removeSubscriberById(Long subscriberId) {
     	subscriberRepository.removeById(subscriberId);
     }
+    
+    @Override
+    public Publisher getExistingPublisher(Long publisherId) throws PublisherNotFoundException {
+    	Publisher publisher = getPublisherById(publisherId);
+    	
+    	if (publisher == null) {
+    		throw new PublisherNotFoundException();
+    	}
+    	
+    	return publisher;
+    }
+    
+    @Override
+    public Subscriber getExistingSubscriber(Long subscriberId) throws SubscriberNotFoundException {
+    	Subscriber subscriber = getSubscriberById(subscriberId);
+    	
+    	if(subscriber == null) {
+    		throw new SubscriberNotFoundException();
+    	}
+    	
+    	return subscriber;
+    }
 
+    @Override
+    public Feed getExistingFeed(Long feedId) throws FeedNotFoundException {
+    	Feed feed = getFeedById(feedId);
+    	
+    	if (feed == null) {
+    		throw new FeedNotFoundException();
+    	}
+    	
+    	return feed;
+    }
+    
 	/**
 	 * Create a builder for use in test harnesses
 	 * @return

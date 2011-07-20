@@ -56,7 +56,7 @@ public class PublisherController {
 	@RequestMapping("/view")
 	public ModelAndView viewPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
-		Publisher p = EnterpriseUtils.getExistingPublisher(pubId);
+		Publisher p = hubService.getExistingPublisher(pubId);
 		
 		modelAndView.addObject("publisher", p);
 		modelAndView.setViewName("management/viewPublisher");
@@ -88,7 +88,7 @@ public class PublisherController {
 	@RequestMapping("/edit")
 	public ModelAndView editPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("publisher", EnterpriseUtils.getExistingPublisher(pubId));
+		modelAndView.addObject("publisher", hubService.getExistingPublisher(pubId));
 		modelAndView.setViewName("management/editPublisher");
 		
 		return modelAndView;
@@ -104,7 +104,7 @@ public class PublisherController {
 	@RequestMapping("/delete")
 	public ModelAndView deletePublisherConfirmation(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
-		Publisher pub = EnterpriseUtils.getExistingPublisher(pubId);
+		Publisher pub = hubService.getExistingPublisher(pubId);
 		
 		modelAndView.addObject("publisher", pub);
 		modelAndView.setViewName("/management/deletePublisherConfirm");

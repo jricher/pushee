@@ -51,7 +51,7 @@ public class SubscriberAPI {
 	@RequestMapping("/get")
 	public ModelAndView apiGetSubscriber(@RequestParam("subscriberId") Long subId) {
 		
-		return new ModelAndView("jsonSubscriberView", "subscriber", EnterpriseUtils.getExistingSubscriber(subId));
+		return new ModelAndView("jsonSubscriberView", "subscriber", hubService.getExistingSubscriber(subId));
 	
 	}
 	
@@ -82,7 +82,7 @@ public class SubscriberAPI {
 	@RequestMapping("/editUrl")
 	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subId, @RequestParam("postbackUrl") String postbackURL) {
 		
-		Subscriber s = EnterpriseUtils.getExistingSubscriber(subId);
+		Subscriber s = hubService.getExistingSubscriber(subId);
 		s.setPostbackURL(postbackURL);
 		hubService.saveSubscriber(s);
 		
@@ -101,8 +101,8 @@ public class SubscriberAPI {
 	public ModelAndView apiAddSubscription(@RequestParam("subscriberId") Long subId, @RequestParam("feedId") Long feedId, 
 			@RequestParam(required=false, value="secret") String secret, @RequestParam(value="leaseSeconds", required=false) Integer leaseSeconds) {
 		
-		Subscriber s = EnterpriseUtils.getExistingSubscriber(subId);
-		Feed f = EnterpriseUtils.getExistingFeed(feedId);
+		Subscriber s = hubService.getExistingSubscriber(subId);
+		Feed f = hubService.getExistingFeed(feedId);
 		Subscription sub = new Subscription();
 		
 		sub.setFeed(f);
@@ -135,7 +135,7 @@ public class SubscriberAPI {
 	@RequestMapping("/remove")
 	public ModelAndView apiRemoveSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
-		Subscriber s = EnterpriseUtils.getExistingSubscriber(subId);
+		Subscriber s = hubService.getExistingSubscriber(subId);
 		Collection<Subscription> subscriptions = s.getSubscriptions();
 		
 		for (Subscription sub : subscriptions) {

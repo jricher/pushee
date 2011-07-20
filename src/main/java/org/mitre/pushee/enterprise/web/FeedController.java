@@ -52,7 +52,7 @@ public class FeedController {
 	@RequestMapping(value="/view")
 	public ModelAndView viewFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
-		Feed theFeed = EnterpriseUtils.getExistingFeed(feedId);
+		Feed theFeed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", theFeed);
 		modelAndView.setViewName("/management/viewFeed");
@@ -85,7 +85,7 @@ public class FeedController {
 	@RequestMapping(value="/edit")
 	public ModelAndView editFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
-		Feed theFeed = EnterpriseUtils.getExistingFeed(feedId);
+		Feed theFeed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", theFeed);
 		modelAndView.setViewName("/management/editFeed");
@@ -103,7 +103,7 @@ public class FeedController {
 	@RequestMapping(value="/delete")
 	public Object deleteFeedConfirmation(ModelAndView modelAndView, @RequestParam Long feedId) {
 		
-		Feed feed = EnterpriseUtils.getExistingFeed(feedId);
+		Feed feed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", feed);
 		modelAndView.setViewName("/management/deleteFeedConfirm");

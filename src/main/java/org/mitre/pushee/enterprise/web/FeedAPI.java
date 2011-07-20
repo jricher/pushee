@@ -53,7 +53,7 @@ public class FeedAPI {
 	@RequestMapping(value="/get")
 	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId) {
 		
-		return new ModelAndView("jsonFeedView", "feed", EnterpriseUtils.getExistingFeed(feedId));
+		return new ModelAndView("jsonFeedView", "feed", hubService.getExistingFeed(feedId));
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class FeedAPI {
 	public ModelAndView apiAddFeed(@RequestParam("publisherId") Long publisherId,
 								@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
-		Publisher publisher = EnterpriseUtils.getExistingPublisher(publisherId);
+		Publisher publisher = hubService.getExistingPublisher(publisherId);
 		
 		Feed theFeed = new Feed();
 		theFeed.setPublisher(publisher);
@@ -100,9 +100,9 @@ public class FeedAPI {
 	public ModelAndView apiEditFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
 			@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
-		Feed theFeed = EnterpriseUtils.getExistingFeed(feedId);
+		Feed theFeed = hubService.getExistingFeed(feedId);
 		
-		theFeed.setPublisher(EnterpriseUtils.getExistingPublisher(publisherId));
+		theFeed.setPublisher(hubService.getExistingPublisher(publisherId));
 		theFeed.setType(type);
 		theFeed.setUrl(url);	
 		
@@ -122,7 +122,7 @@ public class FeedAPI {
 	public ModelAndView apiRemoveFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
 		//First verify that the feed exists
-		EnterpriseUtils.getExistingFeed(feedId);
+		hubService.getExistingFeed(feedId);
 		
 		hubService.removeFeedById(feedId);
 		
