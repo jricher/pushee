@@ -2,6 +2,7 @@ package org.mitre.pushee.enterprise.web;
 
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,12 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/manager/subscribers")
 public class SubscriberController {
 
-	private HubService hubService;
-	
 	@Autowired
-	public SubscriberController(HubService hubService) {
-		this.hubService = hubService;
-	}
+	private HubService hubService;
 
 	/**
 	 * Root page. Displays list of all subscribers.
@@ -30,6 +27,7 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllSubscribers(ModelAndView modelAndView) {
 		
@@ -45,6 +43,7 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/view")
 	public ModelAndView viewSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
@@ -60,6 +59,7 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("add")
 	public ModelAndView addSubscriber(ModelAndView modelAndView) {
 
@@ -75,6 +75,7 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit")
 	public ModelAndView editSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		
@@ -91,6 +92,7 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/remove")
 	public ModelAndView removeSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		

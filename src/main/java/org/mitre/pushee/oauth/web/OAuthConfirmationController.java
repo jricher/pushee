@@ -31,7 +31,7 @@ public class OAuthConfirmationController {
 	@Autowired
 	private ClientAuthenticationCache authenticationCache;
 	
-	// TODO: really want to have a security annotation here...
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/oauth/user/approve")
 	public ModelAndView confimAccess(HttpServletRequest request, HttpServletResponse response, 
 			ModelAndView modelAndView) {

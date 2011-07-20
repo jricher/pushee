@@ -14,6 +14,7 @@
 		
 	<tx:annotation-driven transaction-manager="transactionManager" />
     <context:component-scan annotation-config="true" base-package="org.mitre.pushee" />
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
 		<property name="databasePlatform" value="org.eclipse.persistence.platform.database.MySQLPlatform" />

@@ -9,6 +9,7 @@ import java.util.List;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.oauth2.provider.DefaultOAuth2GrantManager;
@@ -31,13 +32,9 @@ import com.google.common.collect.Lists;
 @RequestMapping("/manager/oauth/clients")
 public class OAuthClientController {
 
+	@Autowired
 	private ClientDetailsEntityService clientService;
 	
-	@Autowired
-	public OAuthClientController(ClientDetailsEntityService clientService) {
-		this.clientService = clientService;
-	}
-
 	/**
 	 * Redirect to the "/" version of the root
 	 * @param modelAndView
@@ -54,6 +51,7 @@ public class OAuthClientController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllClients(ModelAndView modelAndView) {
 		Collection<ClientDetailsEntity> clients = clientService.getAllClients();
@@ -63,12 +61,14 @@ public class OAuthClientController {
 		return modelAndView;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView redirectAdd(ModelAndView modelAndView) {
 		modelAndView.setViewName("redirect:/manager/oauth/clients/add/");
 		return modelAndView;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add/")
 	public ModelAndView addClientPage(ModelAndView modelAndView) {
 		
@@ -87,6 +87,7 @@ public class OAuthClientController {
 		return modelAndView;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete/{clientId}")
 	public ModelAndView deleteClientConfirmation(ModelAndView modelAndView,
 			@PathVariable String clientId) {
@@ -98,6 +99,7 @@ public class OAuthClientController {
 		return modelAndView;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit/{clientId}")
 	public ModelAndView editClientPage(ModelAndView modelAndView,
 			@PathVariable String clientId) {
@@ -110,6 +112,7 @@ public class OAuthClientController {
 		return modelAndView;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/view/{clientId}")
 	public ModelAndView viewClientDetails(ModelAndView modelAndView,
 			@PathVariable String clientId) {

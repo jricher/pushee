@@ -7,6 +7,7 @@ import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,14 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/manager/publishers")
 public class PublisherController {
 
-	private HubService hubService;
-	
 	@Autowired
-	public PublisherController(HubService hubService) {
-		
-		this.hubService = hubService;
-		
-	}
+	private HubService hubService;
 	
 	/**
 	 * Root page. Displays list of all Publishers
@@ -37,6 +32,7 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllPublishers(ModelAndView modelAndView) {
 		
@@ -53,6 +49,7 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/view")
 	public ModelAndView viewPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
@@ -70,6 +67,7 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("add")
 	public ModelAndView addPublisher(ModelAndView modelAndView) {
 
@@ -85,6 +83,7 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit")
 	public ModelAndView editPublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		
@@ -101,6 +100,7 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete")
 	public ModelAndView deletePublisherConfirmation(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 		

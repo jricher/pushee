@@ -8,6 +8,7 @@ import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,18 +24,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/manager/subscribers/api")
 public class SubscriberAPI {
 
-	private HubService hubService;
-	
 	@Autowired
-	public SubscriberAPI(HubService hubService) {
-		this.hubService = hubService;
-	}
+	private HubService hubService;
 	
 	/**
 	 * API access to get list of current Subscribers
 	 * 
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/getAll")
 	public ModelAndView apiGetAllSubscribers() {
 		
@@ -48,6 +46,7 @@ public class SubscriberAPI {
 	 * @param subId
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/get")
 	public ModelAndView apiGetSubscriber(@RequestParam("subscriberId") Long subId) {
 		
@@ -61,6 +60,7 @@ public class SubscriberAPI {
 	 * @param url
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url) {
 		
@@ -79,6 +79,7 @@ public class SubscriberAPI {
 	 * @param  postbackURL
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/editUrl")
 	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subId, @RequestParam("postbackUrl") String postbackURL) {
 		
@@ -97,6 +98,7 @@ public class SubscriberAPI {
 	 * @param  feedId the ID of the feed to subscribe to
 	 * @return the modified subscriber
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/addSubscription")
 	public ModelAndView apiAddSubscription(@RequestParam("subscriberId") Long subId, @RequestParam("feedId") Long feedId, 
 			@RequestParam(required=false, value="secret") String secret, @RequestParam(value="leaseSeconds", required=false) Integer leaseSeconds) {
@@ -132,6 +134,7 @@ public class SubscriberAPI {
 	 * @param  subId
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/remove")
 	public ModelAndView apiRemoveSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
 		

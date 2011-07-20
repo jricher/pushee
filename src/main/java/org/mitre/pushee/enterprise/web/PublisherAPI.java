@@ -6,6 +6,7 @@ import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,20 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/manager/publishers/api")
 public class PublisherAPI {
 
-	private HubService hubService;
-	
 	@Autowired
-	public PublisherAPI(HubService hubService) {
-		
-		this.hubService = hubService;
-		
-	}
+	private HubService hubService;
 	
 	/**
 	 * API access to get list of current Publishers
 	 * 
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/getAll")
 	public ModelAndView apiGetAllPublishers() {
 		
@@ -48,6 +44,7 @@ public class PublisherAPI {
 	 * @param pubId
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/get")
 	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long pubId) {
 		
@@ -61,6 +58,7 @@ public class PublisherAPI {
 	 * @param url
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView apiAddPublisher(@RequestParam("callbackUrl") String url) {
 
@@ -81,6 +79,7 @@ public class PublisherAPI {
 	 * @param url
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/editUrl")
 	public ModelAndView apiEditPublisherUrl(@RequestParam("publisherId") Long pubId, @RequestParam("callbackURL") String url) {
 		
@@ -96,6 +95,7 @@ public class PublisherAPI {
 	 * @param pubId
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/remove")
 	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 

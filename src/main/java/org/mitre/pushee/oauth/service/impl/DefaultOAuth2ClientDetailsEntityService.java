@@ -32,7 +32,6 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	/**
 	 * Get the client for the given ID
 	 */
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@Override
 	public ClientDetailsEntity loadClientByClientId(String clientId) throws OAuth2Exception {
 		if (!Strings.isNullOrEmpty(clientId)) {
@@ -45,7 +44,6 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	/**
 	 * Create a new client with the appropriate fields filled in
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
     public ClientDetailsEntity createClient(String clientId, String clientSecret, 
     		List<String> scope, List<String> grantTypes, String redirectUri, List<GrantedAuthority> authorities, 
@@ -75,7 +73,6 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	/**
 	 * Delete a client and all its associated tokens
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
     public void deleteClient(ClientDetailsEntity client) {
 		
@@ -91,7 +88,6 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	 * Update the oldClient with information from the newClient. The 
 	 * id from oldClient is retained.
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
     public ClientDetailsEntity updateClient(ClientDetailsEntity oldClient, ClientDetailsEntity newClient) {
 		if (oldClient != null && newClient != null) {
@@ -103,7 +99,6 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	/**
 	 * Get all clients in the system
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
     public Collection<ClientDetailsEntity> getAllClients() {
 		return clientRepository.getAllClients();

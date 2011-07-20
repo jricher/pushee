@@ -6,6 +6,7 @@ import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,19 +21,16 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/manager/feeds")
 public class FeedController {
 
-	private HubService hubService;
-	
 	@Autowired
-	public FeedController(HubService hubService) {
-		this.hubService = hubService;
-	}
-	
+	private HubService hubService;
+
 	/**
 	 * Root page. This page should display the list of current feeds.
 	 * 
 	 * @param  modelAndView  MAV object
 	 * @return feedIndex page
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/")
 	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
 
@@ -49,6 +47,7 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return viewFeed page
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/view")
 	public ModelAndView viewFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
@@ -65,6 +64,7 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return createFeed page with the new feed's info displayed 
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add")
 	public ModelAndView addFeed(ModelAndView modelAndView) {
 		
@@ -82,6 +82,7 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return the editFeed page
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit")
 	public ModelAndView editFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
 		
@@ -100,6 +101,7 @@ public class FeedController {
 	 * @param  modelAndView
 	 * @return delete confirmation page
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete")
 	public Object deleteFeedConfirmation(ModelAndView modelAndView, @RequestParam Long feedId) {
 		

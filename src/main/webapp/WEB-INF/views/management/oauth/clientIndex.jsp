@@ -14,7 +14,8 @@
 
 <h2>Available Clients:</h2>
 <c:forEach items="${clients}" var="client">
-Client ID: ${client.clientId} <a href="view/${client.clientId}">View</a>
+Client ID: ${client.clientId} ${client.clientName}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="view/${client.clientId}">View Details</a>
  | <a href="edit/${client.clientId}">Edit</a>
  | <a href="delete/${client.clientId}">Delete</a><br />
 &nbsp;&nbsp;&nbsp;&nbsp;authorizedGrantTypes: ${client.authorizedGrantTypes}<br />

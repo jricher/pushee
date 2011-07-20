@@ -8,6 +8,7 @@ import org.mitre.pushee.oauth.exception.DuplicateClientIdException;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.stereotype.Controller;
@@ -24,15 +25,12 @@ import com.google.common.collect.Lists;
 @RequestMapping("/manager/oauth/clients/api")
 public class OAuthClientAPI {
 
+	@Autowired
 	private ClientDetailsEntityService clientService;
 	
-	@Autowired
-	public OAuthClientAPI(ClientDetailsEntityService clientService) {
-		this.clientService = clientService;
-	}
-
 	// TODO: i think this needs a fancier binding than just strings on the way in
-    @RequestMapping("/add")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping("/add")
     public ModelAndView apiAddClient(ModelAndView modelAndView,
     		@RequestParam String clientId, @RequestParam String clientSecret, 
     		@RequestParam String scope, // space delimited 
@@ -72,8 +70,8 @@ public class OAuthClientAPI {
     	return modelAndView;
     }
 
-	// TODO: map this to a 202/204
-    @RequestMapping("/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping("/delete")
     public ModelAndView apiDeleteClient(ModelAndView modelAndView,
     		@RequestParam String clientId) {
     	
@@ -89,7 +87,8 @@ public class OAuthClientAPI {
     	return modelAndView;
     }
 
-	// TODO: the serializtion of this falls over
+	// TODO: the serializtion of this falls over, don't know why
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/getAll")
     public ModelAndView apiGetAllClients(ModelAndView modelAndView) {
     	
@@ -100,6 +99,7 @@ public class OAuthClientAPI {
     	return modelAndView;
     }
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/update")
     public ModelAndView apiUpdateClient(ModelAndView modelAndView,
     		@RequestParam String clientId, @RequestParam String clientSecret, 
@@ -152,6 +152,7 @@ public class OAuthClientAPI {
     	return modelAndView;
     }
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/getById")
     public ModelAndView getClientById(ModelAndView modelAndView,
     		@RequestParam String clientId) {
