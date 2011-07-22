@@ -5,20 +5,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
 <title>Feed Manager</title>
 </head>
 <body>
-<h1>Feed Manager</h1>
-<h2>Available feeds:</h2>
 
+<h1>Feed Manager</h1>
+
+<h2>Available feeds:</h2>
 <c:forEach items="${feeds}" var="feed">
-Feed ${feed.getId()}:<br/> 
-.....URL = ${feed.getUrl()}<br/>
-.....Type = ${feed.getType()}<br/>
-.....Publisher ID = ${feed.getPublisher().getId()}
-<br/>
-<br/>
+Feed ID: ${feed.getId()} <a href="view/${feed.getId()}">View</a> 
+ | <a href="edit/${feed.getId()}">Edit</a>
+ | <a href="delete/${feed.getId()}">Delete</a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL = ${feed.getUrl()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Type = ${feed.getType()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Publisher ID = ${feed.getPublisher().getId()}
 <hr/>
-<br/>
 </c:forEach>
+
+<a href="add">Add a new feed</a>
+
 </body>
+</html>

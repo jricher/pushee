@@ -1,15 +1,17 @@
 package org.mitre.pushee.enterprise.web;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
+import org.mitre.pushee.hub.model.Publisher;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -25,6 +27,17 @@ public class FeedController {
 	private HubService hubService;
 
 	/**
+	 * Redirect to the "/" version of the root
+	 * @param modelAndView
+	 * @return
+	 */
+	@RequestMapping("")
+	public ModelAndView redirectRoot(ModelAndView modelAndView) {
+		modelAndView.setViewName("redirect:/manager/feeds/");
+		return modelAndView;
+	}
+	
+	/**
 	 * Root page. This page should display the list of current feeds.
 	 * 
 	 * @param  modelAndView  MAV object
@@ -34,8 +47,10 @@ public class FeedController {
 	@RequestMapping(value="/")
 	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
 
-		modelAndView.addObject("feeds", (List<Feed>)hubService.getAllFeeds());
-		modelAndView.setViewName("/management/feedIndex");
+		Collection<Feed> feeds = hubService.getAllFeeds();
+		
+		modelAndView.addObject("feeds", feeds);
+		modelAndView.setViewName("/management/feed/feedIndex");
 		
 		return modelAndView;
 	}
@@ -48,13 +63,19 @@ public class FeedController {
 	 * @return viewFeed page
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value="/view")
-	public ModelAndView viewFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
+	@RequestMapping(value="/view/{feedId}")
+	public ModelAndView viewFeed(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
-		Feed theFeed = hubService.getExistingFeed(feedId);
+		Feed feed = hubService.getExistingFeed(feedId);
 		
-		modelAndView.addObject("feed", theFeed);
-		modelAndView.setViewName("/management/viewFeed");
+		modelAndView.addObject("feed", feed);
+		modelAndView.setViewName("/management/feed/viewFeed");
+		return modelAndView;
+	}
+	
+	@RequestMapping("/add")
+	public ModelAndView redirectAdd(ModelAndView modelAndView) {
+		modelAndView.setViewName("redirect:/manager/feeds/add/");
 		return modelAndView;
 	}
 	
@@ -65,10 +86,21 @@ public class FeedController {
 	 * @return createFeed page with the new feed's info displayed 
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value="/add")
+	@RequestMapping(value="/add/")
 	public ModelAndView addFeed(ModelAndView modelAndView) {
 		
-		modelAndView.setViewName("management/createFeed");
+		Collection<Publisher> publishers = hubService.getAllPublishers();
+		List<Long> publisherIds = new ArrayList<Long>();
+		for (Publisher publisher : publishers) {
+			publisherIds.add(publisher.getId());
+		}
+		
+		Feed feed = new Feed();
+		
+		modelAndView.addObject("mode", "add");
+		modelAndView.addObject("publishers", publishers);
+		modelAndView.addObject("feed", feed);
+		modelAndView.setViewName("management/feed/editFeed");
 		
 		return modelAndView;
 	}
@@ -83,13 +115,20 @@ public class FeedController {
 	 * @return the editFeed page
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value="/edit")
-	public ModelAndView editFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
+	@RequestMapping(value="/edit/{feedId}")
+	public ModelAndView editFeed(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
-		Feed theFeed = hubService.getExistingFeed(feedId);
+		Collection<Publisher> publishers = hubService.getAllPublishers();
+		List<Long> publisherIds = new ArrayList<Long>();
+		for (Publisher publisher : publishers) {
+			publisherIds.add(publisher.getId());
+		}
+		modelAndView.addObject("mode", "edit");
+		modelAndView.addObject("publishers", publishers);
+		Feed feed = hubService.getExistingFeed(feedId);
 		
-		modelAndView.addObject("feed", theFeed);
-		modelAndView.setViewName("/management/editFeed");
+		modelAndView.addObject("feed", feed);
+		modelAndView.setViewName("/management/feed/editFeed");
 		
 		return modelAndView;
 	}
@@ -102,13 +141,13 @@ public class FeedController {
 	 * @return delete confirmation page
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value="/delete")
-	public Object deleteFeedConfirmation(ModelAndView modelAndView, @RequestParam Long feedId) {
+	@RequestMapping(value="/delete/{feedId}")
+	public Object deleteFeedConfirmation(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
 		Feed feed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", feed);
-		modelAndView.setViewName("/management/deleteFeedConfirm");
+		modelAndView.setViewName("/management/feed/deleteFeedConfirm");
 		
 		return modelAndView;
 	}

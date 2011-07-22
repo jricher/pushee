@@ -16,7 +16,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var data = {};
 		
-		data.clientId = $('#feedId').val();
+		data.feedId = $('#id').val();
 		
 		$.post('../api/delete', data)
 			.success(function () {
@@ -49,7 +49,7 @@ You are about to delete this feed:
 
 <div>
 Feed: <a href="/edit?feedId=${feed.getId()}">${feed.getId()}</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;URL:${feed.getURL()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL:${feed.getUrl()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Type = ${feed.getType()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Publisher ID = ${feed.getPublisher().getId()}<br/>
 </div>
@@ -57,7 +57,7 @@ Feed: <a href="/edit?feedId=${feed.getId()}">${feed.getId()}</a><br/>
 This action cannot be undone. Are you sure?
 
 <f:form modelAttribute="feed">
-	<f:hidden path="feedId"/>
+	<f:hidden path="id"/>
 	
 	<button id="yes">Yes</button>
 	

@@ -52,7 +52,9 @@ public class FeedAPI {
 	@RequestMapping(value="/get")
 	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId) {
 		
-		return new ModelAndView("jsonFeedView", "feed", hubService.getExistingFeed(feedId));
+		Feed feed = hubService.getExistingFeed(feedId);
+		
+		return new ModelAndView("jsonFeedView", "feed", feed);
 	}
 
 	/**
@@ -72,12 +74,12 @@ public class FeedAPI {
 		
 		Publisher publisher = hubService.getExistingPublisher(publisherId);
 		
-		Feed theFeed = new Feed();
-		theFeed.setPublisher(publisher);
-		theFeed.setType(type);
-		theFeed.setUrl(url);
+		Feed feed = new Feed();
+		feed.setPublisher(publisher);
+		feed.setType(type);
+		feed.setUrl(url);
 		
-		hubService.saveFeed(theFeed);
+		hubService.saveFeed(feed);
 		Feed newFeed = hubService.getFeedByUrl(url);
 		
 		publisher.addFeed(newFeed);
@@ -101,13 +103,13 @@ public class FeedAPI {
 	public ModelAndView apiEditFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
 			@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
-		Feed theFeed = hubService.getExistingFeed(feedId);
+		Feed feed = hubService.getExistingFeed(feedId);
 		
-		theFeed.setPublisher(hubService.getExistingPublisher(publisherId));
-		theFeed.setType(type);
-		theFeed.setUrl(url);	
+		feed.setPublisher(hubService.getExistingPublisher(publisherId));
+		feed.setType(type);
+		feed.setUrl(url);	
 		
-		hubService.saveFeed(theFeed);
+		hubService.saveFeed(feed);
 		
 		return new ModelAndView("jsonFeedView", "feed", hubService.getFeedById(feedId));
 	}
@@ -120,8 +122,8 @@ public class FeedAPI {
 	 * @return removeSuccess 
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value="/remove")
-	public ModelAndView apiRemoveFeed(@RequestParam("feedId") Long feedId, ModelAndView modelAndView) {
+	@RequestMapping(value="/delete")
+	public ModelAndView apiDeleteFeed(@RequestParam Long feedId, ModelAndView modelAndView) {
 		
 		//First verify that the feed exists
 		hubService.getExistingFeed(feedId);
