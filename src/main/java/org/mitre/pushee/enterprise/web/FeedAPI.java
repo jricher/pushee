@@ -104,14 +104,19 @@ public class FeedAPI {
 			@RequestParam("type") FeedType type, @RequestParam("url") String url) {
 		
 		Feed feed = hubService.getExistingFeed(feedId);
+		Publisher publisher = hubService.getExistingPublisher(publisherId);
 		
-		feed.setPublisher(hubService.getExistingPublisher(publisherId));
+		feed.setPublisher(publisher);
 		feed.setType(type);
 		feed.setUrl(url);	
 		
 		hubService.saveFeed(feed);
+		Feed retrieved = hubService.getFeedById(feedId);
 		
-		return new ModelAndView("jsonFeedView", "feed", hubService.getFeedById(feedId));
+		publisher.addFeed(retrieved);
+		hubService.savePublisher(publisher);
+		
+		return new ModelAndView("jsonFeedView", "feed", retrieved);
 	}
 		
 	/**

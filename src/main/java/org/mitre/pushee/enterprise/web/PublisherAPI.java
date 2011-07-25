@@ -46,9 +46,11 @@ public class PublisherAPI {
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/get")
-	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long pubId) {
+	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long publisherId) {
 		
-		return new ModelAndView("jsonPublisherView", "publisher", hubService.getExistingPublisher(pubId));
+		Publisher publisher = hubService.getExistingPublisher(publisherId);
+		
+		return new ModelAndView("jsonPublisherView", "publisher", publisher);
 	
 	}
 	
@@ -62,9 +64,9 @@ public class PublisherAPI {
 	@RequestMapping("/add")
 	public ModelAndView apiAddPublisher(@RequestParam("callbackUrl") String url) {
 
-		Publisher p = new Publisher();
-		p.setCallbackURL(url);
-		hubService.savePublisher(p);
+		Publisher publisher = new Publisher();
+		publisher.setCallbackURL(url);
+		hubService.savePublisher(publisher);
 		
 		Publisher newPublisher =  hubService.getPublisherByUrl(url);
 		
@@ -80,13 +82,16 @@ public class PublisherAPI {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/editUrl")
-	public ModelAndView apiEditPublisherUrl(@RequestParam("publisherId") Long pubId, @RequestParam("callbackURL") String url) {
+	@RequestMapping("/edit")
+	public ModelAndView apiEditPublisher(@RequestParam("publisherId") Long publisherId, @RequestParam("callbackURL") String url) {
 		
-		Publisher p = hubService.getExistingPublisher(pubId);
-		p.setCallbackURL(url);
+		Publisher publisher = hubService.getExistingPublisher(publisherId);
+		publisher.setCallbackURL(url);
+		hubService.savePublisher(publisher);
 		
-		return new ModelAndView("jsonPublisherView", "publisher", p);
+		Publisher retrieved =  hubService.getPublisherByUrl(url);
+		
+		return new ModelAndView("jsonPublisherView", "publisher", retrieved);
 	}
 	
 	/**
