@@ -44,8 +44,9 @@ $(document).ready(function() {
 		var errors = [];
 		
 		var data = {};
-		if (mode == 'edit') {
-			data.feedId = ${feed.getId();};
+		
+		if ("${mode}" == 'edit') {
+			data.feedId = "${feed.getId()}";
 		}
 		
 		data.publisherId = $('#publisherId').val();
@@ -84,13 +85,13 @@ $(document).ready(function() {
 <script type="text/javascript">
 // Send code for edit
 function sendData(data) {
+	
+	var feedId = "${feed.getId()}";
+	
 	console.log("mode = edit");
 	$.post('../api/edit', data)
 		.success(function () {
 			console.log("Success!");
-			
-			var feedId = ${feed.getId();};
-			
 			window.location.replace("../view/" + feedId);
 		})
 		.error(function () {
@@ -158,7 +159,14 @@ function sendData(data) {
 	Publisher: <select id="publisherId" items="${publishers}"> <br/>	 
 	<options> 
 	<c:forEach var="pub" items="${publishers }">
-	<option value="${pub.getId()}">${pub.getCallbackURL()}</option>
+		<c:choose>
+			<c:when test="${pub.getId() == feed.getPublisher().getId()}">
+				<option selected="selected" value="${pub.getId()}">#${pub.getId()}: ${pub.getCallbackURL()}</option>
+			</c:when>
+			<c:otherwise>
+				<option value="${pub.getId()}">#${pub.getId()}: ${pub.getCallbackURL()}</option>
+			</c:otherwise>
+		</c:choose>
 	</c:forEach>
 	</options>
 	</select>
