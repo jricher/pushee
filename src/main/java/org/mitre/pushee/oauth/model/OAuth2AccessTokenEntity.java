@@ -11,6 +11,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -184,7 +185,7 @@ public class OAuth2AccessTokenEntity extends OAuth2AccessToken {
      * @see org.springframework.security.oauth2.common.OAuth2AccessToken#getScope()
      */
     @Override
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(
     		joinColumns=@JoinColumn(name="owner_id"),
     		name="scope"

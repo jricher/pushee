@@ -7,7 +7,7 @@ package org.mitre.pushee.hub.exception;
  * @author AANGANES
  *
  */
-public class PermissionDeniedException extends Exception {
+public class PermissionDeniedException extends RuntimeException {
 
 	/**
 	 * 

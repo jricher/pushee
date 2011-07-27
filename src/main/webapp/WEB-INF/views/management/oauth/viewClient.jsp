@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,6 +22,13 @@ Client: <a href="../edit/${client.clientId}">${client.clientId}</a><br />
 &nbsp;&nbsp;&nbsp;&nbsp;Timeout for Access Tokens: ${client.accessTokenTimeout}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Timeout for Refresh Tokens: ${client.refreshTokenTimeout}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Owner: ${client.owner}<br />
+
+<!-- TODO: list and allow for manipulation of tokens issued to this client
+<c:forEach items="${tokens}">
+
+</c:forEach>
+-->
+
 </div>
 
 <ul id="nav">

@@ -32,14 +32,6 @@ public class JSONOAuthClientView extends AbstractView {
 
 			@Override
 			public boolean shouldSkipField(FieldAttributes f) {
-				/** /
-				if (f.getDeclaringClass().equals(ClientDetailsEntity.class)) {
-					if (f.getName().equals("authorities")) {
-						// TODO: find a way to push this through as a list of strings
-						return true;
-					}
-				}
-				/ **/
 				return false;
 			}
 
@@ -48,8 +40,9 @@ public class JSONOAuthClientView extends AbstractView {
 				// skip the JPA binding wrapper
 				if (clazz.equals(BeanPropertyBindingResult.class)) {
 					return true;
+				} else {
+					return false;
 				}
-				return false;
 			}
 
 		})

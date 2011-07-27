@@ -39,6 +39,9 @@
 	<beans:bean id="jsonSubscriptionView" class="org.mitre.pushee.hub.model.serializer.JSONSubscriptionView"/>
 	<beans:bean id="jsonPublisherView" class="org.mitre.pushee.hub.model.serializer.JSONPublisherView"/>
 	<beans:bean id="jsonOAuthClientView" class="org.mitre.pushee.oauth.model.serializer.JSONOAuthClientView" />
+
+	<!-- other required views -->	
+	<beans:bean id="tokenIntrospection" class="org.mitre.pushee.oauth.model.serializer.TokenIntrospection" />
 	
 	<!-- Imports user-defined @Controller beans that process client requests -->
 	<beans:import resource="controllers.xml" />

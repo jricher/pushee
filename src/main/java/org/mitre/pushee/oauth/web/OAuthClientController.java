@@ -77,7 +77,7 @@ public class OAuthClientController {
 		
 		ClientDetailsEntity client = ClientDetailsEntity.makeBuilder()
 				.setScope(Lists.newArrayList("scope"))
-				.setAuthorities(auth) // WTF?
+				.setAuthorities(auth) // why do we have to pull this into a separate list?
 				.setAuthorizedGrantTypes(Lists.newArrayList(DefaultOAuth2GrantManager.GrantType.authorization_code.toString()))
 				.finish();
 		modelAndView.addObject("availableGrantTypes", DefaultOAuth2GrantManager.GrantType.values());
@@ -105,6 +105,7 @@ public class OAuthClientController {
 			@PathVariable String clientId) {
 		
 		ClientDetailsEntity client = clientService.loadClientByClientId(clientId);
+		
 		modelAndView.addObject("availableGrantTypes", DefaultOAuth2GrantManager.GrantType.values());
 		modelAndView.addObject("client", client);
 		modelAndView.setViewName("/management/oauth/editClient");

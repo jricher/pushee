@@ -4,6 +4,7 @@
 package org.mitre.pushee.oauth.service.impl;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
@@ -13,6 +14,9 @@ import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntityFactory;
 import org.mitre.pushee.oauth.repository.OAuth2TokenRepository;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
+import org.mitre.pushee.oauth.service.OAuth2TokenEntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.provider.token.ExpiredOAuthTokenException;
@@ -24,13 +28,17 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.OAuth2ProviderTokenServices;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Sets;
+
 
 /**
  * @author jricher
  * 
  */
 @Service
-public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenServices {
+public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityService {
+	
+	private static Logger logger = LoggerFactory.getLogger(DefaultOAuth2ProviderTokenService.class);
 
 	@Autowired
 	private OAuth2TokenRepository tokenRepository;
@@ -45,7 +53,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 	private OAuth2RefreshTokenEntityFactory refreshTokenFactory;
 	
 	@Override
-    public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
+    public OAuth2AccessTokenEntity createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
 		if (authentication != null && 
 				authentication.getClientAuthentication() != null && 
 				authentication.getClientAuthentication() instanceof ClientAuthenticationToken) {
@@ -63,8 +71,21 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 	    	token.setClient(client);
 	    	
 		    // inherit the scope from the auth
+	    	// this lets us match which scope is requested 
 		    if (client.isScoped()) {
-		    	token.setScope(clientAuth.getScope());
+		    	
+		    	// restrict granted scopes to a valid subset of those 
+		    	Set<String> validScopes = Sets.newHashSet();
+		    	
+		    	for (String requested : clientAuth.getScope()) {
+	                if (client.getScope().contains(requested)) {
+	                	validScopes.add(requested);
+	                } else {
+	                	logger.warn("Client " + client.getClientId() + " requested out of permission scope: " + requested);
+	                }
+                }
+		    	
+		    	token.setScope(validScopes);
 		    }
 
 		    // make it expire if necessary
@@ -106,7 +127,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
     }
 
 	@Override
-    public OAuth2AccessToken refreshAccessToken(String refreshTokenValue) throws AuthenticationException {
+    public OAuth2AccessTokenEntity refreshAccessToken(String refreshTokenValue) throws AuthenticationException {
 		
 		OAuth2RefreshTokenEntity refreshToken = tokenRepository.getRefreshTokenByValue(refreshTokenValue);
 		
@@ -170,6 +191,35 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
     }
 
 
+	@Override
+    public OAuth2AccessTokenEntity getAccessToken(String accessTokenValue) {
+		OAuth2AccessTokenEntity accessToken = tokenRepository.getAccessTokenByValue(accessTokenValue);
+		
+		return accessToken;		
+    }
+
+	@Override
+    public OAuth2RefreshTokenEntity getRefreshToken(String refreshTokenValue) {
+		OAuth2RefreshTokenEntity refreshToken = tokenRepository.getRefreshTokenByValue(refreshTokenValue);
+		
+		return refreshToken;
+    }
+	
+	@Override
+    public void revokeRefreshToken(OAuth2RefreshTokenEntity refreshToken) {
+	    tokenRepository.clearAccessTokensForRefreshToken(refreshToken);
+	    tokenRepository.removeRefreshToken(refreshToken);	    
+    }
+
+	@Override
+    public void revokeAccessToken(OAuth2AccessTokenEntity accessToken) {
+		tokenRepository.removeAccessToken(accessToken);	    
+    }
+	
+
+	
+	
+	
 	/**
 	 * Get a builder object for this class (for tests)
 	 * @return
@@ -212,6 +262,5 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2ProviderTokenSer
 			return instance;
 		}
 	}
-	
-	
+
 }
