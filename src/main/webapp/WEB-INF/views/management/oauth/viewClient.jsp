@@ -23,12 +23,29 @@ Client: <a href="../edit/${client.clientId}">${client.clientId}</a><br />
 &nbsp;&nbsp;&nbsp;&nbsp;Timeout for Refresh Tokens: ${client.refreshTokenTimeout}<br />
 &nbsp;&nbsp;&nbsp;&nbsp;Owner: ${client.owner}<br />
 
-<!-- TODO: list and allow for manipulation of tokens issued to this client
-<c:forEach items="${tokens}">
-
+<h3>Active access tokens</h3>
+<c:forEach items="${accessTokens}" var="token">
+<div>
+Token: ${token.value} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scope: ${token.scope}<br />
+<c:if test="${token.expiration != null}">
+&nbsp;&nbsp;&nbsp;&nbsp;Expires: ${token.expiration}<br />
+</c:if>
+</div>
+<hr />
 </c:forEach>
--->
 
+<h3>Active refresh tokens</h3>
+<c:forEach items="${refreshTokens}" var="token">
+<div>
+Token: ${token.value} <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scope: ${token.scope}<br />
+<c:if test="${token.expiration != null}">
+&nbsp;&nbsp;&nbsp;&nbsp;Expires: ${token.expiration}<br />
+</c:if>
+</div>
+<hr />
+</c:forEach>
 </div>
 
 <ul id="nav">

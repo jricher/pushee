@@ -7,7 +7,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
+import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
+import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
+import org.mitre.pushee.oauth.service.OAuth2TokenEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +37,9 @@ public class OAuthClientController {
 
 	@Autowired
 	private ClientDetailsEntityService clientService;
+
+	@Autowired
+	private OAuth2TokenEntityService tokenService;
 	
 	/**
 	 * Redirect to the "/" version of the root
@@ -119,7 +125,14 @@ public class OAuthClientController {
 			@PathVariable String clientId) {
 		
 		ClientDetailsEntity client = clientService.loadClientByClientId(clientId);
+		
+		List<OAuth2AccessTokenEntity> accessTokens = tokenService.getAccessTokensForClient(client);
+		List<OAuth2RefreshTokenEntity> refreshTokens = tokenService.getRefreshTokensForClient(client);
+		
 		modelAndView.addObject("client", client);
+		modelAndView.addObject("accessTokens", accessTokens);
+		modelAndView.addObject("refreshTokens", refreshTokens);
+		
 		modelAndView.setViewName("/management/oauth/viewClient");
 		return modelAndView;
 	}

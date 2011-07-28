@@ -1,10 +1,10 @@
 package org.mitre.pushee.oauth.repository;
 
+import java.util.List;
+
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 public interface OAuth2TokenRepository {
 
@@ -23,5 +23,9 @@ public interface OAuth2TokenRepository {
 	public void removeAccessToken(OAuth2AccessTokenEntity accessToken);
 
 	public void clearTokensForClient(ClientDetailsEntity client);
+
+	public List<OAuth2AccessTokenEntity> getAccessTokensForClient(ClientDetailsEntity client);
+
+	public List<OAuth2RefreshTokenEntity> getRefreshTokensForClient(ClientDetailsEntity client);
 
 }

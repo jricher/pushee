@@ -4,6 +4,7 @@
 package org.mitre.pushee.oauth.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -217,9 +218,22 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
     }
 	
 
-	
-	
-	
+	/* (non-Javadoc)
+     * @see org.mitre.pushee.oauth.service.OAuth2TokenEntityService#getAccessTokensForClient(org.mitre.pushee.oauth.model.ClientDetailsEntity)
+     */
+    @Override
+    public List<OAuth2AccessTokenEntity> getAccessTokensForClient(ClientDetailsEntity client) {
+	    return tokenRepository.getAccessTokensForClient(client);
+    }
+
+	/* (non-Javadoc)
+     * @see org.mitre.pushee.oauth.service.OAuth2TokenEntityService#getRefreshTokensForClient(org.mitre.pushee.oauth.model.ClientDetailsEntity)
+     */
+    @Override
+    public List<OAuth2RefreshTokenEntity> getRefreshTokensForClient(ClientDetailsEntity client) {
+    	return tokenRepository.getRefreshTokensForClient(client);
+    }
+
 	/**
 	 * Get a builder object for this class (for tests)
 	 * @return

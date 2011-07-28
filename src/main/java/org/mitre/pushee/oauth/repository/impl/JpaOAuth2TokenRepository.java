@@ -96,6 +96,27 @@ public class JpaOAuth2TokenRepository implements OAuth2TokenRepository {
 	        removeRefreshToken(refreshToken);
         }	    
     }
-	
+
+	/* (non-Javadoc)
+     * @see org.mitre.pushee.oauth.repository.OAuth2TokenRepository#getAccessTokensForClient(org.mitre.pushee.oauth.model.ClientDetailsEntity)
+     */
+    @Override
+    public List<OAuth2AccessTokenEntity> getAccessTokensForClient(ClientDetailsEntity client) {
+		TypedQuery<OAuth2AccessTokenEntity> queryA = manager.createNamedQuery("OAuth2AccessTokenEntity.getByClient", OAuth2AccessTokenEntity.class);
+		queryA.setParameter("client", client);
+	    List<OAuth2AccessTokenEntity> accessTokens = queryA.getResultList();
+	    return accessTokens;
+    }
+
+	/* (non-Javadoc)
+     * @see org.mitre.pushee.oauth.repository.OAuth2TokenRepository#getRefreshTokensForClient(org.mitre.pushee.oauth.model.ClientDetailsEntity)
+     */
+    @Override
+    public List<OAuth2RefreshTokenEntity> getRefreshTokensForClient(ClientDetailsEntity client) {
+		TypedQuery<OAuth2RefreshTokenEntity> queryR = manager.createNamedQuery("OAuth2RefreshTokenEntity.getByClient", OAuth2RefreshTokenEntity.class);
+		queryR.setParameter("client", client);
+	    List<OAuth2RefreshTokenEntity> refreshTokens = queryR.getResultList();
+	    return refreshTokens;
+    }	
 
 }
