@@ -8,20 +8,25 @@
 <title>Publisher Manager</title>
 </head>
 <body>
-<h1>Subscriber Manager: Subscriber Index</h1>
 
+<h1>Subscriber Manager</h1>
+
+<h2>Available subscribers:</h2>
 <c:forEach items="${subscribers}" var="subscriber">
-	<h3>Subscriber ${subscriber.getId()}</h3>
-	URL = ${subscriber.getPostbackURL()}<br/>
-	Feed Subscriptions:<br/>
-	<c:forEach items="${subscriber.getSubscriptions()}" var="subscription">
-		.....ID: ${subscription.getFeed().getId()}: <br/>
-		.....URL: ${subscription.getFeed().getUrl()}<br/>
-	</c:forEach>
-	<br/>
-	<br/>
-	<hr/>
-	<br/>
+Subscriber ID: ${subscriber.getId()} <a href="view/${subscriber.getId()}">View</a> 
+ | <a href="edit/${subscriber.getId()}">Edit</a>
+ | <a href="delete/${subscriber.getId()}">Delete</a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL = ${subscriber.getPostbackURL()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Feed Subscriptions:<br/>
+<c:forEach items="${subscriber.getSubscriptions()}" var="subscription">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID: ${subscription.getFeed().getId()}: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL: ${subscription.getFeed().getUrl()}<br/>
 </c:forEach>
+<hr/>
+<br/>
+</c:forEach>
+
+<a href="add/">Add a new subscriber</a>
+
 </body>
 </html>

@@ -16,7 +16,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var data = {};
 		
-		data.SubscriberId = $('#SubscriberId').val();
+		data.subscriberId = $('#id').val();
 		
 		$.post('../api/delete', data)
 			.success(function () {
@@ -60,7 +60,7 @@ Subscriber: <a href="edit/${subscriber.getId()}">${subscriber.getId()}</a><br />
 This action cannot be undone. Are you sure?
 
 <f:form modelAttribute="subscriber">
-	<f:hidden path="subscriberId"/>
+	<f:hidden path="id"/>
 	
 	<button id="yes">Yes</button>
 	

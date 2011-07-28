@@ -75,12 +75,9 @@ public class Subscriber {
 	 * @param f the feed this subscription this is for
 	 */
 	public void removeSubscription(Feed f) {
-		Subscription s = new Subscription();
-		s.setFeed(f);
-		s.setSubscriber(this);
-		
-		if (subscriptions.contains(s)) {
-			subscriptions.remove(s);
+
+		if (subscriptions.contains(f)) {
+			subscriptions.remove(f);
 		}
 	}
 	

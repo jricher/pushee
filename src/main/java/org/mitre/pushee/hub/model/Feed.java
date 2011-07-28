@@ -40,7 +40,6 @@ public class Feed {
 
 	@Override
 	public int hashCode() {
-		logger.info("Feed - hashcode");
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -53,7 +52,6 @@ public class Feed {
 
 	@Override
 	public boolean equals(Object obj) {
-		logger.info("Feed - equals");
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -69,12 +67,7 @@ public class Feed {
 		if (publisher == null) {
 			if (other.publisher != null)
 				return false;
-		} else if (!publisher.getId().equals(other.publisher.getId()))
-			return false;
-		if (subscriptions == null) {
-			if (other.subscriptions != null)
-				return false;
-		} else if (!subscriptions.equals(other.subscriptions))
+		} else if (!publisher.equals(other.publisher))
 			return false;
 		if (type != other.type)
 			return false;

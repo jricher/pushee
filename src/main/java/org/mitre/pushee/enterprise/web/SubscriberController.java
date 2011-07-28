@@ -1,9 +1,11 @@
 package org.mitre.pushee.enterprise.web;
 
+import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +24,17 @@ public class SubscriberController {
 	private HubService hubService;
 
 	/**
+	 * Redirect to the "/" version of the root
+	 * @param modelAndView
+	 * @return
+	 */
+	@RequestMapping("")
+	public ModelAndView redirectRoot(ModelAndView modelAndView) {
+		modelAndView.setViewName("redirect:/manager/subscribers/");
+		return modelAndView;
+	}
+	
+	/**
 	 * Root page. Displays list of all subscribers.
 	 * 
 	 * @param modelAndView
@@ -32,7 +45,7 @@ public class SubscriberController {
 	public ModelAndView viewAllSubscribers(ModelAndView modelAndView) {
 		
 		modelAndView.addObject("subscribers", hubService.getAllSubscribers());
-		modelAndView.setViewName("management/subscriberIndex");
+		modelAndView.setViewName("management/subscriber/subscriberIndex");
 		return modelAndView;
 	}
 	
@@ -44,11 +57,13 @@ public class SubscriberController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/view")
-	public ModelAndView viewSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
+	@RequestMapping("/view/{subscriberId}")
+	public ModelAndView viewSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
-		modelAndView.setViewName("management/viewSubscriber");
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		
+		modelAndView.addObject("subscriber", subscriber);
+		modelAndView.setViewName("management/subscriber/viewSubscriber");
 		
 		return modelAndView;
 	}
@@ -60,10 +75,13 @@ public class SubscriberController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("add")
+	@RequestMapping("/add/")
 	public ModelAndView addSubscriber(ModelAndView modelAndView) {
 
-		modelAndView.setViewName("management/createSubscriber");
+		modelAndView.addObject("mode", "add");
+		modelAndView.addObject("feeds", hubService.getAllFeeds());
+		modelAndView.addObject("subscriber", new Subscriber());
+		modelAndView.setViewName("management/subscriber/editSubscriber");
 		
 		return modelAndView;
 	}
@@ -76,11 +94,15 @@ public class SubscriberController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/edit")
-	public ModelAndView editSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
+	@RequestMapping("/edit/{subscriberId}")
+	public ModelAndView editSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
-		modelAndView.setViewName("management/editSubscriber");
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		
+		modelAndView.addObject("subscriber", subscriber);
+		modelAndView.addObject("feeds", hubService.getAllFeeds());
+		modelAndView.addObject("mode", "edit");
+		modelAndView.setViewName("management/subscriber/editSubscriber");
 		
 		return modelAndView;
 	}
@@ -93,11 +115,13 @@ public class SubscriberController {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/remove")
-	public ModelAndView removeSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
+	@RequestMapping("/delete/{subscriberId}")
+	public ModelAndView removeSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
-		modelAndView.addObject("subscriber", hubService.getExistingSubscriber(subId));
-		modelAndView.setViewName("/management/deleteSubscriberConfirm");
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		
+		modelAndView.addObject("subscriber", subscriber);
+		modelAndView.setViewName("/management/subscriber/deleteSubscriberConfirm");
 		
 		return modelAndView;
 	}	

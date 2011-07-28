@@ -50,7 +50,9 @@ public class SubscriberAPI {
 	@RequestMapping("/get")
 	public ModelAndView apiGetSubscriber(@RequestParam("subscriberId") Long subId) {
 		
-		return new ModelAndView("jsonSubscriberView", "subscriber", hubService.getExistingSubscriber(subId));
+		Subscriber subscriber = hubService.getExistingSubscriber(subId);
+		
+		return new ModelAndView("jsonSubscriberView", "subscriber", subscriber);
 	
 	}
 	
@@ -64,11 +66,13 @@ public class SubscriberAPI {
 	@RequestMapping("/add")
 	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url) {
 		
-		Subscriber s = new Subscriber();
-		s.setPostbackURL(url);
-		hubService.saveSubscriber(s);
+		Subscriber subscriber = new Subscriber();
+		subscriber.setPostbackURL(url);
+		hubService.saveSubscriber(subscriber);
 		
-		return new ModelAndView("jsonSubscriberView", "subscriber", hubService.getSubscriberByCallbackURL(url));
+		Subscriber retrieved = hubService.getSubscriberByCallbackURL(url);
+		
+		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
 		
 	}
 	
@@ -80,14 +84,14 @@ public class SubscriberAPI {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/editUrl")
-	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subId, @RequestParam("postbackUrl") String postbackURL) {
+	@RequestMapping("/edit")
+	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subscriberId, @RequestParam("postbackUrl") String postbackURL) {
 		
-		Subscriber s = hubService.getExistingSubscriber(subId);
-		s.setPostbackURL(postbackURL);
-		hubService.saveSubscriber(s);
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		subscriber.setPostbackURL(postbackURL);
+		hubService.saveSubscriber(subscriber);
 		
-		return new ModelAndView("jsonSubscriberView", "subscriber", s);
+		return new ModelAndView("jsonSubscriberView", "subscriber", subscriber);
 	}
 	
 	/**
@@ -100,29 +104,52 @@ public class SubscriberAPI {
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/addSubscription")
-	public ModelAndView apiAddSubscription(@RequestParam("subscriberId") Long subId, @RequestParam("feedId") Long feedId, 
+	public ModelAndView apiAddSubscription(@RequestParam("subscriberId") Long subscriberId, @RequestParam("feedId") Long feedId, 
 			@RequestParam(required=false, value="secret") String secret, @RequestParam(value="leaseSeconds", required=false) Integer leaseSeconds) {
 		
-		Subscriber s = hubService.getExistingSubscriber(subId);
-		Feed f = hubService.getExistingFeed(feedId);
-		Subscription sub = new Subscription();
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		Feed feed = hubService.getExistingFeed(feedId);
+		Subscription subscription = new Subscription();
 		
-		sub.setFeed(f);
-		sub.setSubscriber(s);
+		subscription.setFeed(feed);
+		subscription.setSubscriber(subscriber);
 		
 		if (secret != null) {
-			sub.setSecret(secret);
+			subscription.setSecret(secret);
 		}
 		if (leaseSeconds != null) {
 			Calendar now = Calendar.getInstance();
 			now.add(Calendar.SECOND, leaseSeconds);
-			sub.setTimeout(now);
+			subscription.setTimeout(now);
 		}
 		
-		s.addSubscription(sub);
-		hubService.saveSubscriber(s);
+		subscriber.addSubscription(subscription);
+		hubService.saveSubscriber(subscriber);
 		
-		Subscriber retrieved = hubService.getSubscriberById(subId);
+		Subscriber retrieved = hubService.getSubscriberById(subscriberId);
+		
+		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
+	}
+	
+	/**
+	 * API access to remove a subscription from a given subscriber
+	 * to a given feed.
+	 * 
+	 * @param  subId  the ID of the subscriber
+	 * @param  feedId the ID of the feed to remove subscription from
+	 * @return the modified subscriber
+	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping("/removeSubscription")
+	public ModelAndView apiRemoveSubscription(@RequestParam("subscriberId") Long subscriberId, @RequestParam("feedId") Long feedId) {
+		
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		Feed feed = hubService.getExistingFeed(feedId);
+		
+		subscriber.removeSubscription(feed);
+		hubService.saveSubscriber(subscriber);
+		
+		Subscriber retrieved = hubService.getSubscriberById(subscriberId);
 		
 		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
 	}
@@ -131,25 +158,25 @@ public class SubscriberAPI {
 	 * API access to remove a subscriber. Also removes references to subscriptions
 	 * this subscriber had in any associated Feed objects.
 	 * 
-	 * @param  subId
+	 * @param  subscriberId
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/remove")
-	public ModelAndView apiRemoveSubscriber(@RequestParam("subscriberId") Long subId, ModelAndView modelAndView) {
+	@RequestMapping("/delete")
+	public ModelAndView apiDeleteSubscriber(@RequestParam("subscriberId") Long subscriberId, ModelAndView modelAndView) {
 		
-		Subscriber s = hubService.getExistingSubscriber(subId);
-		Collection<Subscription> subscriptions = s.getSubscriptions();
+		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
+		Collection<Subscription> subscriptions = subscriber.getSubscriptions();
 		
 		for (Subscription sub : subscriptions) {
 			
-			Feed f = sub.getFeed();
-			f.removeSubscription(sub);
-			hubService.saveFeed(f);
+			Feed feed = sub.getFeed();
+			feed.removeSubscription(sub);
+			hubService.saveFeed(feed);
 			
 		}
 		
-		hubService.removeSubscriberById(subId);
+		hubService.removeSubscriberById(subscriberId);
 		
 		modelAndView.setViewName("management/successfullyRemoved");
 		

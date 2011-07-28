@@ -1,12 +1,13 @@
 package org.mitre.pushee.enterprise.web;
 
+import java.util.Collection;
 import java.util.List;
 
-import org.mitre.pushee.hub.exception.FeedNotFoundException;
-import org.mitre.pushee.hub.exception.PublisherNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Feed.FeedType;
 import org.mitre.pushee.hub.model.Publisher;
+import org.mitre.pushee.hub.model.Subscriber;
+import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -131,7 +132,13 @@ public class FeedAPI {
 	public ModelAndView apiDeleteFeed(@RequestParam Long feedId, ModelAndView modelAndView) {
 		
 		//First verify that the feed exists
-		hubService.getExistingFeed(feedId);
+		Feed feed = hubService.getExistingFeed(feedId);
+		
+		Collection<Subscription> subscriptions= feed.getSubscriptions();
+		for (Subscription subscription: subscriptions) {
+			Subscriber subscriber = subscription.getSubscriber();
+			subscriber.removeSubscription(feed);
+		}
 		
 		hubService.removeFeedById(feedId);
 		
