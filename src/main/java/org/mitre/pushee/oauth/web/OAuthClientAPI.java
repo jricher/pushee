@@ -93,7 +93,7 @@ public class OAuthClientAPI {
     public ModelAndView apiGetAllClients(ModelAndView modelAndView) {
     	
     	Collection<ClientDetailsEntity> clients = clientService.getAllClients();
-    	modelAndView.addObject("clients", clients);
+    	modelAndView.addObject("entity", clients);
     	modelAndView.setViewName("jsonOAuthClientView");
     	
     	return modelAndView;
