@@ -20,4 +20,6 @@ public interface OAuth2TokenEntityService extends OAuth2ProviderTokenServices {
 	public List<OAuth2AccessTokenEntity> getAccessTokensForClient(ClientDetailsEntity client);
 	
 	public List<OAuth2RefreshTokenEntity> getRefreshTokensForClient(ClientDetailsEntity client);
+
+	public void clearExpiredTokens();
 }

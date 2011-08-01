@@ -19,6 +19,7 @@ import org.mitre.pushee.oauth.service.OAuth2TokenEntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.provider.token.ExpiredOAuthTokenException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -234,7 +235,25 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
     	return tokenRepository.getRefreshTokensForClient(client);
     }
 
-	/**
+    @Override
+    @Scheduled(fixedRate = 5 * 60 * 1000) // schedule this task every five minutes
+    public void clearExpiredTokens() {
+    	logger.info("Cleaning out all expired tokens");
+    	
+    	List<OAuth2AccessTokenEntity> accessTokens = tokenRepository.getExpiredAccessTokens();
+    	logger.info("Found " + accessTokens.size() + " expired access tokens");
+    	for (OAuth2AccessTokenEntity oAuth2AccessTokenEntity : accessTokens) {
+	        revokeAccessToken(oAuth2AccessTokenEntity);
+        }
+    	
+    	List<OAuth2RefreshTokenEntity> refreshTokens = tokenRepository.getExpiredRefreshTokens();
+    	logger.info("Found " + refreshTokens.size() + " expired refresh tokens");
+    	for (OAuth2RefreshTokenEntity oAuth2RefreshTokenEntity : refreshTokens) {
+	        revokeRefreshToken(oAuth2RefreshTokenEntity);
+        }
+    }
+    
+    /**
 	 * Get a builder object for this class (for tests)
 	 * @return
 	 */
@@ -272,7 +291,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 			return this;
 		}
 		
-		public DefaultOAuth2ProviderTokenService finish() {
+		public OAuth2TokenEntityService finish() {
 			return instance;
 		}
 	}

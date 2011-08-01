@@ -30,7 +30,8 @@ import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
 @Entity
 @Table(name="refreshtoken")
 @NamedQueries({
-	@NamedQuery(name = "OAuth2RefreshTokenEntity.getByClient", query = "select r from OAuth2RefreshTokenEntity r where r.client = :client")
+	@NamedQuery(name = "OAuth2RefreshTokenEntity.getByClient", query = "select r from OAuth2RefreshTokenEntity r where r.client = :client"),
+	@NamedQuery(name = "OAuth2RefreshTokenEntity.getExpired", query = "select r from OAuth2RefreshTokenEntity r where r.expiration is not null and r.expiration < current_timestamp")
 })
 public class OAuth2RefreshTokenEntity extends ExpiringOAuth2RefreshToken {
 

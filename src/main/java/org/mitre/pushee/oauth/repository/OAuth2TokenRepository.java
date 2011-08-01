@@ -28,4 +28,8 @@ public interface OAuth2TokenRepository {
 
 	public List<OAuth2RefreshTokenEntity> getRefreshTokensForClient(ClientDetailsEntity client);
 
+	public List<OAuth2AccessTokenEntity> getExpiredAccessTokens();
+
+	public List<OAuth2RefreshTokenEntity> getExpiredRefreshTokens();
+
 }
