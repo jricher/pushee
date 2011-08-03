@@ -28,6 +28,14 @@ public class FeedAPI {
 	@Autowired
 	private HubService hubService;
 	
+	public FeedAPI() {
+		
+	}
+	
+	public FeedAPI(HubService hubService) {
+		this.hubService = hubService;
+	}
+	
 	/**
 	 * API access to get the list of all feeds.
 	 * 
@@ -112,7 +120,7 @@ public class FeedAPI {
 		feed.setUrl(url);	
 		
 		hubService.saveFeed(feed);
-		Feed retrieved = hubService.getFeedById(feedId);
+		Feed retrieved = hubService.getExistingFeed(feedId);
 		
 		publisher.addFeed(retrieved);
 		hubService.savePublisher(publisher);

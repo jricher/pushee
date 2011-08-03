@@ -95,43 +95,6 @@ public class SubscriberAPI {
 	}
 	
 	/**
-	 * API access to add a subscription from a given subscriber
-	 * to a given feed.
-	 * 
-	 * @param  subId  the ID of the subscriber
-	 * @param  feedId the ID of the feed to subscribe to
-	 * @return the modified subscriber
-	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping("/addSubscription")
-	public ModelAndView apiAddSubscription(@RequestParam("subscriberId") Long subscriberId, @RequestParam("feedId") Long feedId, 
-			@RequestParam(required=false, value="secret") String secret, @RequestParam(value="leaseSeconds", required=false) Integer leaseSeconds) {
-		
-		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
-		Feed feed = hubService.getExistingFeed(feedId);
-		Subscription subscription = new Subscription();
-		
-		subscription.setFeed(feed);
-		subscription.setSubscriber(subscriber);
-		
-		if (secret != null) {
-			subscription.setSecret(secret);
-		}
-		if (leaseSeconds != null) {
-			Calendar now = Calendar.getInstance();
-			now.add(Calendar.SECOND, leaseSeconds);
-			subscription.setTimeout(now);
-		}
-		
-		subscriber.addSubscription(subscription);
-		hubService.saveSubscriber(subscriber);
-		
-		Subscriber retrieved = hubService.getSubscriberById(subscriberId);
-		
-		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
-	}
-	
-	/**
 	 * API access to remove a subscription from a given subscriber
 	 * to a given feed.
 	 * 
