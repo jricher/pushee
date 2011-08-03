@@ -27,6 +27,15 @@ public class SubscriberAPI {
 	@Autowired
 	private HubService hubService;
 	
+	public SubscriberAPI() {
+		
+	}
+	
+	public SubscriberAPI(HubService hubService) {
+		this.hubService = hubService;
+	}
+	
+	
 	/**
 	 * API access to get list of current Subscribers
 	 * 
@@ -91,7 +100,9 @@ public class SubscriberAPI {
 		subscriber.setPostbackURL(postbackURL);
 		hubService.saveSubscriber(subscriber);
 		
-		return new ModelAndView("jsonSubscriberView", "subscriber", subscriber);
+		Subscriber retrieved = hubService.getExistingSubscriber(subscriberId);
+		
+		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
 	}
 	
 	/**
@@ -112,7 +123,7 @@ public class SubscriberAPI {
 		subscriber.removeSubscription(feed);
 		hubService.saveSubscriber(subscriber);
 		
-		Subscriber retrieved = hubService.getSubscriberById(subscriberId);
+		Subscriber retrieved = hubService.getExistingSubscriber(subscriberId);
 		
 		return new ModelAndView("jsonSubscriberView", "subscriber", retrieved);
 	}

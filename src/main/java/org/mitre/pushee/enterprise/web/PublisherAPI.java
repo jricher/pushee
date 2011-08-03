@@ -25,6 +25,14 @@ public class PublisherAPI {
 	@Autowired
 	private HubService hubService;
 	
+	public PublisherAPI() {
+		
+	}
+	
+	public PublisherAPI(HubService hubService) {
+		this.hubService = hubService;
+	}
+	
 	/**
 	 * API access to get list of current Publishers
 	 * 
@@ -89,7 +97,7 @@ public class PublisherAPI {
 		publisher.setCallbackURL(url);
 		hubService.savePublisher(publisher);
 		
-		Publisher retrieved =  hubService.getPublisherByUrl(url);
+		Publisher retrieved =  hubService.getExistingPublisher(publisherId);
 		
 		return new ModelAndView("jsonPublisherView", "publisher", retrieved);
 	}
@@ -104,7 +112,7 @@ public class PublisherAPI {
 	@RequestMapping("/remove")
 	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 
-		Publisher pub = hubService.getPublisherById(pubId);
+		Publisher pub = hubService.getExistingPublisher(pubId);
 		Set<Feed> feeds = pub.getFeeds();
 		for (Feed f : feeds) {
 			hubService.removeFeedById(f.getId());

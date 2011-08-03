@@ -11,12 +11,12 @@ import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.exception.PublisherNotFoundException;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Publisher;
+import org.mitre.pushee.hub.model.Subscription;
 import org.mitre.pushee.hub.service.HubService;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -97,7 +97,7 @@ public class FeedAPITest {
 		expect(hubService.getExistingFeed(5L)).andThrow(new FeedNotFoundException()).once();
 		replay(hubService);
 		
-		ModelAndView result = feedApi.apiGetFeed(5L);
+		feedApi.apiGetFeed(5L);
 		
 		verify(hubService);
 	}
@@ -135,7 +135,7 @@ public class FeedAPITest {
 		expect(hubService.getFeedByUrl("http://example.com/feed1")).andReturn(feed1).once();
 		replay(hubService);
 		
-		ModelAndView result = feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1");
+		feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1");
 		
 		verify(hubService);
 	}
@@ -173,27 +173,63 @@ public class FeedAPITest {
 	}
 	
 	@Test(expected=FeedNotFoundException.class)
-	@Ignore
 	public void editFeed_invalidFeed() {
+		
+		expect(hubService.getExistingFeed(5L)).andThrow(new FeedNotFoundException()).once();
+
+		replay(hubService);
+		
+		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new");
+		
+		verify(hubService);
 		
 	}
 	
 	@Test(expected=PublisherNotFoundException.class)
-	@Ignore
 	public void editFeed_invalidPublisher() {
+		Feed feed = new Feed();
+		feed.setUrl("http://example.com/feed1");
+		feed.setType(Feed.FeedType.ATOM);
+		feed.setId(5L);
 		
+		expect(hubService.getExistingFeed(5L)).andReturn(feed).once();
+		expect(hubService.getExistingPublisher(3L)).andThrow(new PublisherNotFoundException()).once();
+		replay(hubService);
+		
+		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new");
+		
+		verify(hubService);
+	
 	}
 	
 	@Test
-	@Ignore
 	public void deleteFeed_valid() {
+		Feed feed = new Feed();
+		feed.setUrl("http://example.com/feed1");
+		feed.setType(Feed.FeedType.ATOM);
+		feed.setId(5L);
+		feed.setSubscriptions(new ArrayList<Subscription>());
+		
+		expect(hubService.getExistingFeed(5L)).andReturn(feed).once();
+		replay(hubService);
+		
+		ModelAndView result = feedApi.apiDeleteFeed(5L, new ModelAndView());
+		
+		verify(hubService);
+		
+		assertThat(result.getViewName(), CoreMatchers.equalTo("management/successfullyRemoved"));
 		
 	}
 	
 	@Test(expected=FeedNotFoundException.class)
-	@Ignore
 	public void deleteFeed_invalidFeed() {
 		
+		expect(hubService.getExistingFeed(5L)).andThrow(new FeedNotFoundException()).once();
+		replay(hubService);
+		
+		feedApi.apiDeleteFeed(5L, new ModelAndView());
+		
+		verify(hubService);	
 	}
 	
 }
