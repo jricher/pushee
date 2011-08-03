@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mitre.pushee.hub.exception.FeedNotFoundException;
 import org.mitre.pushee.hub.exception.SubscriberNotFoundException;
@@ -47,7 +48,7 @@ public class PuSHEndpointTest {
         //Define Parameter Values to Pass to controller action (Can be done in setup method if common)
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        String verify = ClientVerify.ASYNC.toString().toLowerCase();
+        String verify = ClientVerify.SYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_SUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
@@ -146,11 +147,12 @@ public class PuSHEndpointTest {
     }
     
     @Test(expected=SubscriberNotFoundException.class)
+    @Ignore // we allow subscribers we haven't seen and dynamically generate them
     public void subscriberRequest_invalidSubscriber() {
     	
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        String verify = ClientVerify.ASYNC.toString().toLowerCase();
+        String verify = ClientVerify.SYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_SUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";
@@ -194,7 +196,7 @@ public class PuSHEndpointTest {
     	//Define Parameter Values to Pass to controller action (Can be done in setup method if common)
         String callback = "http://callback.url";
         String topic = "http://topic.url";
-        String verify = ClientVerify.ASYNC.toString().toLowerCase();
+        String verify = ClientVerify.SYNC.toString().toLowerCase();
         String mode = PuSHProtocolParameters.HUB_UNSUBSCRIBE;
         String verifyToken = "verify";
         String secret = "secret";

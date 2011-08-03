@@ -2,6 +2,7 @@ package org.mitre.pushee.hub.web;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.concurrent.Future;
 
 import org.apache.http.client.HttpClient;
 import org.mitre.pushee.hub.model.Feed;
@@ -16,8 +17,15 @@ public interface ClientConnection {
 			String mimeType, String charset, HttpClient hc)
 			throws UnsupportedEncodingException;
 
-	// utility functions, to be moved to utility class
-	public boolean verifyCallback(String callback, String mode, String topic,
-			int leaseSeconds, String verifyToken);
+	/**
+	 * Synchronously verify a subscribe/unsubscribe
+	 * @param callback
+	 * @param mode
+	 * @param topic
+	 * @param leaseSeconds
+	 * @param verifyToken
+	 * @return
+	 */
+	public boolean verifyCallback(String callback, String mode, String topic, int leaseSeconds, String verifyToken);
 
 }

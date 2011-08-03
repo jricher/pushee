@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,15 +29,20 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.Subscriber;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.google.common.io.CharStreams;
 
+@Service
 public class ClientConnectionHttpImpl implements ClientConnection {
 
 	/* (non-Javadoc)
 	 * @see org.mitre.pushee.hub.web.ClientConnection#fetchAndRepublishFeedToSubscribers(org.mitre.pushee.hub.model.Feed, java.util.Collection)
 	 */
+	@Async
 	@Override
 	public void fetchAndRepublishFeedToSubscribers(Feed feed, Collection<Subscriber> subscribers) {
 
@@ -114,14 +120,15 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 
 	// TODO: add in periodic refresh of subscription on verification
 	
-	// utility functions, to be moved to utility class
-	/* (non-Javadoc)
-	 * @see org.mitre.pushee.hub.web.ClientConnection#verifyCallback(java.lang.String, java.lang.String, java.lang.String, long, java.lang.String)
-	 */
-	@Override
-	public boolean verifyCallback(String callback, String mode, String topic, int leaseSeconds, String verifyToken) {
-		// make a call to callback with the appropriate parameters
+
 	
+	/* (non-Javadoc)
+     * @see org.mitre.pushee.hub.web.ClientConnection#verifyCallback(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String)
+     */
+    @Override
+    public boolean verifyCallback(String callback, String mode, String topic, int leaseSeconds, String verifyToken) {
+		// make a call to callback with the appropriate parameters
+		
 		HttpClient hc = new DefaultHttpClient();
 		
 		HttpPost post = new HttpPost(callback);
@@ -180,8 +187,11 @@ public class ClientConnectionHttpImpl implements ClientConnection {
 			e.printStackTrace();
 		}
 		
-		// if the call comes back 200 and the challenge matches, return true, else
+		// if the call comes back 200 and the challenge matches, we will have returned true above
+		
+		// if all else fails, 
 		return false;
 	}
+
 
 }
