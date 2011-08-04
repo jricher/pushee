@@ -3,16 +3,15 @@ package org.mitre.pushee.oauth.service.impl;
 import java.util.Collection;
 import java.util.List;
 
+import org.mitre.pushee.hub.exception.ClientNotFoundException;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.ClientDetailsEntityFactory;
 import org.mitre.pushee.oauth.repository.OAuth2ClientRepository;
 import org.mitre.pushee.oauth.repository.OAuth2TokenRepository;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
@@ -28,6 +27,17 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	
 	@Autowired
 	private ClientDetailsEntityFactory clientFactory;
+	
+	public DefaultOAuth2ClientDetailsEntityService() {
+		
+	}
+	
+	public DefaultOAuth2ClientDetailsEntityService(OAuth2ClientRepository clientRepository, 
+			OAuth2TokenRepository tokenRepository, ClientDetailsEntityFactory clientFactory) {
+		this.clientRepository = clientRepository;
+		this.tokenRepository = tokenRepository;
+		this.clientFactory = clientFactory;
+	}
 	
 	/**
 	 * Get the client for the given ID
@@ -75,6 +85,10 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	 */
 	@Override
     public void deleteClient(ClientDetailsEntity client) {
+		
+		if (clientRepository.getClientById(client.getClientId()) == null) {
+			throw new ClientNotFoundException();
+		}
 		
 		// clean out any tokens that this client had issued
 		tokenRepository.clearTokensForClient(client);

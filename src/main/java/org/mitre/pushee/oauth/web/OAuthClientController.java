@@ -41,6 +41,15 @@ public class OAuthClientController {
 	@Autowired
 	private OAuth2TokenEntityService tokenService;
 	
+	public OAuthClientController() {
+		
+	}
+	
+	public OAuthClientController(ClientDetailsEntityService clientService, OAuth2TokenEntityService tokenService) {
+		this.clientService = clientService;
+		this.tokenService = tokenService;
+	}
+	
 	/**
 	 * Redirect to the "/" version of the root
 	 * @param modelAndView

@@ -31,6 +31,15 @@ public class OAuthConfirmationController {
 	@Autowired
 	private ClientAuthenticationCache authenticationCache;
 	
+	public OAuthConfirmationController() {
+		
+	}
+	
+	public OAuthConfirmationController(ClientDetailsEntityService clientService, ClientAuthenticationCache authenticationCache) {
+		this.clientService = clientService;
+		this.authenticationCache = authenticationCache;
+	}
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping("/oauth/user/approve")
 	public ModelAndView confimAccess(HttpServletRequest request, HttpServletResponse response, 

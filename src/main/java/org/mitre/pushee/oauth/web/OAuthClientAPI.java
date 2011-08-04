@@ -28,6 +28,14 @@ public class OAuthClientAPI {
 	@Autowired
 	private ClientDetailsEntityService clientService;
 	
+	public OAuthClientAPI() {
+		
+	}
+	
+	public OAuthClientAPI(ClientDetailsEntityService clientService) {
+		this.clientService = clientService;
+	}
+	
 	// TODO: i think this needs a fancier binding than just strings on the way in
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")

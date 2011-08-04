@@ -27,6 +27,14 @@ public class JpaOAuth2ClientRepository implements OAuth2ClientRepository {
 	@PersistenceContext
 	private EntityManager manager;
 	
+	public JpaOAuth2ClientRepository() {
+		
+	}
+	
+	public JpaOAuth2ClientRepository(EntityManager manager) {
+		this.manager = manager;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.mitre.pushee.oauth.repository.OAuth2ClientRepository#getClientById(java.lang.String)
 	 */
