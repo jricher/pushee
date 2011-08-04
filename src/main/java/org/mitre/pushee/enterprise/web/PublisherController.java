@@ -134,7 +134,7 @@ public class PublisherController {
 		Publisher publisher = hubService.getExistingPublisher(pubId);
 		
 		modelAndView.addObject("publisher", publisher);
-		modelAndView.setViewName("/management/publisher/deletePublisherConfirm");
+		modelAndView.setViewName("management/publisher/deletePublisherConfirm");
 		return modelAndView;
 	}
 	

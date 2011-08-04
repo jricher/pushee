@@ -124,12 +124,12 @@ public class SubscriberController {
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete/{subscriberId}")
-	public ModelAndView removeSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
+	public ModelAndView deleteSubscriberConfirmation(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
 		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
 		
 		modelAndView.addObject("subscriber", subscriber);
-		modelAndView.setViewName("/management/subscriber/deleteSubscriberConfirm");
+		modelAndView.setViewName("management/subscriber/deleteSubscriberConfirm");
 		
 		return modelAndView;
 	}	
