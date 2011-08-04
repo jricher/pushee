@@ -25,6 +25,14 @@ public class FeedController {
 
 	@Autowired
 	private HubService hubService;
+	
+	public FeedController() {
+		
+	}
+	
+	public FeedController(HubService hubService) {
+		this.hubService = hubService;
+	}
 
 	/**
 	 * Redirect to the "/" version of the root
@@ -50,7 +58,7 @@ public class FeedController {
 		Collection<Feed> feeds = hubService.getAllFeeds();
 		
 		modelAndView.addObject("feeds", feeds);
-		modelAndView.setViewName("/management/feed/feedIndex");
+		modelAndView.setViewName("management/feed/feedIndex");
 		
 		return modelAndView;
 	}
@@ -69,7 +77,7 @@ public class FeedController {
 		Feed feed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", feed);
-		modelAndView.setViewName("/management/feed/viewFeed");
+		modelAndView.setViewName("management/feed/viewFeed");
 		return modelAndView;
 	}
 	
@@ -90,10 +98,6 @@ public class FeedController {
 	public ModelAndView addFeed(ModelAndView modelAndView) {
 		
 		Collection<Publisher> publishers = hubService.getAllPublishers();
-		List<Long> publisherIds = new ArrayList<Long>();
-		for (Publisher publisher : publishers) {
-			publisherIds.add(publisher.getId());
-		}
 		
 		Feed feed = new Feed();
 		
@@ -119,16 +123,12 @@ public class FeedController {
 	public ModelAndView editFeed(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
 		Collection<Publisher> publishers = hubService.getAllPublishers();
-		List<Long> publisherIds = new ArrayList<Long>();
-		for (Publisher publisher : publishers) {
-			publisherIds.add(publisher.getId());
-		}
-		modelAndView.addObject("mode", "edit");
-		modelAndView.addObject("publishers", publishers);
 		Feed feed = hubService.getExistingFeed(feedId);
 		
+		modelAndView.addObject("mode", "edit");
+		modelAndView.addObject("publishers", publishers);
 		modelAndView.addObject("feed", feed);
-		modelAndView.setViewName("/management/feed/editFeed");
+		modelAndView.setViewName("management/feed/editFeed");
 		
 		return modelAndView;
 	}
@@ -142,12 +142,12 @@ public class FeedController {
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete/{feedId}")
-	public Object deleteFeedConfirmation(@PathVariable Long feedId, ModelAndView modelAndView) {
+	public ModelAndView deleteFeedConfirmation(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
 		Feed feed = hubService.getExistingFeed(feedId);
 		
 		modelAndView.addObject("feed", feed);
-		modelAndView.setViewName("/management/feed/deleteFeedConfirm");
+		modelAndView.setViewName("management/feed/deleteFeedConfirm");
 		
 		return modelAndView;
 	}

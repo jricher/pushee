@@ -23,6 +23,14 @@ public class SubscriberController {
 	@Autowired
 	private HubService hubService;
 
+	public SubscriberController() {
+		
+	}
+	
+	public SubscriberController(HubService hubService) {
+		this.hubService = hubService;
+	}
+	
 	/**
 	 * Redirect to the "/" version of the root
 	 * @param modelAndView

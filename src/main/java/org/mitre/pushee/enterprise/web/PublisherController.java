@@ -23,6 +23,14 @@ public class PublisherController {
 	@Autowired
 	private HubService hubService;
 	
+	public PublisherController() {
+		
+	}
+	
+	public PublisherController(HubService hubService) {
+		this.hubService = hubService;
+	}
+	
 	/**
 	 * Redirect to the "/" version of the root
 	 * @param modelAndView
