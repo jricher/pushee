@@ -6,7 +6,6 @@ package org.mitre.pushee.oauth.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
@@ -20,14 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth.provider.token.ExpiredOAuthTokenException;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.ClientAuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.OAuth2ProviderTokenServices;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
@@ -55,7 +53,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 	private OAuth2RefreshTokenEntityFactory refreshTokenFactory;
 	
 	@Override
-    public OAuth2AccessTokenEntity createAccessToken(OAuth2Authentication authentication) throws AuthenticationException {
+    public OAuth2AccessTokenEntity createAccessToken(OAuth2Authentication authentication) throws AuthenticationException, InvalidClientException {
 		if (authentication != null && 
 				authentication.getClientAuthentication() != null && 
 				authentication.getClientAuthentication() instanceof ClientAuthenticationToken) {
@@ -125,7 +123,7 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 		    return token;
 		}
 		
-	    return null;
+	    throw new AuthenticationCredentialsNotFoundException("No authentication credentials found");
     }
 
 	@Override
@@ -137,8 +135,12 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 			throw new InvalidTokenException("Invalid refresh token: " + refreshTokenValue);
 		}
 		
-		ClientDetailsEntity client = refreshToken.getClient();		
-		// should we check client.isAllowRefresh() here? Sanity check?
+		ClientDetailsEntity client = refreshToken.getClient();
+		
+		//Make sure this client allows access token refreshing
+		if (!client.isAllowRefresh()) {
+			throw new InvalidClientException("Client does not allow refreshing access token!");
+		}
 		
 		// clear out any access tokens
 		// TODO: make this a configurable option
@@ -194,17 +196,25 @@ public class DefaultOAuth2ProviderTokenService implements OAuth2TokenEntityServi
 
 
 	@Override
-    public OAuth2AccessTokenEntity getAccessToken(String accessTokenValue) {
+    public OAuth2AccessTokenEntity getAccessToken(String accessTokenValue) throws AuthenticationException {
 		OAuth2AccessTokenEntity accessToken = tokenRepository.getAccessTokenByValue(accessTokenValue);
-		
-		return accessToken;		
+		if (accessToken == null) {
+			throw new InvalidTokenException("Access token for value " + accessTokenValue + " was not found");
+		}
+		else {
+			return accessToken;	
+		}
     }
 
 	@Override
-    public OAuth2RefreshTokenEntity getRefreshToken(String refreshTokenValue) {
+    public OAuth2RefreshTokenEntity getRefreshToken(String refreshTokenValue) throws AuthenticationException {
 		OAuth2RefreshTokenEntity refreshToken = tokenRepository.getRefreshTokenByValue(refreshTokenValue);
-		
-		return refreshToken;
+		if (refreshToken == null) {
+			throw new InvalidTokenException("Refresh token for value " + refreshTokenValue + " was not found");
+		}
+		else {
+			return refreshToken;	
+		}
     }
 	
 	@Override

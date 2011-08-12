@@ -3,7 +3,6 @@ package org.mitre.pushee.oauth.service.impl;
 import java.util.Collection;
 import java.util.List;
 
-import org.mitre.pushee.hub.exception.ClientNotFoundException;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.ClientDetailsEntityFactory;
 import org.mitre.pushee.oauth.repository.OAuth2ClientRepository;
@@ -11,6 +10,7 @@ import org.mitre.pushee.oauth.repository.OAuth2TokenRepository;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.stereotype.Service;
 
@@ -43,12 +43,18 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	 * Get the client for the given ID
 	 */
 	@Override
-	public ClientDetailsEntity loadClientByClientId(String clientId) throws OAuth2Exception {
+	public ClientDetailsEntity loadClientByClientId(String clientId) throws OAuth2Exception, InvalidClientException, IllegalArgumentException {
 		if (!Strings.isNullOrEmpty(clientId)) {
-			return clientRepository.getClientById(clientId);
+			ClientDetailsEntity client = clientRepository.getClientById(clientId);
+			if (client == null) {
+				throw new InvalidClientException("Client with id " + clientId + " was not found");
+			}
+			else {
+				return client;
+			}
 		}
 		
-		return null;
+		throw new IllegalArgumentException("Client id must not be empty!");
 	}
 	
 	/**
@@ -84,10 +90,10 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	 * Delete a client and all its associated tokens
 	 */
 	@Override
-    public void deleteClient(ClientDetailsEntity client) {
+    public void deleteClient(ClientDetailsEntity client) throws InvalidClientException {
 		
 		if (clientRepository.getClientById(client.getClientId()) == null) {
-			throw new ClientNotFoundException();
+			throw new InvalidClientException("Client with id " + client.getClientId() + " was not found");
 		}
 		
 		// clean out any tokens that this client had issued
@@ -103,11 +109,11 @@ public class DefaultOAuth2ClientDetailsEntityService implements ClientDetailsEnt
 	 * id from oldClient is retained.
 	 */
 	@Override
-    public ClientDetailsEntity updateClient(ClientDetailsEntity oldClient, ClientDetailsEntity newClient) {
+    public ClientDetailsEntity updateClient(ClientDetailsEntity oldClient, ClientDetailsEntity newClient) throws IllegalArgumentException {
 		if (oldClient != null && newClient != null) {
 			return clientRepository.updateClient(oldClient.getClientId(), newClient);
 		}
-		return null;
+		throw new IllegalArgumentException("Neither old client or new client can be null!");
     }
 
 	/**
