@@ -16,6 +16,14 @@ public class IntrospectionEndpoint {
 	@Autowired
 	OAuth2TokenEntityService tokenServices;
 	
+	public IntrospectionEndpoint() {
+		
+	}
+	
+	public IntrospectionEndpoint(OAuth2TokenEntityService tokenServices) {
+		this.tokenServices = tokenServices;
+	}
+	
 	// TODO
 	@RequestMapping("/oauth/verify")
 	public ModelAndView verify(@RequestParam("token") String tokenValue, 

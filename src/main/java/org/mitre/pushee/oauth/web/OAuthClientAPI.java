@@ -7,6 +7,8 @@ import org.mitre.pushee.hub.exception.ClientNotFoundException;
 import org.mitre.pushee.oauth.exception.DuplicateClientIdException;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +29,8 @@ public class OAuthClientAPI {
 
 	@Autowired
 	private ClientDetailsEntityService clientService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(OAuthClientAPI.class);
 	
 	public OAuthClientAPI() {
 		
@@ -52,7 +56,7 @@ public class OAuthClientAPI {
     		@RequestParam(required=false) Long refreshTokenTimeout, 
     		@RequestParam(required=false) String owner
     		) {
-    	
+    	logger.info("apiAddClient - start");
     	ClientDetailsEntity oldClient = clientService.loadClientByClientId(clientId);
     	if (oldClient != null) {
     		throw new DuplicateClientIdException(clientId);
@@ -62,6 +66,7 @@ public class OAuthClientAPI {
     	// parse all of our space-delimited lists
     	List<String> scopeList = Lists.newArrayList(spaceDelimited.split(scope));
     	List<String> grantTypesList = Lists.newArrayList(spaceDelimited.split(grantTypes)); // TODO: make a stronger binding to GrantTypes
+    	logger.info("apiAddClient - before creating authorities list");
     	List<GrantedAuthority> authoritiesList = Lists.newArrayList(
     			Iterables.transform(spaceDelimited.split(authorities), new Function<String, GrantedAuthority>() {
     				@Override
@@ -69,12 +74,19 @@ public class OAuthClientAPI {
     					return new GrantedAuthorityImpl(auth);
     				}
     			}));
+    	logger.info("apiAddClient - printing client details");
+    	logger.info("Making call to create client with " + clientId + ", " + clientSecret 
+    			+ ", " + scopeList + ", " + grantTypesList + ", " + redirectUri + ", " 
+    			+ authoritiesList + ", " + name + ", " + description + ", " + allowRefresh 
+    			+ ", " + accessTokenTimeout + ", " + refreshTokenTimeout + ", " + owner);
     	
-    	ClientDetailsEntity client = clientService.createClient(clientId, clientSecret, scopeList, grantTypesList, redirectUri, authoritiesList, name, description, allowRefresh, accessTokenTimeout, refreshTokenTimeout, owner);
-    	
+    	ClientDetailsEntity client = clientService.createClient(clientId, clientSecret, 
+    			scopeList, grantTypesList, redirectUri, authoritiesList, name, description, 
+    			allowRefresh, accessTokenTimeout, refreshTokenTimeout, owner);
+    	logger.info("apiAddClient - adding model objects");
     	modelAndView.addObject("entity", client);
     	modelAndView.setViewName("jsonOAuthClientView");
-    	
+    	logger.info("apiAddClient - end");
     	return modelAndView;
     }
 

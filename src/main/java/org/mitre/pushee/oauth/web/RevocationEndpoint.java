@@ -22,6 +22,14 @@ public class RevocationEndpoint {
 	@Autowired
 	OAuth2TokenEntityService tokenServices;
 	
+	public RevocationEndpoint() {
+		
+	}
+	
+	public RevocationEndpoint(OAuth2TokenEntityService tokenServices) {
+		this.tokenServices = tokenServices;
+	}
+	
 	// TODO
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
 	@RequestMapping("/oauth/revoke")
