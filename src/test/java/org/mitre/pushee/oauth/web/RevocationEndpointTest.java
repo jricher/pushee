@@ -62,11 +62,11 @@ public class RevocationEndpointTest {
 	private ClientAuthenticationToken clientAuthentication;
 	private Set<String> scope;
 	private List<GrantedAuthority> authorities;
-	private OAuth2RefreshTokenEntity refreshToken;
+	private OAuth2RefreshTokenEntity badRefreshToken;
 	private OAuth2AccessTokenEntity accessToken;
 	
 	private ClientDetailsEntity otherClient;
-	private OAuth2RefreshTokenEntity badRefreshToken;
+	private OAuth2RefreshTokenEntity refreshToken;
 	private OAuth2AccessTokenEntity badAccessToken;
 
 	@Before
@@ -81,7 +81,7 @@ public class RevocationEndpointTest {
 		
 		scope = Sets.newHashSet("test");
 		authorities = Lists.newArrayList();
-		authorities.add(new GrantedAuthorityImpl("RIGHT_TEST")); // for some reason the guava constructor doesn't work here
+		authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN")); // for some reason the guava constructor doesn't work here
 
 		List<String> authorizedGrantTypes = Lists.newArrayList("authorization_code", "refresh_token");
 		String webServerRedirectUri = "http://localhost/return";
@@ -99,10 +99,10 @@ public class RevocationEndpointTest {
 		clientAuthentication = new AuthorizedClientAuthenticationToken(clientId, clientSecret, scope, authorities);
 		oAuth2Authentication = new OAuth2Authentication<Authentication, Authentication>(clientAuthentication, userAuthentication);
 		
-		badRefreshToken = new OAuth2RefreshTokenEntity();
-		badRefreshToken.setValue(refreshTokenValue);
-		badRefreshToken.setClient(clientDetails);
-		badRefreshToken.setScope(scope);
+		refreshToken = new OAuth2RefreshTokenEntity();
+		refreshToken.setValue(refreshTokenValue);
+		refreshToken.setClient(clientDetails);
+		refreshToken.setScope(scope);
 		
 		accessToken = new OAuth2AccessTokenEntity();
 		accessToken.setValue(accessTokenValue);
@@ -120,17 +120,17 @@ public class RevocationEndpointTest {
 							.setWebServerRedirectUri(webServerRedirectUri)
 							.setAuthorities(authorities).finish();
 		
-		refreshToken = new OAuth2RefreshTokenEntity();
-		refreshToken.setValue(refreshTokenValue);
-		refreshToken.setClient(otherClient);
-		refreshToken.setScope(scope);
+		badRefreshToken = new OAuth2RefreshTokenEntity();
+		badRefreshToken.setValue(refreshTokenValue);
+		badRefreshToken.setClient(otherClient);
+		badRefreshToken.setScope(scope);
 		
 		badAccessToken = new OAuth2AccessTokenEntity();
 		badAccessToken.setValue(accessTokenValue);
 		badAccessToken.setClient(otherClient);
 		//badAccessToken.setAuthentication(oAuth2Authentication);
 		badAccessToken.setScope(scope);
-		badAccessToken.setRefreshToken(refreshToken);
+		badAccessToken.setRefreshToken(badRefreshToken);
 		badAccessToken.setTokenType("bearer");
 		
 		SecurityContextHolder.getContext().setAuthentication(oAuth2Authentication);
@@ -138,7 +138,6 @@ public class RevocationEndpointTest {
 	
 	@Test
 	@Rollback
-	@Ignore
 	public void revoke_validRefreshToken() {
 		expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(refreshToken).once();
 		//expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(null).once();
@@ -157,7 +156,6 @@ public class RevocationEndpointTest {
 	
 	@Test
 	@Rollback
-	@Ignore
 	public void revoke_validAccessToken() {
 		//expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(null).once();
 		expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(accessToken).once();
@@ -186,7 +184,6 @@ public class RevocationEndpointTest {
 	}
 	
 	@Test(expected = PermissionDeniedException.class)
-	@Ignore
 	public void revoke_invalidUnownedRefreshToken() {
 		expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(badRefreshToken).once();
 		//expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(null).once();
@@ -198,7 +195,6 @@ public class RevocationEndpointTest {
 	}
 	
 	@Test(expected = PermissionDeniedException.class)
-	@Ignore
 	public void revoke_invalidUnownedAccessToken() {
 		//expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(null).once();
 		expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(badAccessToken).once();
