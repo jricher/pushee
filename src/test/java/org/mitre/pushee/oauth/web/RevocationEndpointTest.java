@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.exception.PermissionDeniedException;
@@ -128,7 +127,6 @@ public class RevocationEndpointTest {
 		badAccessToken = new OAuth2AccessTokenEntity();
 		badAccessToken.setValue(accessTokenValue);
 		badAccessToken.setClient(otherClient);
-		//badAccessToken.setAuthentication(oAuth2Authentication);
 		badAccessToken.setScope(scope);
 		badAccessToken.setRefreshToken(badRefreshToken);
 		badAccessToken.setTokenType("bearer");
@@ -140,7 +138,6 @@ public class RevocationEndpointTest {
 	@Rollback
 	public void revoke_validRefreshToken() {
 		expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(refreshToken).once();
-		//expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(null).once();
 		tokenServices.revokeRefreshToken(refreshToken);
 		expectLastCall();
 		replay(tokenServices);
@@ -157,7 +154,6 @@ public class RevocationEndpointTest {
 	@Test
 	@Rollback
 	public void revoke_validAccessToken() {
-		//expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(null).once();
 		expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(accessToken).once();
 		tokenServices.revokeAccessToken(accessToken);
 		expectLastCall();
@@ -186,7 +182,6 @@ public class RevocationEndpointTest {
 	@Test(expected = PermissionDeniedException.class)
 	public void revoke_invalidUnownedRefreshToken() {
 		expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(badRefreshToken).once();
-		//expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(null).once();
 		replay(tokenServices);
 		
 		endpoint.revoke(refreshTokenValue, new ModelAndView());
@@ -196,7 +191,6 @@ public class RevocationEndpointTest {
 	
 	@Test(expected = PermissionDeniedException.class)
 	public void revoke_invalidUnownedAccessToken() {
-		//expect(tokenServices.getRefreshToken(refreshTokenValue)).andReturn(null).once();
 		expect(tokenServices.getAccessToken(accessTokenValue)).andReturn(badAccessToken).once();
 		replay(tokenServices);
 		

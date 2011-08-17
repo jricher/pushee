@@ -11,11 +11,17 @@ import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
 import org.mitre.pushee.oauth.service.ClientDetailsEntityService;
 import org.mitre.pushee.oauth.service.OAuth2TokenEntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.ClientAuthenticationToken;
 import org.springframework.security.oauth2.provider.DefaultOAuth2GrantManager;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +47,16 @@ public class OAuthClientController {
 	@Autowired
 	private OAuth2TokenEntityService tokenService;
 	
+	private Logger logger;
+	
 	public OAuthClientController() {
-		
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	public OAuthClientController(ClientDetailsEntityService clientService, OAuth2TokenEntityService tokenService) {
 		this.clientService = clientService;
 		this.tokenService = tokenService;
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	/**
@@ -69,6 +78,12 @@ public class OAuthClientController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllClients(ModelAndView modelAndView) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ClientAuthenticationToken clientAuth = (ClientAuthenticationToken) ((OAuth2Authentication) auth).getClientAuthentication();
+		
+		logger.info("Client auth = " + clientAuth);		
+		logger.info("Granted authorities = " + clientAuth.getAuthorities().toString());
+		
 		Collection<ClientDetailsEntity> clients = clientService.getAllClients();
 		modelAndView.addObject("clients", clients);
 		modelAndView.setViewName("/management/oauth/clientIndex");
