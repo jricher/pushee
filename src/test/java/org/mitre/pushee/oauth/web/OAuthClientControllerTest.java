@@ -207,8 +207,18 @@ public class OAuthClientControllerTest {
 	}
 	
 	@Test
-	@Ignore
 	public void editClient_valid() {
+		expect(clientService.loadClientByClientId(clientId)).andReturn(clientDetails).once();
+		replay(clientService);
+		
+		ModelAndView result = controller.editClientPage(new ModelAndView(), clientId);
+		
+		verify(clientService);
+		
+		GrantType[] grantTypes = DefaultOAuth2GrantManager.GrantType.values();
+		assertThat((GrantType[])result.getModel().get("availableGrantTypes"), CoreMatchers.equalTo(grantTypes));
+		assertThat((ClientDetailsEntity)result.getModel().get("client"), CoreMatchers.equalTo(clientDetails));
+		assertThat(result.getViewName(), CoreMatchers.equalTo("/management/oauth/editClient"));
 		
 	}
 	
@@ -216,30 +226,41 @@ public class OAuthClientControllerTest {
 	@Rollback
 	@Ignore
 	public void editClient_invalid() {
-		expect(clientService.loadClientByClientId(clientId)).andReturn(clientDetails).once();
-		replay(clientService);
 		SecurityContextHolder.getContext().setAuthentication(null);
 		controller.editClientPage(new ModelAndView(), clientId);
-		verify(clientService);
-		
+		verify(clientService);	
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
-	@Ignore
 	public void viewDetails_valid() {
+		expect(clientService.loadClientByClientId(clientId)).andReturn(clientDetails).once();
+		replay(clientService);
 		
+		List<OAuth2AccessTokenEntity> accessTokens = Lists.newArrayList(accessToken);
+		List<OAuth2RefreshTokenEntity> refreshTokens = Lists.newArrayList(refreshToken);
+		
+		expect(tokenService.getAccessTokensForClient(clientDetails)).andReturn(accessTokens).once();
+		expect(tokenService.getRefreshTokensForClient(clientDetails)).andReturn(refreshTokens).once();
+		replay(tokenService);
+		
+		ModelAndView result = controller.viewClientDetails(new ModelAndView(), clientId);
+		
+		verify(clientService);
+		verify(tokenService);
+		
+		assertThat((ClientDetailsEntity)result.getModel().get("client"), CoreMatchers.equalTo(clientDetails));
+		assertThat((List<OAuth2AccessTokenEntity>)result.getModel().get("accessTokens"), CoreMatchers.equalTo(accessTokens));
+		assertThat((List<OAuth2RefreshTokenEntity>)result.getModel().get("refreshTokens"), CoreMatchers.equalTo(refreshTokens));
+		assertThat(result.getViewName(), CoreMatchers.equalTo("/management/oauth/viewClient"));
 	}
 	
 	@Test(expected = PermissionDeniedException.class)
 	@Rollback
 	@Ignore
 	public void viewDetails_invalid() {
-		expect(clientService.loadClientByClientId(clientId)).andReturn(clientDetails).once();
-		replay(clientService);
 		SecurityContextHolder.getContext().setAuthentication(null);
 		controller.viewClientDetails(new ModelAndView(), clientId);
-		verify(clientService);
-		
 	}
 	
 }
