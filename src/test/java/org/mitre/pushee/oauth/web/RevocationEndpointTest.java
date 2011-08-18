@@ -80,7 +80,7 @@ public class RevocationEndpointTest {
 		
 		scope = Sets.newHashSet("test");
 		authorities = Lists.newArrayList();
-		authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN")); // for some reason the guava constructor doesn't work here
+		authorities.add(new GrantedAuthorityImpl("NOT_ROLE")); // for some reason the guava constructor doesn't work here
 
 		List<String> authorizedGrantTypes = Lists.newArrayList("authorization_code", "refresh_token");
 		String webServerRedirectUri = "http://localhost/return";

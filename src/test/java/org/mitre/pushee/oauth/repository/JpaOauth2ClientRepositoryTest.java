@@ -41,7 +41,7 @@ public class JpaOauth2ClientRepositoryTest {
 	
 	//Inject the same entity manager that is injected into the repository
 	@Autowired
-	private JpaOAuth2ClientRepository repository;
+	private OAuth2ClientRepository repository;
 	
 	@Test
 	public void getClientById_valid() {

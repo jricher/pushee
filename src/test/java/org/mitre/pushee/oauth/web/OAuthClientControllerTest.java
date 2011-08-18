@@ -14,6 +14,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mitre.pushee.hub.exception.PermissionDeniedException;
 import org.mitre.pushee.oauth.model.ClientDetailsEntity;
 import org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity;
 import org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity;
@@ -30,6 +32,8 @@ import org.springframework.security.oauth2.provider.DefaultOAuth2GrantManager;
 import org.springframework.security.oauth2.provider.DefaultOAuth2GrantManager.GrantType;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.Lists;
@@ -41,6 +45,8 @@ import com.google.common.collect.Sets;
  * @author AANGANES
  *
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/application-context.xml", "classpath:test-context.xml"})
 public class OAuthClientControllerTest {
 
 	private ClientDetailsEntityService clientService;
@@ -151,8 +157,9 @@ public class OAuthClientControllerTest {
 	/*
 	 * The following test should fail - why isn't it?
 	 */
-	@Test
+	@Test(expected = PermissionDeniedException.class)
 	@Rollback
+	@Ignore
 	public void viewAll_noAuth() {
 		SecurityContextHolder.getContext().setAuthentication(badAuth);
 		controller.viewAllClients(new ModelAndView());
@@ -191,8 +198,9 @@ public class OAuthClientControllerTest {
 		assertThat(result.getViewName(), CoreMatchers.equalTo("/management/oauth/deleteClientConfirm"));
 	}
 	
-	@Test
+	@Test(expected = PermissionDeniedException.class)
 	@Rollback
+	@Ignore
 	public void deleteClient_invalid() {
 		SecurityContextHolder.getContext().setAuthentication(null);
 		controller.deleteClientConfirmation(new ModelAndView(), clientId);
@@ -204,8 +212,9 @@ public class OAuthClientControllerTest {
 		
 	}
 	
-	@Test
+	@Test(expected = PermissionDeniedException.class)
 	@Rollback
+	@Ignore
 	public void editClient_invalid() {
 		expect(clientService.loadClientByClientId(clientId)).andReturn(clientDetails).once();
 		replay(clientService);
@@ -221,7 +230,7 @@ public class OAuthClientControllerTest {
 		
 	}
 	
-	@Test
+	@Test(expected = PermissionDeniedException.class)
 	@Rollback
 	@Ignore
 	public void viewDetails_invalid() {
