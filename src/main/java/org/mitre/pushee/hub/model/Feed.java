@@ -34,9 +34,34 @@ import org.slf4j.LoggerFactory;
 })
 public class Feed {
 
+	public enum FeedType {
+		ATOM, RSS
+	}
 	private static final Logger logger = LoggerFactory.getLogger(Feed.class);
-
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	
+	@Basic
+	private String url;
+	
+	@Basic
+	private FeedType type;
+	
+	@ManyToOne
+    @JoinColumn(name="publisher_id")
+	private Publisher publisher;
+	
+	@OneToMany(mappedBy = "feed")
+	private Collection<Subscription> subscriptions;
+	
+	/**
+	 * Constructor
+	 */
+	public Feed() {
+		subscriptions = new ArrayList<Subscription>();
+	}
 
 	@Override
 	public int hashCode() {
@@ -86,31 +111,6 @@ public class Feed {
 				+ subscriptions + "]";
 	}
 
-	public enum FeedType {
-		ATOM, RSS
-	}
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	
-	@Basic
-	private String url;
-	
-	@Basic
-	private FeedType type;
-	
-	@ManyToOne
-    @JoinColumn(name="publisher_id")
-	private Publisher publisher;
-	
-	@OneToMany(mappedBy = "feed")
-	private Collection<Subscription> subscriptions;
-	
-	public Feed() {
-		subscriptions = new ArrayList<Subscription>();
-	}
-	
 	/**
 	 * Add a subscriber to the Collection
 	 * 
