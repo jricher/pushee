@@ -13,6 +13,7 @@
                 <value>file:src/main/db/tables/publisher.sql</value>
                 <value>file:src/main/db/tables/subscriber.sql</value>
                 <value>file:src/main/db/tables/subscription.sql</value>
+                <value>file:src/main/db/tables/aggregator.sql</value>
                 <!-- OAuth2 Data model -->
                 <value>file:src/main/db/tables/accesstoken.sql</value>
                 <value>file:src/main/db/tables/authorities.sql</value>

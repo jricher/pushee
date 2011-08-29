@@ -9,6 +9,7 @@
         <class>org.mitre.pushee.hub.model.Subscription</class>
         <class>org.mitre.pushee.hub.model.Publisher</class>
         <class>org.mitre.pushee.hub.model.Feed</class>
+        <class>org.mitre.pushee.hub.model.Aggregator</class>
         <class>org.mitre.pushee.oauth.model.ClientDetailsEntity</class>
         <class>org.mitre.pushee.oauth.model.OAuth2AccessTokenEntity</class>
         <class>org.mitre.pushee.oauth.model.OAuth2RefreshTokenEntity</class>

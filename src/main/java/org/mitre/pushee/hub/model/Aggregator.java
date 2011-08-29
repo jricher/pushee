@@ -47,14 +47,14 @@ public class Aggregator {
 	private FeedType type;
 	
 	//Feeds that I subscribe to
-	@OneToMany
+//	@OneToMany
 	private List<Feed> source;
 	
 	//Subscribers that are subscribed to me
-	@OneToMany
+//	@OneToMany
 	private List<Subscriber> subscribers;
 	
-	@OneToMany(mappedBy = "feed")
+//	@OneToMany(mappedBy = "feed")
 	private Collection<Subscription> subscriptions;
 	
 	@SuppressWarnings("unused")
