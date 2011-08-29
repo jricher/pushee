@@ -4,7 +4,11 @@ import java.util.Collection;
 
 import org.mitre.pushee.hub.exception.AggregatorNotFoundException;
 import org.mitre.pushee.hub.model.Aggregator;
+import org.mitre.pushee.hub.repository.AggregatorRepository;
 import org.mitre.pushee.hub.service.AggregatorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of the Aggregator Service
@@ -12,49 +16,69 @@ import org.mitre.pushee.hub.service.AggregatorService;
  * @author AANGANES
  *
  */
+@Service
+@Transactional
 public class DefaultAggregatorService implements AggregatorService {
 
+	@Autowired
+	private AggregatorRepository repository;
+	
+	/**
+	 * Default constructor
+	 */
+	public DefaultAggregatorService() {
+		
+	}
+	
+	/**
+	 * Constructor for use in test harnesses. 
+	 * 
+	 * @param repository
+	 */
+	public DefaultAggregatorService(AggregatorRepository repository) {
+		this.repository = repository;
+	}
+	
 	@Override
 	public Aggregator getById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.getById(id);
 	}
 
 	@Override
 	public Aggregator getByUrl(String url) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.getByUrl(url);
 	}
 
 	@Override
 	public Collection<Aggregator> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.getAll();
 	}
 
 	@Override
 	public void save(Aggregator aggregator) {
-		// TODO Auto-generated method stub
-
+		repository.save(aggregator);
 	}
 
 	@Override
 	public void removeById(Long id) {
-		// TODO Auto-generated method stub
-
+		repository.removeById(id);
 	}
 
 	@Override
 	public void remove(Aggregator aggregator) {
-		// TODO Auto-generated method stub
-
+		repository.remove(aggregator);
 	}
 
 	@Override
-	public void getExistingAggregator(Long id)
+	public Aggregator getExistingAggregator(Long id)
 			throws AggregatorNotFoundException {
-		// TODO Auto-generated method stub
-
+		Aggregator aggregator = getById(id);
+		
+		if (aggregator == null) {
+			throw new AggregatorNotFoundException();
+		}
+		
+		return aggregator;
 	}
 
 }

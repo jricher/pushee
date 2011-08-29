@@ -31,6 +31,7 @@
 			<prop key="org.mitre.pushee.hub.exception.SubscriberNotFoundException">subscriberNotFound</prop>
 			<prop key="org.mitre.pushee.hub.exception.PublisherNotFoundException">publisherNotFound</prop>
 	        <prop key="org.mitre.pushee.hub.exception.PermissionDeniedException">permissionDenied</prop>
+	        <prop key="org.mitre.pushee.hub.exception.AggregatorNotFoundException">aggregatorNotFound</prop>
 	        <prop key="org.mitre.pushee.oauth.exception.DuplicateClientIdException">duplicateClientId</prop>
 	     </props>
 	   </property>

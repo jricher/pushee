@@ -1,6 +1,7 @@
 package org.mitre.pushee.hub.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An aggregator is a special class of Feed that acts as both a Feed and a Subscriber -
- * it subscribes to a set of feeds, and serves the combined content as a single new feed.
+ * it subscribes to a set of source, and serves the combined content as a single new feed.
  * 
  * @author AANGANES
  *
@@ -47,12 +48,16 @@ public class Aggregator {
 	
 	//Feeds that I subscribe to
 	@OneToMany
-	private List<Feed> feeds;
+	private List<Feed> source;
 	
 	//Subscribers that are subscribed to me
 	@OneToMany
 	private List<Subscriber> subscribers;
 	
+	@OneToMany(mappedBy = "feed")
+	private Collection<Subscription> subscriptions;
+	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(Subscriber.class);
 	
 	/**
@@ -66,8 +71,8 @@ public class Aggregator {
 		this.subscribers.add(subscriber);
 	}
 	
-	public void addFeed(Feed feed) {
-		this.feeds.add(feed);
+	public void addSourceFeed(Feed feed) {
+		this.source.add(feed);
 	}
 	
 	@Override
@@ -164,17 +169,17 @@ public class Aggregator {
 	}
 
 	/**
-	 * @param feeds the feeds to set
+	 * @param source the source to set
 	 */
 	public void setFeeds(List<Feed> feeds) {
-		this.feeds = feeds;
+		this.source = feeds;
 	}
 
 	/**
-	 * @return the feeds
+	 * @return the source
 	 */
 	public List<Feed> getFeeds() {
-		return feeds;
+		return source;
 	}
 
 
@@ -207,6 +212,20 @@ public class Aggregator {
 	 */
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	/**
+	 * @param subscriptions the subscriptions to set
+	 */
+	public void setSubscriptions(Collection<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
+
+	/**
+	 * @return the subscriptions
+	 */
+	public Collection<Subscription> getSubscriptions() {
+		return subscriptions;
 	}
 	
 	

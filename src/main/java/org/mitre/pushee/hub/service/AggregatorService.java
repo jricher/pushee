@@ -25,6 +25,6 @@ public interface AggregatorService {
 	
 	public void remove(Aggregator aggregator);
 	
-	public void getExistingAggregator(Long id) throws AggregatorNotFoundException;
+	public Aggregator getExistingAggregator(Long id) throws AggregatorNotFoundException;
 	
 }
