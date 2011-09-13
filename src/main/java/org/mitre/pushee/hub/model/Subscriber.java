@@ -45,7 +45,9 @@ public class Subscriber {
     private static final Logger logger = LoggerFactory.getLogger(Subscriber.class);
     
 	public Subscriber() {
-		subscriptions = new ArrayList<Subscription>();
+		if (subscriptions == null) {
+			subscriptions = new ArrayList<Subscription>();
+		}
 	}
 
 	/**
@@ -65,6 +67,9 @@ public class Subscriber {
 	
 	@Override
 	public String toString() {
+		if (subscriptions != null) {
+			subscriptions.size();
+		}
 		return "Subscriber [id=" + id + ", postbackURL=" + postbackURL
 				+ ", subscriptions=" + subscriptions + "]";
 	}
@@ -117,8 +122,8 @@ public class Subscriber {
 		if (subscriptions == null) {
 			if (other.subscriptions != null)
 				return false;
-		} else if (!subscriptions.equals(other.subscriptions))
-			return false;
+		}// else if (!subscriptions.equals(other.subscriptions))
+			//return false;
 		return true;
 	}
 

@@ -45,12 +45,10 @@ public class Publisher {
 	private static final Logger logger = LoggerFactory.getLogger(Publisher.class);
 	
 	public Publisher() {
-		feeds = new HashSet<Feed>();
+		if (feeds == null) {
+			feeds = new HashSet<Feed>();
+		}
 	}
-
-	
-	
-
 
 	@Override
 	public int hashCode() {
@@ -69,6 +67,9 @@ public class Publisher {
 
 	@Override
 	public String toString() {
+		if (feeds != null) {
+			feeds.size();
+		}
 		return "Publisher [id=" + id + ", callbackURL=" + callbackURL
 				+ ", feeds=" + feeds + "]";
 	}

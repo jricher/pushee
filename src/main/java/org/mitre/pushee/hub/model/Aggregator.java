@@ -1,20 +1,15 @@
 package org.mitre.pushee.hub.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.mitre.pushee.hub.model.Feed.FeedType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +23,10 @@ import org.slf4j.LoggerFactory;
 @Entity
 @Table(name="aggregator")
 @NamedQueries({
-	@NamedQuery(name = "Aggregator.getByUrl", query = "select a from Aggregator a where a.url  = :aggregatorUrl"),
 	@NamedQuery(name = "Aggregator.getAll", query = "select a from Aggregator a")
 })
 public class Aggregator {
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -40,50 +34,44 @@ public class Aggregator {
 	@Basic
 	private String displayName;
 	
-	@Basic
-	private String url;
-
-	@Basic
-	private FeedType type;
+	@JoinColumn(name = "feed_id")
+	private Feed aggregatorFeed;
 	
-	//Feeds that I subscribe to
-//	@OneToMany
-	private List<Feed> source;
+	@JoinColumn(name = "subscriber_id")
+	private Subscriber sourceSubscriber;
 	
-	//Subscribers that are subscribed to me
-//	@OneToMany
-	private List<Subscriber> subscribers;
-	
-//	@OneToMany(mappedBy = "feed")
-	private Collection<Subscription> subscriptions;
-	
-	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(Subscriber.class);
+	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 	
 	/**
 	 * Constructor
 	 */
 	public Aggregator() {
-		subscribers = new ArrayList<Subscriber>();
+		logger.info("Aggregator constructor");
 	}
+
 	
-	public void addSubscriber(Subscriber subscriber) {
-		this.subscribers.add(subscriber);
+	
+	@Override
+	public String toString() {
+		return "Aggregator [id=" + id + ", displayName=" + displayName
+				+ ", aggregatorFeed=" + aggregatorFeed + ", sourceSubscriber="
+				+ sourceSubscriber + "]";
 	}
-	
-	public void addSourceFeed(Feed feed) {
-		this.source.add(feed);
-	}
-	
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((aggregatorFeed == null) ? 0 : aggregatorFeed.hashCode());
+		result = prime * result
 				+ ((displayName == null) ? 0 : displayName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		result = prime
+				* result
+				+ ((sourceSubscriber == null) ? 0 : sourceSubscriber.hashCode());
 		return result;
 	}
 
@@ -99,6 +87,13 @@ public class Aggregator {
 			return false;
 		}
 		Aggregator other = (Aggregator) obj;
+		if (aggregatorFeed == null) {
+			if (other.aggregatorFeed != null) {
+				return false;
+			}
+		} else if (!aggregatorFeed.equals(other.aggregatorFeed)) {
+			return false;
+		}
 		if (displayName == null) {
 			if (other.displayName != null) {
 				return false;
@@ -113,19 +108,16 @@ public class Aggregator {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
-		if (type != other.type) {
-			return false;
-		}
-		if (url == null) {
-			if (other.url != null) {
+		if (sourceSubscriber == null) {
+			if (other.sourceSubscriber != null) {
 				return false;
 			}
-		} else if (!url.equals(other.url)) {
+		} else if (!sourceSubscriber.equals(other.sourceSubscriber)) {
 			return false;
 		}
 		return true;
 	}
-
+	
 	/**
 	 * @param id the id to set
 	 */
@@ -138,66 +130,6 @@ public class Aggregator {
 	 */
 	public Long getId() {
 		return id;
-	}
-
-	/**
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(FeedType type) {
-		this.type = type;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public FeedType getType() {
-		return type;
-	}
-
-	/**
-	 * @param source the source to set
-	 */
-	public void setFeeds(List<Feed> feeds) {
-		this.source = feeds;
-	}
-
-	/**
-	 * @return the source
-	 */
-	public List<Feed> getFeeds() {
-		return source;
-	}
-
-
-
-	/**
-	 * @param subscribers the subscribers to set
-	 */
-	public void setSubscribers(List<Subscriber> subscribers) {
-		this.subscribers = subscribers;
-	}
-
-
-
-	/**
-	 * @return the subscribers
-	 */
-	public List<Subscriber> getSubscribers() {
-		return subscribers;
 	}
 
 	/**
@@ -215,19 +147,30 @@ public class Aggregator {
 	}
 
 	/**
-	 * @param subscriptions the subscriptions to set
+	 * @return the aggregatorFeed
 	 */
-	public void setSubscriptions(Collection<Subscription> subscriptions) {
-		this.subscriptions = subscriptions;
+	public Feed getAggregatorFeed() {
+		return aggregatorFeed;
+	}
+	
+	/**
+	 * @param feed the aggregatorFeed
+	 */
+	public void setAggregatorFeed(Feed feed) {
+		this.aggregatorFeed = feed;
 	}
 
 	/**
-	 * @return the subscriptions
+	 * @return the sourceSubscriber
 	 */
-	public Collection<Subscription> getSubscriptions() {
-		return subscriptions;
+	public Subscriber getSourceSubscriber() {
+		return sourceSubscriber;
 	}
 	
-	
-	
+	/**
+	 * @param subscriber the sourceSubscriber
+	 */
+	public void setSourceSubscriber(Subscriber subscriber) {
+		this.sourceSubscriber = subscriber;
+	}
 }

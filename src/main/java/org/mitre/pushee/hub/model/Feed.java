@@ -60,7 +60,9 @@ public class Feed {
 	 * Constructor
 	 */
 	public Feed() {
-		subscriptions = new ArrayList<Subscription>();
+		if (subscriptions == null) {
+			subscriptions = new ArrayList<Subscription>();
+		}
 	}
 
 	@Override
@@ -106,6 +108,9 @@ public class Feed {
 
 	@Override
 	public String toString() {
+		if (subscriptions != null) {
+			subscriptions.size();
+		}
 		return "Feed [id=" + id + ", url=" + url + ", type=" + type
 				+ ", publisherId=" + (publisher == null ? "none" : publisher.getId()) + ", subscriptions="
 				+ subscriptions + "]";

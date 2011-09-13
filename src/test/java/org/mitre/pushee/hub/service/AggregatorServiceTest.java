@@ -46,18 +46,6 @@ public class AggregatorServiceTest {
 	
 	@Test
 	@Ignore
-	public void getByUrl_valid() {
-		
-	}
-	
-	@Test
-	@Ignore
-	public void getByUrl_invalid() {
-		
-	}
-	
-	@Test
-	@Ignore
 	public void getAll() {
 		
 	}

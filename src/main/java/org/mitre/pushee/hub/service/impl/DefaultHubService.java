@@ -29,15 +29,15 @@ public class DefaultHubService implements HubService {
 	private FeedRepository feedRepository;
 	
 	@Autowired
-	private PublisherRepository publisherRepository;
+	private static PublisherRepository publisherRepository;
 	
 	@Autowired
 	private SubscriberRepository subscriberRepository;
 	
 	public DefaultHubService() {
-		
+	
 	}
-
+	
 	@Override
 	public Collection<Subscriber> getAllSubscribers() {
 		return subscriberRepository.getAll();

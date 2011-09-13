@@ -21,14 +21,6 @@ public interface AggregatorRepository {
 	public Aggregator getById(Long id);
 	
 	/**
-	 * Get an aggregator by its unique URL
-	 * 
-	 * @param url the URL of the aggregator
-	 * @return a valid Aggregator if it exists, null otherwise
-	 */
-	public Aggregator getByUrl(String url);
-	
-	/**
 	 * Persists an Aggregator 
 	 * 
 	 * @param aggregator valid Aggregator instance

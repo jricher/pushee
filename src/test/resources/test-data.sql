@@ -18,3 +18,6 @@ INSERT INTO ACCESSTOKEN (id, tokenType, refresh_token_id, client_id) VALUES ('jk
 
 INSERT INTO REFRESHTOKEN (id, client_id) VALUES ('1', '1');
 INSERT INTO REFRESHTOKEN (id, client_id) VALUES ('5', '2');
+
+INSERT INTO AGGREGATOR (id, displayName, feed_id, subscriber_id) VALUES (1, 'Aggregator One', 1, 2);
+INSERT INTO AGGREGATOR (id, displayName, feed_id, subscriber_id) VALUES (2, 'Aggregator Two', 2, 1);

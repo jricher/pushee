@@ -44,7 +44,12 @@ public class Subscription {
 	@Basic
 	private String secret;
 	
+	//Many to one: one Feed may belong to many subscriptions
+	// or Many subscriptions may link to the same One feed
 	@ManyToOne
+	//Join column: We don't store the actual feed, since it is already stored. Instead the
+	//subscription.sql table definition has a "feed_id" column, which we use to link to
+	//the proper feed.
     @JoinColumn(name = "feed_id")
 	private Feed feed;
 	
@@ -86,6 +91,13 @@ public class Subscription {
 
 
 
+	/*
+	 * Modified by aanganes in order to stop infinite recursion.
+	 * If both this and other have feeds, make sure the IDs match but stop there.
+	 * If both this and other have subscribers, make sure the IDs match but stop there.
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		logger.info("Subscription - equals");
@@ -99,7 +111,7 @@ public class Subscription {
 		if (feed == null) {
 			if (other.feed != null)
 				return false;
-		} else if (!feed.equals(other.feed))
+		} else if (other.feed != null && feed.getId() != other.id)
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -114,7 +126,7 @@ public class Subscription {
 		if (subscriber == null) {
 			if (other.subscriber != null)
 				return false;
-		} else if (!subscriber.equals(other.subscriber))
+		} else if (other.subscriber != null && subscriber.getId() != other.id)
 			return false;
 		if (timeout == null) {
 			if (other.timeout != null)

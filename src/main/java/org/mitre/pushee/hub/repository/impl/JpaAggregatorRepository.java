@@ -1,7 +1,6 @@
 package org.mitre.pushee.hub.repository.impl;
 
 
-import static org.mitre.pushee.hub.repository.util.JpaUtil.getSingleResult;
 import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 
 import java.util.Collection;
@@ -32,14 +31,6 @@ public class JpaAggregatorRepository implements AggregatorRepository {
 	@Transactional
 	public Aggregator getById(Long id) {
 		return manager.find(Aggregator.class, id);
-	}
-
-	@Override
-	@Transactional
-	public Aggregator getByUrl(String url) {
-		TypedQuery<Aggregator> query = manager.createNamedQuery("Aggregator.getByUrl", Aggregator.class);
-		query.setParameter("aggregatorUrl", url);
-		return getSingleResult(query.getResultList());
 	}
 
 	@Override

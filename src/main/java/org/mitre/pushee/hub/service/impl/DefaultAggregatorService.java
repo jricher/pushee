@@ -4,8 +4,11 @@ import java.util.Collection;
 
 import org.mitre.pushee.hub.exception.AggregatorNotFoundException;
 import org.mitre.pushee.hub.model.Aggregator;
+import org.mitre.pushee.hub.model.Feed;
+import org.mitre.pushee.hub.model.Subscriber;
 import org.mitre.pushee.hub.repository.AggregatorRepository;
 import org.mitre.pushee.hub.service.AggregatorService;
+import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +26,17 @@ public class DefaultAggregatorService implements AggregatorService {
 	@Autowired
 	private AggregatorRepository repository;
 	
+	@Autowired
+	private HubService hubService;
+	
+	private String baseTomcatUrl;
+	
 	/**
 	 * Default constructor
 	 */
 	public DefaultAggregatorService() {
-		
+		//TODO: get base application url from tomcat
+		baseTomcatUrl = "";
 	}
 	
 	/**
@@ -40,13 +49,35 @@ public class DefaultAggregatorService implements AggregatorService {
 	}
 	
 	@Override
+	public Aggregator createNew(String displayName) {
+
+		Aggregator a = new Aggregator();
+		a.setDisplayName(displayName);
+		Aggregator saved = repository.save(a);
+		
+		String feedURL = baseTomcatUrl + "/aggregator/feed/" + saved.getId();
+		String subURL = baseTomcatUrl + "/aggregator/subscriber/" + saved.getId();
+		
+		Feed feed = new Feed();
+		feed.setUrl(feedURL);
+		feed.setType(Feed.FeedType.ATOM);
+		hubService.saveFeed(feed);
+		feed = hubService.getFeedByUrl(feedURL);
+		
+		Subscriber sub = new Subscriber();
+		sub.setPostbackURL(subURL);
+		hubService.saveSubscriber(sub);
+		sub = hubService.getSubscriberByCallbackURL(subURL);
+		
+		saved.setAggregatorFeed(feed);
+		saved.setSourceSubscriber(sub);
+		
+		return repository.save(a);
+	}
+	
+	@Override
 	public Aggregator getById(Long id) {
 		return repository.getById(id);
-	}
-
-	@Override
-	public Aggregator getByUrl(String url) {
-		return repository.getByUrl(url);
 	}
 
 	@Override

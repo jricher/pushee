@@ -16,7 +16,7 @@ import org.mitre.pushee.hub.model.Subscriber;
  *
  */
 public interface HubService {
-
+	
 	/**
 	 * Get a collection of all subscribers managed by this HubService.
 	 * 

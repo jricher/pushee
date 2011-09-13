@@ -13,9 +13,9 @@ import org.mitre.pushee.hub.model.Aggregator;
  */
 public interface AggregatorService {
 
-	public Aggregator getById(Long id);
+	public Aggregator createNew(String displayName);
 	
-	public Aggregator getByUrl(String url);
+	public Aggregator getById(Long id);
 	
 	public Collection<Aggregator> getAll();
 	
