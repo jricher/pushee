@@ -35,6 +35,22 @@ public class JpaAggregatorRepository implements AggregatorRepository {
 
 	@Override
 	@Transactional
+	public Aggregator getByFeedUrl(String feedUrl) {
+		TypedQuery<Aggregator> query = manager.createNamedQuery("Aggregator.getByFeedUrl", Aggregator.class);
+		query.setParameter("feedUrl", feedUrl);
+		return query.getSingleResult();
+	}
+
+	@Override
+	@Transactional
+	public Aggregator getBySubscriberUrl(String subscriberUrl) {
+		TypedQuery<Aggregator> query = manager.createNamedQuery("Aggregator.getBySubscriberUrl", Aggregator.class);
+		query.setParameter("subscriberUrl", subscriberUrl);
+		return query.getSingleResult();
+	}
+	
+	@Override
+	@Transactional
 	public Aggregator save(Aggregator aggregator) {
 		return saveOrUpdate(aggregator.getId(), manager, aggregator);
 	}

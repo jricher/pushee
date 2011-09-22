@@ -46,6 +46,30 @@ public class AggregatorServiceTest {
 	
 	@Test
 	@Ignore
+	public void getByFeedUrl_valid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getByFeedUrl_invalid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getBySubscriberUrl_valid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getBySubscriberUrl_invalid() {
+		
+	}
+	
+	@Test
+	@Ignore
 	public void getAll() {
 		
 	}

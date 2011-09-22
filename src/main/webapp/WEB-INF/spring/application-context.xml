@@ -58,7 +58,11 @@
 			</map>
 		</property>
 	</bean>
-
+<!--  
+	<bean class="org.mitre.pushee.hub.service.impl.DefaultAggregatorService">
+		<property name="baseTomcatUrl" value ="http://pushe.mitre.org" />
+	</bean>
+-->
 	<!-- scheduled tasks -->
 	<task:scheduler id="taskScheduler" pool-size="10" />
 	<task:executor id="taskExecutor" pool-size="5" />

@@ -2,6 +2,8 @@ package org.mitre.pushee.hub.service.impl;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mitre.pushee.hub.exception.AggregatorNotFoundException;
 import org.mitre.pushee.hub.model.Aggregator;
 import org.mitre.pushee.hub.model.Feed;
@@ -35,8 +37,7 @@ public class DefaultAggregatorService implements AggregatorService {
 	 * Default constructor
 	 */
 	public DefaultAggregatorService() {
-		//TODO: get base application url from tomcat
-		baseTomcatUrl = "";
+		
 	}
 	
 	/**
@@ -54,7 +55,7 @@ public class DefaultAggregatorService implements AggregatorService {
 		Aggregator a = new Aggregator();
 		a.setDisplayName(displayName);
 		Aggregator saved = repository.save(a);
-		
+	
 		String feedURL = baseTomcatUrl + "/aggregator/feed/" + saved.getId();
 		String subURL = baseTomcatUrl + "/aggregator/subscriber/" + saved.getId();
 		
@@ -80,6 +81,16 @@ public class DefaultAggregatorService implements AggregatorService {
 		return repository.getById(id);
 	}
 
+	@Override
+	public Aggregator getByFeedUrl(String feedUrl) {
+		return repository.getByFeedUrl(feedUrl);
+	}
+	
+	@Override
+	public Aggregator getBySubscriberUrl(String subscriberUrl) {
+		return repository.getBySubscriberUrl(subscriberUrl);
+	}
+	
 	@Override
 	public Collection<Aggregator> getAll() {
 		return repository.getAll();
@@ -110,6 +121,14 @@ public class DefaultAggregatorService implements AggregatorService {
 		}
 		
 		return aggregator;
+	}
+
+	public String getBaseTomcatUrl() {
+		return baseTomcatUrl;
+	}
+
+	public void setBaseTomcatUrl(String baseTomcatUrl) {
+		this.baseTomcatUrl = baseTomcatUrl;
 	}
 
 }

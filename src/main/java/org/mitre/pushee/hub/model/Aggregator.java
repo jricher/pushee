@@ -9,9 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.mitre.pushee.hub.model.processor.AggregatorProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 
 /**
  * An aggregator is a special class of Feed that acts as both a Feed and a Subscriber -
@@ -23,7 +26,9 @@ import org.slf4j.LoggerFactory;
 @Entity
 @Table(name="aggregator")
 @NamedQueries({
-	@NamedQuery(name = "Aggregator.getAll", query = "select a from Aggregator a")
+	@NamedQuery(name = "Aggregator.getAll", query = "select a from Aggregator a"),
+	@NamedQuery(name = "Aggregator.getByFeedUrl", query = "select a from Aggregator a where a.aggregatorFeed.url =:feedUrl"),
+	@NamedQuery(name = "Aggregator.getBySubscriberUrl", query = "select a from Aggregator a where a.sourceSubscriber.postbackURL =:subscriberUrl")
 })
 public class Aggregator {
 	
@@ -40,6 +45,9 @@ public class Aggregator {
 	@JoinColumn(name = "subscriber_id")
 	private Subscriber sourceSubscriber;
 	
+	//@Transient
+	//private AggregatorProcessor processor;
+	
 	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 	
 	/**
@@ -49,7 +57,13 @@ public class Aggregator {
 		logger.info("Aggregator constructor");
 	}
 
+	/*public void process(HttpEntity<String> input) {
+		processor.process(input);
+	}
 	
+	public HttpEntity<String> getContent() {
+		return processor.getContent();
+	}*/
 	
 	@Override
 	public String toString() {
@@ -57,8 +71,6 @@ public class Aggregator {
 				+ ", aggregatorFeed=" + aggregatorFeed + ", sourceSubscriber="
 				+ sourceSubscriber + "]";
 	}
-
-
 
 	@Override
 	public int hashCode() {

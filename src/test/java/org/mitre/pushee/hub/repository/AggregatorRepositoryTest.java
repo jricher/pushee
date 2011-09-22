@@ -156,6 +156,30 @@ public class AggregatorRepositoryTest {
 	}
 	
 	@Test
+	@Ignore
+	public void getByFeedUrl_valid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getByFeedUrl_invalid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getBySubscriberUrl_valid() {
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getBySubscriberUrl_invalid() {
+		
+	}
+	
+	@Test
 	@Rollback
 	public void save_validNew() {
 		Aggregator newAgg = new Aggregator();
@@ -166,24 +190,56 @@ public class AggregatorRepositoryTest {
 		assertThat(saved, not(nullValue()));
 		assertThat(saved, is(sameInstance(newAgg)));
 		assertThat(saved.getId(), not(nullValue()));
-
 	}
 	
 	@Test
+	@Rollback
 	public void save_validExisting() {
+		agg1.setDisplayName("A New Display Name");
 		
+		Aggregator saved = repository.save(agg1);
+		
+		assertThat(saved, not(nullValue()));
+		assertThat(saved.getId(), equalTo(agg1.getId()));
+		assertThat(saved.getDisplayName(), equalTo(agg1.getDisplayName()));
 	}
 	
 	@Test
-	@Ignore
+	@Rollback
 	public void remove_valid() {
 		
+		Aggregator managed = repository.getById((agg1.getId()));
+		
+		repository.remove(managed);
+		
+		Aggregator nullagg = repository.getById(agg1.getId());
+		
+		assertThat(nullagg, is(nullValue()));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	@Ignore
 	public void remove_invalid() {
+		Aggregator doesNotExist = new Aggregator();
+		doesNotExist.setId(42L);
+		doesNotExist.setAggregatorFeed(aggFeed1);
+		doesNotExist.setSourceSubscriber(srcSub1);
 		
+		repository.remove(doesNotExist);
 	}
 	
+	@Test
+	@Rollback
+	public void removeById_valid() {
+		repository.removeById(agg1.getId());
+		
+		Aggregator nullagg = repository.getById(agg1.getId());
+		
+		assertThat(nullagg, is(nullValue()));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void removeById_invalid() {
+		
+		repository.removeById(42L);
+	}
 }

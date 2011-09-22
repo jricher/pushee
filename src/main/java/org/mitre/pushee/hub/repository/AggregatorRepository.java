@@ -21,6 +21,22 @@ public interface AggregatorRepository {
 	public Aggregator getById(Long id);
 	
 	/**
+	 * Get an aggregator by its unique feed URL
+	 * 
+	 * @param feedUrl the URL of the aggregator's feed
+	 * @return the aggregator associated with this URL if it exists, null otherwise
+	 */
+	public Aggregator getByFeedUrl(String feedUrl);
+	
+	/**
+	 * Get an aggregator by its unique subscriber URL
+	 * 
+	 * @param subscriberUrl the URL of the aggregator's subscriber
+	 * @return the aggregator associated with this URL if it exists, null otherwise
+	 */
+	public Aggregator getBySubscriberUrl(String subscriberUrl);
+	
+	/**
 	 * Persists an Aggregator 
 	 * 
 	 * @param aggregator valid Aggregator instance
