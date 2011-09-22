@@ -6,6 +6,7 @@ import static org.mitre.pushee.hub.repository.util.JpaUtil.saveOrUpdate;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -38,7 +39,13 @@ public class JpaAggregatorRepository implements AggregatorRepository {
 	public Aggregator getByFeedUrl(String feedUrl) {
 		TypedQuery<Aggregator> query = manager.createNamedQuery("Aggregator.getByFeedUrl", Aggregator.class);
 		query.setParameter("feedUrl", feedUrl);
-		return query.getSingleResult();
+		Aggregator result;
+		try {
+			result = query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+		return result;
 	}
 
 	@Override
@@ -46,7 +53,13 @@ public class JpaAggregatorRepository implements AggregatorRepository {
 	public Aggregator getBySubscriberUrl(String subscriberUrl) {
 		TypedQuery<Aggregator> query = manager.createNamedQuery("Aggregator.getBySubscriberUrl", Aggregator.class);
 		query.setParameter("subscriberUrl", subscriberUrl);
-		return query.getSingleResult();
+		Aggregator result;
+		try {
+			result = query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+		return result;
 	}
 	
 	@Override

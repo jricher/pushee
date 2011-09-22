@@ -10,11 +10,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mitre.pushee.hub.model.Aggregator;
@@ -43,9 +39,6 @@ public class AggregatorRepositoryTest {
 
 	@Autowired
 	private AggregatorRepository repository;
-	
-	@PersistenceContext
-	private EntityManager sharedManager;
 	
 	private Feed aggFeed1;
 	private Feed aggFeed2;
@@ -107,7 +100,6 @@ public class AggregatorRepositoryTest {
 		aggFeed1.addSubscription(subscript);
 		srcSub1.addSubscription(subscript);
 		srcSub2.addSubscription(feedsubscript1);
-		
 	}
 	
 	@Test
@@ -156,27 +148,31 @@ public class AggregatorRepositoryTest {
 	}
 	
 	@Test
-	@Ignore
 	public void getByFeedUrl_valid() {
-		
+		Aggregator retrieved = repository.getByFeedUrl(aggFeed1.getUrl());
+		assertThat(retrieved, is(not(nullValue())));
+		assertThat(retrieved.getAggregatorFeed().getId(), equalTo(aggFeed1.getId()));
+		assertThat(retrieved.getSourceSubscriber().getId(), equalTo(srcSub1.getId()));
 	}
 	
 	@Test
-	@Ignore
 	public void getByFeedUrl_invalid() {
-		
+		Aggregator nullAgg = repository.getByFeedUrl("BadURl.com");
+		assertThat(nullAgg, is(nullValue()));
 	}
 	
 	@Test
-	@Ignore
 	public void getBySubscriberUrl_valid() {
-		
+		Aggregator retrieved = repository.getBySubscriberUrl(srcSub1.getPostbackURL());
+		assertThat(retrieved, is(not(nullValue())));
+		assertThat(retrieved.getAggregatorFeed().getId(), equalTo(aggFeed1.getId()));
+		assertThat(retrieved.getSourceSubscriber().getId(), equalTo(srcSub1.getId()));
 	}
 	
 	@Test
-	@Ignore
 	public void getBySubscriberUrl_invalid() {
-		
+		Aggregator nullAgg = repository.getBySubscriberUrl("BadURl.com");
+		assertThat(nullAgg, is(nullValue()));
 	}
 	
 	@Test

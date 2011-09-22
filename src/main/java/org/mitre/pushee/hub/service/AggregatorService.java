@@ -56,8 +56,9 @@ public interface AggregatorService {
 	 * Save an Aggregator
 	 * 
 	 * @param aggregator the Aggregator to save
+	 * @return the saved Aggregator
 	 */
-	public void save(Aggregator aggregator);
+	public Aggregator save(Aggregator aggregator);
 	
 	/**
 	 * Remove an Aggregator by its ID

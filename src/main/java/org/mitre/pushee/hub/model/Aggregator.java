@@ -45,8 +45,8 @@ public class Aggregator {
 	@JoinColumn(name = "subscriber_id")
 	private Subscriber sourceSubscriber;
 	
-	//@Transient
-	//private AggregatorProcessor processor;
+	@Transient
+	private AggregatorProcessor processor;
 	
 	private static final Logger logger = LoggerFactory.getLogger(Aggregator.class);
 	
@@ -57,13 +57,13 @@ public class Aggregator {
 		logger.info("Aggregator constructor");
 	}
 
-	/*public void process(HttpEntity<String> input) {
+	public void process(HttpEntity<String> input) {
 		processor.process(input);
 	}
 	
 	public HttpEntity<String> getContent() {
 		return processor.getContent();
-	}*/
+	}
 	
 	@Override
 	public String toString() {
@@ -184,5 +184,13 @@ public class Aggregator {
 	 */
 	public void setSourceSubscriber(Subscriber subscriber) {
 		this.sourceSubscriber = subscriber;
+	}
+
+	public AggregatorProcessor getProcessor() {
+		return processor;
+	}
+
+	public void setProcessor(AggregatorProcessor processor) {
+		this.processor = processor;
 	}
 }

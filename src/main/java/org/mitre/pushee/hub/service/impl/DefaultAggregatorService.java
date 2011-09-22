@@ -31,6 +31,7 @@ public class DefaultAggregatorService implements AggregatorService {
 	@Autowired
 	private HubService hubService;
 	
+	//@Autowired
 	private String baseTomcatUrl;
 	
 	/**
@@ -97,8 +98,8 @@ public class DefaultAggregatorService implements AggregatorService {
 	}
 
 	@Override
-	public void save(Aggregator aggregator) {
-		repository.save(aggregator);
+	public Aggregator save(Aggregator aggregator) {
+		return repository.save(aggregator);
 	}
 
 	@Override
