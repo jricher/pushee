@@ -73,13 +73,13 @@ public class FeedAPI {
 	 * @param  publisherId
 	 * @param  type
 	 * @param  url
-	 * @param  modelAndView
+	 * @param  displayName
 	 * @return JSON representation of the newly created feed
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add")
 	public ModelAndView apiAddFeed(@RequestParam("publisherId") Long publisherId,
-								@RequestParam("type") FeedType type, @RequestParam("url") String url) {
+								@RequestParam("type") FeedType type, @RequestParam("url") String url, @RequestParam("displayName") String displayName) {
 		
 		Publisher publisher = hubService.getExistingPublisher(publisherId);
 		
@@ -87,6 +87,7 @@ public class FeedAPI {
 		feed.setPublisher(publisher);
 		feed.setType(type);
 		feed.setUrl(url);
+		feed.setDisplayName(displayName);
 		
 		hubService.saveFeed(feed);
 		Feed newFeed = hubService.getFeedByUrl(url);
@@ -104,13 +105,13 @@ public class FeedAPI {
 	 * @param  publisherId
 	 * @param  type
 	 * @param  url
-	 * @param  modelAndView
+	 * @param  displayName
 	 * @return JSON representation of the feed, post-edit
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit")
 	public ModelAndView apiEditFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
-			@RequestParam("type") FeedType type, @RequestParam("url") String url) {
+			@RequestParam("type") FeedType type, @RequestParam("url") String url, @RequestParam("displayName") String displayName) {
 		
 		Feed feed = hubService.getExistingFeed(feedId);
 		Publisher publisher = hubService.getExistingPublisher(publisherId);
@@ -118,6 +119,7 @@ public class FeedAPI {
 		feed.setPublisher(publisher);
 		feed.setType(type);
 		feed.setUrl(url);	
+		feed.setDisplayName(displayName);
 		
 		hubService.saveFeed(feed);
 		Feed retrieved = hubService.getExistingFeed(feedId);

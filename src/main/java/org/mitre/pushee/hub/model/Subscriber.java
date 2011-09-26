@@ -38,6 +38,9 @@ public class Subscriber {
 	@Basic
 	private String postbackURL;
 	
+	@Basic 
+	private String displayName;
+	
     @OneToMany(mappedBy = "subscriber", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Subscription> subscriptions;
     
@@ -167,6 +170,20 @@ public class Subscriber {
 	 */
 	public Collection<Subscription> getSubscriptions() {
 		return subscriptions;
+	}
+
+	/**
+	 * @return the displayName
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * @param displayName the displayName to set
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	
 }

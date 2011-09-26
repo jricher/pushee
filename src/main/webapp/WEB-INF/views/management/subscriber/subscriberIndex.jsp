@@ -16,6 +16,7 @@
 Subscriber ID: ${subscriber.getId()} <a href="view/${subscriber.getId()}">View</a> 
  | <a href="edit/${subscriber.getId()}">Edit</a>
  | <a href="delete/${subscriber.getId()}">Delete</a> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name = ${subscriber.getDisplayName()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;URL = ${subscriber.getPostbackURL()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Feed Subscriptions:<br/>
 <c:forEach items="${subscriber.getSubscriptions()}" var="subscription">

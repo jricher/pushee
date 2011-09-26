@@ -29,7 +29,7 @@ public class DefaultHubService implements HubService {
 	private FeedRepository feedRepository;
 	
 	@Autowired
-	private static PublisherRepository publisherRepository;
+	private PublisherRepository publisherRepository;
 	
 	@Autowired
 	private SubscriberRepository subscriberRepository;

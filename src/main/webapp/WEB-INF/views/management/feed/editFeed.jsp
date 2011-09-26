@@ -63,6 +63,13 @@ $(document).ready(function() {
 			errors.push("Feed url cannot be left blank");
 		}
 		
+		data.displayName = $('#displayName').val();
+		if (!data.displayName) {
+			$('#displayName').addClass('error');
+			valid = false;
+			errors.push("Display name cannot be left blank");
+		}
+		
 		//Since this is a radio button selection there must be a value
 		data.type = $('[name=type]:checked').val();
 		
@@ -144,6 +151,8 @@ function sendData(data) {
 	<c:otherwise>
 	</c:otherwise>
 	</c:choose>
+	
+	Name: <f:input path="displayName"/> <br/>
 	
 	URL: <f:input path="url"/> <br/>
 	

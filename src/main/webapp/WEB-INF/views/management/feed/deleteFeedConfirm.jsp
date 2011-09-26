@@ -49,6 +49,7 @@ You are about to delete this feed:
 
 <div>
 Feed: <a href="/edit?feedId=${feed.getId()}">${feed.getId()}</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name:${feed.getDisplayName()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;URL:${feed.getUrl()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Type = ${feed.getType()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Publisher ID = ${feed.getPublisher().getId()}<br/>

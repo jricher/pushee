@@ -1,6 +1,5 @@
 package org.mitre.pushee.enterprise.web;
 
-import java.util.Calendar;
 import java.util.Collection;
 
 import org.mitre.pushee.hub.model.Feed;
@@ -69,14 +68,16 @@ public class SubscriberAPI {
 	 * API access to add a new subscriber
 	 * 
 	 * @param url
+	 * @param displayName
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
-	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url) {
+	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url, @RequestParam("displayName") String displayName) {
 		
 		Subscriber subscriber = new Subscriber();
 		subscriber.setPostbackURL(url);
+		subscriber.setDisplayName(displayName);
 		hubService.saveSubscriber(subscriber);
 		
 		Subscriber retrieved = hubService.getSubscriberByCallbackURL(url);
@@ -90,14 +91,16 @@ public class SubscriberAPI {
 	 * 
 	 * @param  subId
 	 * @param  postbackURL
+	 * @param  displayName
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit")
-	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subscriberId, @RequestParam("postbackUrl") String postbackURL) {
+	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subscriberId, @RequestParam("postbackUrl") String postbackURL, @RequestParam("displayName") String displayName) {
 		
 		Subscriber subscriber = hubService.getExistingSubscriber(subscriberId);
 		subscriber.setPostbackURL(postbackURL);
+		subscriber.setDisplayName(displayName);
 		hubService.saveSubscriber(subscriber);
 		
 		Subscriber retrieved = hubService.getExistingSubscriber(subscriberId);

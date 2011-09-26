@@ -26,6 +26,7 @@
 		Feed ID: ${feed.getId()} <a href="view/${feed.getId()}">View</a> 
 		 | <a href="edit/${feed.getId()}">Edit</a>
 		 | <a href="delete/${feed.getId()}">Delete</a> <br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;Name: ${feed.getDisplayName()}<br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;URL = ${feed.getUrl()}<br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;Type = ${feed.getType()}<br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;Publisher ID = ${feed.getPublisher().getId()}

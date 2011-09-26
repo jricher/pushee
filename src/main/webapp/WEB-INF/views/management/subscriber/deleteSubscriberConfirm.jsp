@@ -48,8 +48,9 @@ $(document).ready(function() {
 You are about to delete this subscriber:
 
 <div>
-Subscriber: <a href="edit/${subscriber.getId()}">${subscriber.getId()}</a><br />
-&nbsp;&nbsp;&nbsp;&nbsp;URL: ${subscriber.getPostbackURL()}<br />
+Subscriber: <a href="edit/${subscriber.getId()}">${subscriber.getId()}</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name: ${subscriber.getDisplayName()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL: ${subscriber.getPostbackURL()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Feed Subscriptions:
 <c:forEach items="${subscriber.getSubscriptions()}" var="subscription">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID: ${subscription.getFeed().getId()}<br/>

@@ -12,6 +12,7 @@
 <div>
 <h1>View Feed Details</h1>
 <h3>Feed : <a href="../edit/${feed.getId()}">${feed.getId()}</a></h3><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name: ${feed.getDisplayName()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;URL: ${feed.getUrl()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Type: ${feed.getType()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Publisher ID: ${feed.getPublisher().getId()}<br/>

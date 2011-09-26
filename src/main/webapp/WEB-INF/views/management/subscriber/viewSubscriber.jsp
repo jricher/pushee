@@ -12,6 +12,7 @@
 <div>
 <h1>View Subscriber Details</h1>
 <h3>Subscriber :  <a href="../edit/${subscriber.getId()}">${subscriber.getId()}</a></h3> 
+&nbsp;&nbsp;&nbsp;&nbsp;Name = ${subscriber.getDisplayName()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;URL = ${subscriber.getPostbackURL()}<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Feed Subscriptions:<br/>
 <c:forEach items="${subscriber.getSubscriptions()}" var="subscription">

@@ -108,6 +108,7 @@ public class FeedAPITest {
 		feed1.setUrl("http://example.com/feed1");
 		feed1.setType(Feed.FeedType.ATOM);
 		feed1.setId(5L);
+		feed1.setDisplayName("Name");
 		Publisher publisher = new Publisher();
 		publisher.setId(2L);
 		publisher.addFeed(feed1);
@@ -117,7 +118,7 @@ public class FeedAPITest {
 		expect(hubService.getFeedByUrl("http://example.com/feed1")).andReturn(feed1).once();
 		replay(hubService);
 		
-		ModelAndView result = feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1");
+		ModelAndView result = feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1", "Name");
 		
 		verify(hubService);
 		
@@ -130,12 +131,13 @@ public class FeedAPITest {
 		feed1.setUrl("http://example.com/feed1");
 		feed1.setType(Feed.FeedType.ATOM);
 		feed1.setId(5L);
+		feed1.setDisplayName("Name");
 		
 		expect(hubService.getExistingPublisher(2L)).andThrow(new PublisherNotFoundException()).once();
 		expect(hubService.getFeedByUrl("http://example.com/feed1")).andReturn(feed1).once();
 		replay(hubService);
 		
-		feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1");
+		feedApi.apiAddFeed(2L, Feed.FeedType.ATOM, "http://example.com/feed1", "Name");
 		
 		verify(hubService);
 	}
@@ -146,6 +148,7 @@ public class FeedAPITest {
 		feed.setUrl("http://example.com/feed1");
 		feed.setType(Feed.FeedType.ATOM);
 		feed.setId(5L);
+		feed.setDisplayName("Name");
 		Publisher publisher = new Publisher();
 		publisher.setId(2L);
 		publisher.addFeed(feed);
@@ -155,6 +158,7 @@ public class FeedAPITest {
 		editedFeed.setUrl("http://example.com/feed1/new");
 		editedFeed.setType(Feed.FeedType.RSS);
 		editedFeed.setId(5L);
+		editedFeed.setDisplayName("New Name!");
 		Publisher newPublisher = new Publisher();
 		newPublisher.setId(3L);
 		newPublisher.addFeed(editedFeed);
@@ -165,7 +169,7 @@ public class FeedAPITest {
 		expect(hubService.getExistingFeed(5L)).andReturn(editedFeed).once();
 		replay(hubService);
 		
-		ModelAndView result = feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new");
+		ModelAndView result = feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new", "New Name!");
 		
 		verify(hubService);
 		
@@ -179,7 +183,7 @@ public class FeedAPITest {
 
 		replay(hubService);
 		
-		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new");
+		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new", "New Name!");
 		
 		verify(hubService);
 		
@@ -196,7 +200,7 @@ public class FeedAPITest {
 		expect(hubService.getExistingPublisher(3L)).andThrow(new PublisherNotFoundException()).once();
 		replay(hubService);
 		
-		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new");
+		feedApi.apiEditFeed(5L, 3L, Feed.FeedType.RSS, "http://example.com/feed1/new", "New Name!");
 		
 		verify(hubService);
 	

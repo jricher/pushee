@@ -92,11 +92,12 @@ public class SubscriberAPITest {
 		
 		Subscriber sub = new Subscriber();
 		sub.setPostbackURL("http://example.com/subscriber");
+		sub.setDisplayName("Name");
 		
 		expect(hubService.getSubscriberByCallbackURL("http://example.com/subscriber")).andReturn(sub).once();
 		replay(hubService);
 		
-		ModelAndView result = subscriberApi.apiAddSubscriber("http://example.com/subscriber");
+		ModelAndView result = subscriberApi.apiAddSubscriber("http://example.com/subscriber", "Name");
 		
 		verify(hubService);
 		
@@ -121,16 +122,18 @@ public class SubscriberAPITest {
 		Subscriber sub = new Subscriber();
 		sub.setPostbackURL("http://example.com/subscriber");
 		sub.setId(5L);
+		sub.setDisplayName("Name");
 		
 		Subscriber modified = new Subscriber();
 		modified.setPostbackURL("http://example.com/subscriber/new");
 		modified.setId(5L);
+		modified.setDisplayName("New Name!");
 		
 		expect(hubService.getExistingSubscriber(5L)).andReturn(sub).once();
 		expect(hubService.getExistingSubscriber(5L)).andReturn(modified).once();
 		replay(hubService);
 		
-		ModelAndView result = subscriberApi.apiEditSubscriber(5L, "http://example.com/subscriber/new");
+		ModelAndView result = subscriberApi.apiEditSubscriber(5L, "http://example.com/subscriber/new", "New Name!");
 		
 		verify(hubService);
 		
@@ -144,7 +147,7 @@ public class SubscriberAPITest {
 		expect(hubService.getExistingSubscriber(5L)).andThrow(new SubscriberNotFoundException()).once();
 		replay(hubService);
 		
-		subscriberApi.apiEditSubscriber(5L, "http://example.com/subscriber/new");
+		subscriberApi.apiEditSubscriber(5L, "http://example.com/subscriber/new", "New Name!");
 		
 		verify(hubService);
 	}

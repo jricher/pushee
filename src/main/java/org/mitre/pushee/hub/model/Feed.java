@@ -47,6 +47,9 @@ public class Feed {
 	private String url;
 	
 	@Basic
+	private String displayName;
+	
+	@Basic
 	private FeedType type;
 	
 	@ManyToOne
@@ -207,6 +210,20 @@ public class Feed {
 	 */
 	public void setSubscriptions(Collection<Subscription> subscriptions) {
 		this.subscriptions = subscriptions;
+	}
+
+	/**
+	 * @return the displayName
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * @param displayName the displayName to set
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	
 }
