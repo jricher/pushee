@@ -91,7 +91,7 @@ public class FeedController {
 	 * Add a feed. 
 	 * 
 	 * @param  modelAndView  MAV object
-	 * @return createFeed page with the new feed's info displayed 
+	 * @return editFeed page with mode set to "add"
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add/")
@@ -116,7 +116,7 @@ public class FeedController {
 	 * 
 	 * @param  feedId        ID of the feed to edit
 	 * @param  modelAndView  MAV object
-	 * @return the editFeed page
+	 * @return editFeed page with mode set to "edit"
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit/{feedId}")
