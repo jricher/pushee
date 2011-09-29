@@ -11,17 +11,18 @@
 <body>
 <div>
 <h1>View Aggregator Details</h1>
-<h3>Aggregator : <a href="../edit/${agg.getId()}">${agg.getId()}</a></h3><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;URL: ${agg.getUrl()}<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;Type: ${agg.getType()}<br/>
+<h3>Aggregator : <a href="../edit/${aggregator.getId()}">${aggregator.getId()}</a></h3><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name: ${aggregator.getDisplayName()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;URL: ${aggregator.getUrl()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Type: ${aggregator.getType()}<br/>
 </div>
 
 <hr/>
 
 <ul id="nav">
 <li><a href="../">View All</a></li>
-<li><a href="../edit/${agg.getId()}">Edit</a></li>
-<li><a href="../delete/${agg.getId()}">Delete</a></li>
+<li><a href="../edit/${aggregator.getId()}">Edit</a></li>
+<li><a href="../delete/${aggregator.getId()}">Delete</a></li>
 
 </body>
 </html>
