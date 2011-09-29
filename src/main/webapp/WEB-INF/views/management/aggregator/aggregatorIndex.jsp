@@ -22,6 +22,7 @@
 		Aggregator ID: ${agg.getId()} <a href="view/${agg.getId()}">View</a> 
 		 | <a href="edit/${agg.getId()}">Edit</a>
 		 | <a href="delete/${agg.getId()}">Delete</a> <br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;Name = ${agg.getDisplayName()}<br/> 
 		&nbsp;&nbsp;&nbsp;&nbsp;URL = ${agg.getUrl()}<br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;Type = ${agg.getType()}<br/>
 		<hr/>

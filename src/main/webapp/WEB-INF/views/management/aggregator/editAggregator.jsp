@@ -45,19 +45,24 @@ $(document).ready(function() {
 		
 		var data = {};
 		
-		if ("${mode}" == 'edit') {
-			data.aggregatorId = "${agg.getId()}";
-		}
-		
-		data.url = $('#url').val();
-		if(!data.url) {
-			$('#url').addClass('error');
+		data.displayName = $('#displayName').val();
+		if (!data.displayName) {
+			$('#displayName').addClass('error');
 			valid = false;
-			errors.push("Aggregator url cannot be left blank");
+			errors.push("Aggregator name cannot be left blank");
 		}
 		
-		//Since this is a radio button selection there must be a value
-		data.type = $('[name=type]:checked').val();
+		if ("${mode}" == 'edit') {
+			
+			data.aggregatorId = "${aggregator.getId()}";
+			
+			data.processorClassName = $('#processorClass').val();
+			if (!data.processorClassName) {
+				$('#processorClass').addClass('error');
+				valid = false;
+				errors.push("Aggregator processor class cannot be left blank");
+			}
+		}
 		
 		console.log(data);
 		
@@ -79,7 +84,7 @@ $(document).ready(function() {
 // Send code for edit
 function sendData(data) {
 	
-	var aggId = "${agg.getId()}";
+	var aggId = "${aggregator.getId()}";
 	
 	console.log("mode = edit");
 	$.post('../api/edit', data)
@@ -128,24 +133,31 @@ function sendData(data) {
 </c:choose>
 <div id="error"></div>
 
-<f:form modelAttribute="agg" id="addAggregator">
+<f:form modelAttribute="aggregator" id="addAggregator">
 
 	<c:choose>
 	<c:when test="${mode == 'edit'}">
-		Id: ${agg.getId()} <br/>
+		Id: ${aggregator.getId()} <br/>
 	</c:when>
 	<c:otherwise>
 	</c:otherwise>
 	</c:choose>
 	
-	URL: <f:input path="url"/> <br/>
+	Name: <f:input path="displayName"/> <br/>
 	
 	<c:choose>
 	<c:when test="${mode == 'edit'}">
-		Type: <f:radiobutton path="type" value="RSS"/> RSS <f:radiobutton path="type" value="ATOM"/> ATOM <br/>
+		Processor: 
+		<select id="processorClass" items="${processors}"> <br/>	 
+			<options> 
+				<c:forEach var="proc" items="${processors}">
+					<option value="${proc.getCanonicalName()}">proc.getSimpleName()</option>
+				</c:forEach>
+			</options>
+		</select>
 	</c:when>
 	<c:otherwise>
-		Type: <f:radiobutton path="type" value="RSS" checked="true"/> RSS <f:radiobutton path="type" value="ATOM"/> ATOM <br/>
+		Processor: ${aggregator.getProcessor().getClass().getSimpleName()} <br/>
 	</c:otherwise>
 	</c:choose>
 	
@@ -157,8 +169,8 @@ function sendData(data) {
 
 <ul id="nav">
 <li><a href="../">View All</a></li>
-<li><a href="../view/${agg.getId()}">View</a></li>
-<li><a href="../delete/${agg.getId()}">Delete</a></li>
+<li><a href="../view/${aggregator.getId()}">View</a></li>
+<li><a href="../delete/${aggregator.getId()}">Delete</a></li>
 </ul>
 
 </body>

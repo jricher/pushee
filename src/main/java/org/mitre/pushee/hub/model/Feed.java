@@ -37,6 +37,8 @@ public class Feed {
 	public enum FeedType {
 		ATOM, RSS
 	}
+	
+	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(Feed.class);
 	
 	@Id

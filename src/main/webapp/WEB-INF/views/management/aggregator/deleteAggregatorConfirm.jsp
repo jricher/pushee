@@ -48,14 +48,15 @@ $(document).ready(function() {
 You are about to delete this aggregator:
 
 <div>
-Aggregator: <a href="/edit?aggregatorId=${agg.getId()}">${agg.getId()}</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;URL:${agg.getUrl()}<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;Type = ${agg.getType()}<br/>
+Aggregator: <a href="/edit?aggregatorId=${aggregator.getId()}">${aggregator.getId()}</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Name = ${aggregator.getDisplayName()}<br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;URL:${aggregator.getUrl()}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;Type = ${aggregator.getType()}<br/>
 </div>
 
 This action cannot be undone. Are you sure?
 
-<f:form modelAttribute="agg">
+<f:form modelAttribute="aggregator">
 	<f:hidden path="id"/>
 	
 	<button id="yes">Yes</button>
