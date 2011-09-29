@@ -74,7 +74,7 @@ public class DefaultAggregatorService implements AggregatorService {
 		saved.setAggregatorFeed(feed);
 		saved.setSourceSubscriber(sub);
 		
-		return repository.save(a);
+		return repository.save(saved);
 	}
 	
 	@Override

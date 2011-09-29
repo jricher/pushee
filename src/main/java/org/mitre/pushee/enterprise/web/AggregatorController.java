@@ -65,7 +65,7 @@ public class AggregatorController {
 		Collection<Aggregator> aggs = service.getAll();
 		
 		modelAndView.addObject("aggregators", aggs);
-		modelAndView.setViewName("management/aggregator/aggIndex");
+		modelAndView.setViewName("management/aggregator/aggregatorIndex");
 		
 		return modelAndView;
 	}
@@ -109,7 +109,7 @@ public class AggregatorController {
 		/*
 		 * The following snippet comes from http://stackoverflow.com/questions/492184/how-do-you-find-all-subclasses-of-a-given-class-in-java/495851#495851
 		 * The snippet looks in the "org/mitre/pushee/hub/model/processor/impl" package for 
-		 * classes that imlement the AggregatorProcessor interface. Those classes are then presented
+		 * classes that implement the AggregatorProcessor interface. Those classes are then presented
 		 * in a drop-down selector on the "Add New Aggregator" page as options for the processor type 
 		 * on this new aggregator.
 		 */

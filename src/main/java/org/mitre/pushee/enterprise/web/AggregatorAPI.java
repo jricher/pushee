@@ -52,7 +52,7 @@ public class AggregatorAPI {
 	 */
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/getAll")
-	public ModelAndView apiGetAllFeeds() {	
+	public ModelAndView apiGetAllAggregators() {	
 		List<Aggregator> aggregators = (List<Aggregator>)service.getAll();
 
 		return new ModelAndView(jsonView, "aggregators", aggregators);
@@ -84,13 +84,24 @@ public class AggregatorAPI {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add")
 	public ModelAndView apiAddAggregator(@RequestParam("displayName") String displayName,
-			@RequestParam("processorClass") String processorClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+			@RequestParam("processorClass") String processorClassName) {
 		
 		Aggregator newAgg = service.createNew(displayName);
-		
-		Class<?> clazz = Class.forName(processorClassName);
-		AggregatorProcessor proc = (AggregatorProcessor)clazz.newInstance();
-		newAgg.setProcessor(proc);
+		try {
+			Class<?> clazz = Class.forName(processorClassName);
+			System.out.println("Class.forname returned " + clazz.toString());
+			AggregatorProcessor proc = (AggregatorProcessor)clazz.newInstance();
+			System.out.println("clazz.newInstance returned " + proc.toString());
+			if (proc != null) {
+				System.out.println("Setting processor on aggregator");
+				newAgg.setProcessor(proc);
+			}
+		} catch (Exception e) {
+			System.out.println("Exception when instantiating " + processorClassName);
+			System.out.println("Exception is of type " + e.getClass());
+			System.out.println("Stack trace: " + e.getStackTrace());
+			e.printStackTrace();
+		}
 		
 		return new ModelAndView(jsonView, "newAgg", newAgg);
 	}
