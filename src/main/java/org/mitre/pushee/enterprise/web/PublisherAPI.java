@@ -38,7 +38,6 @@ public class PublisherAPI {
 	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/getAll")
 	public ModelAndView apiGetAllPublishers() {
 		
@@ -52,7 +51,6 @@ public class PublisherAPI {
 	 * @param pubId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/get")
 	public ModelAndView apiGetPublisher(@RequestParam("publisherId") Long publisherId) {
 		
@@ -68,7 +66,6 @@ public class PublisherAPI {
 	 * @param url
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView apiAddPublisher(@RequestParam("callbackUrl") String url) {
 
@@ -89,7 +86,6 @@ public class PublisherAPI {
 	 * @param url
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit")
 	public ModelAndView apiEditPublisher(@RequestParam("publisherId") Long publisherId, @RequestParam("callbackURL") String url) {
 		
@@ -108,7 +104,6 @@ public class PublisherAPI {
 	 * @param pubId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/remove")
 	public ModelAndView apiRemovePublisher(@RequestParam("publisherId") Long pubId, ModelAndView modelAndView) {
 

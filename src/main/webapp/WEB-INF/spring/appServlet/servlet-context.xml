@@ -13,7 +13,7 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
-	<security:global-method-security pre-post-annotations="enabled" proxy-target-class="true"/>
+<!-- 	<security:global-method-security pre-post-annotations="enabled" proxy-target-class="true"/> -->
 	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -42,7 +42,7 @@
 	<beans:bean id="jsonAggregatorView" class="org.mitre.pushee.hub.model.serializer.JSONAggregatorView"/>
 
 	<!-- other required views -->	
-	<beans:bean id="tokenIntrospection" class="org.mitre.pushee.oauth.model.serializer.TokenIntrospection" />
+<!-- 	<beans:bean id="tokenIntrospection" class="org.mitre.pushee.oauth.model.serializer.TokenIntrospection" /> -->
 	
 	<!-- Imports user-defined @Controller beans that process client requests -->
 	<beans:import resource="controllers.xml" />

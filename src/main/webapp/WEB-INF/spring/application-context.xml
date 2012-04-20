@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<import resource="data-context.xml" />
-	<import resource="security-context.xml" />
+<!-- 	<import resource="security-context.xml" /> -->
 		
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -40,11 +40,7 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	<!--
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
--->
+
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="pusheePersistenceUnit" />

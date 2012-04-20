@@ -48,7 +48,6 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllPublishers(ModelAndView modelAndView) {
 		
@@ -65,7 +64,6 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/view/{publisherId}")
 	public ModelAndView viewPublisher(@PathVariable("publisherId") Long pubId, ModelAndView modelAndView) {
 		
@@ -89,7 +87,6 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add/")
 	public ModelAndView addPublisher(ModelAndView modelAndView) {
 
@@ -107,7 +104,6 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit/{publisherId}")
 	public ModelAndView editPublisher(@PathVariable("publisherId") Long pubId, ModelAndView modelAndView) {
 		
@@ -127,7 +123,6 @@ public class PublisherController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete/{publisherId}")
 	public ModelAndView deletePublisherConfirmation(@PathVariable("publisherId") Long pubId, ModelAndView modelAndView) {
 		

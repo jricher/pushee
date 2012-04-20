@@ -40,7 +40,6 @@ public class SubscriberAPI {
 	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/getAll")
 	public ModelAndView apiGetAllSubscribers() {
 		
@@ -54,7 +53,6 @@ public class SubscriberAPI {
 	 * @param subId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/get")
 	public ModelAndView apiGetSubscriber(@RequestParam("subscriberId") Long subId) {
 		
@@ -71,7 +69,6 @@ public class SubscriberAPI {
 	 * @param displayName
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add")
 	public ModelAndView apiAddSubscriber(@RequestParam("postbackUrl") String url, @RequestParam("displayName") String displayName) {
 		
@@ -94,7 +91,6 @@ public class SubscriberAPI {
 	 * @param  displayName
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit")
 	public ModelAndView apiEditSubscriber(@RequestParam("subscriberId") Long subscriberId, @RequestParam("postbackUrl") String postbackURL, @RequestParam("displayName") String displayName) {
 		
@@ -116,7 +112,6 @@ public class SubscriberAPI {
 	 * @param  feedId the ID of the feed to remove subscription from
 	 * @return the modified subscriber
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/removeSubscription")
 	public ModelAndView apiRemoveSubscription(@RequestParam("subscriberId") Long subscriberId, @RequestParam("feedId") Long feedId) {
 		
@@ -138,7 +133,6 @@ public class SubscriberAPI {
 	 * @param  subscriberId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete")
 	public ModelAndView apiDeleteSubscriber(@RequestParam("subscriberId") Long subscriberId, ModelAndView modelAndView) {
 		

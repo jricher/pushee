@@ -51,7 +51,6 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return feedIndex page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/")
 	public ModelAndView viewAllFeeds(ModelAndView modelAndView) {
 
@@ -70,7 +69,6 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return viewFeed page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/view/{feedId}")
 	public ModelAndView viewFeed(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
@@ -93,7 +91,6 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return editFeed page with mode set to "add"
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add/")
 	public ModelAndView addFeed(ModelAndView modelAndView) {
 		
@@ -118,7 +115,6 @@ public class FeedController {
 	 * @param  modelAndView  MAV object
 	 * @return editFeed page with mode set to "edit"
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit/{feedId}")
 	public ModelAndView editFeed(@PathVariable Long feedId, ModelAndView modelAndView) {
 		
@@ -140,7 +136,6 @@ public class FeedController {
 	 * @param  modelAndView
 	 * @return delete confirmation page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete/{feedId}")
 	public ModelAndView deleteFeedConfirmation(@PathVariable Long feedId, ModelAndView modelAndView) {
 		

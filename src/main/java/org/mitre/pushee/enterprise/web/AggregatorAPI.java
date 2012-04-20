@@ -50,7 +50,6 @@ public class AggregatorAPI {
 	 * @param  modelAndView  MAV object
 	 * @return JSON representation of aggregator list
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/getAll")
 	public ModelAndView apiGetAllAggregators() {	
 		List<Aggregator> aggregators = (List<Aggregator>)service.getAll();
@@ -65,7 +64,6 @@ public class AggregatorAPI {
 	 * @param  modelAndView  MAV object
 	 * @return JSON representation of the aggregator
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/get")
 	public ModelAndView apiGetAggregator(@RequestParam("aggregatorId") Long aggregatorId) {
 		
@@ -81,7 +79,6 @@ public class AggregatorAPI {
 	 * @param displayName
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add")
 	public ModelAndView apiAddAggregator(@RequestParam("displayName") String displayName,
 			@RequestParam("processorClass") String processorClassName) {
@@ -114,7 +111,6 @@ public class AggregatorAPI {
 	 * @param processorClassName
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit")
 	public ModelAndView apiEditAggregator(@RequestParam("aggregatorId") Long aggregatorId, 
 			@RequestParam("displayName") String displayName) {
@@ -135,7 +131,6 @@ public class AggregatorAPI {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete")
 	public ModelAndView apiDeleteAggregator(@RequestParam Long aggregatorId, ModelAndView modelAndView) {
 		

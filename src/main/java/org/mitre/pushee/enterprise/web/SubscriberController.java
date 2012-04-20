@@ -48,7 +48,6 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/")
 	public ModelAndView viewAllSubscribers(ModelAndView modelAndView) {
 		
@@ -64,7 +63,6 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/view/{subscriberId}")
 	public ModelAndView viewSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
@@ -82,7 +80,6 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/add/")
 	public ModelAndView addSubscriber(ModelAndView modelAndView) {
 
@@ -101,7 +98,6 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/edit/{subscriberId}")
 	public ModelAndView editSubscriber(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		
@@ -122,7 +118,6 @@ public class SubscriberController {
 	 * @param modelAndView
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/delete/{subscriberId}")
 	public ModelAndView deleteSubscriberConfirmation(@PathVariable Long subscriberId, ModelAndView modelAndView) {
 		

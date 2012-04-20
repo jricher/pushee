@@ -42,7 +42,6 @@ public class FeedAPI {
 	 * @param  modelAndView  MAV object
 	 * @return JSON representation of feed list
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/getAll")
 	public ModelAndView apiGetAllFeeds() {	
 		List<Feed> feeds = (List<Feed>)hubService.getAllFeeds();
@@ -57,7 +56,6 @@ public class FeedAPI {
 	 * @param  modelAndView  MAV object
 	 * @return JSON representation of the feed
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/get")
 	public ModelAndView apiGetFeed(@RequestParam("feedId") Long feedId) {
 		
@@ -76,7 +74,6 @@ public class FeedAPI {
 	 * @param  displayName
 	 * @return JSON representation of the newly created feed
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add")
 	public ModelAndView apiAddFeed(@RequestParam("publisherId") Long publisherId,
 								@RequestParam("type") FeedType type, @RequestParam("url") String url, @RequestParam("displayName") String displayName) {
@@ -108,7 +105,6 @@ public class FeedAPI {
 	 * @param  displayName
 	 * @return JSON representation of the feed, post-edit
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit")
 	public ModelAndView apiEditFeed(@RequestParam("feedId") Long feedId, @RequestParam("publisherId") Long publisherId,
 			@RequestParam("type") FeedType type, @RequestParam("url") String url, @RequestParam("displayName") String displayName) {
@@ -137,7 +133,6 @@ public class FeedAPI {
 	 * @param  modelAndView  MAV object
 	 * @return removeSuccess 
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete")
 	public ModelAndView apiDeleteFeed(@RequestParam Long feedId, ModelAndView modelAndView) {
 		

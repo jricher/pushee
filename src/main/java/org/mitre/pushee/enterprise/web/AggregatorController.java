@@ -58,7 +58,6 @@ public class AggregatorController {
 	 * @param  modelAndView  MAV object
 	 * @return aggregatorIndex page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/")
 	public ModelAndView viewAllAggregators(ModelAndView modelAndView) {
 		
@@ -77,7 +76,6 @@ public class AggregatorController {
 	 * @param  modelAndView  MAV object
 	 * @return viewAggregator page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/view/{aggregatorId}")
 	public ModelAndView viewAggregator(@PathVariable Long aggregatorId, ModelAndView modelAndView) {
 		
@@ -100,7 +98,6 @@ public class AggregatorController {
 	 * @param  modelAndView  MAV object
 	 * @return editAggregator page with mode set to "add"
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/add/")
 	public ModelAndView addAggregator(ModelAndView modelAndView) throws ClassNotFoundException {
 		
@@ -141,7 +138,6 @@ public class AggregatorController {
 	 * @param  modelAndView  MAV object
 	 * @return editAggregator page with mode set to "edit"
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit/{aggregatorId}")
 	public ModelAndView editAggregator(@PathVariable Long aggregatorId, ModelAndView modelAndView) {
 		
@@ -161,7 +157,6 @@ public class AggregatorController {
 	 * @param  modelAndView
 	 * @return delete confirmation page
 	 */
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/delete/{aggregatorId}")
 	public ModelAndView deleteAggregatorConfirmation(@PathVariable Long aggregatorId, ModelAndView modelAndView) {
 		
