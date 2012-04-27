@@ -1,7 +1,8 @@
 package org.mitre.pushee.hub.model.processor.impl;
 
+import java.util.ArrayList;
+
 import org.mitre.pushee.hub.model.processor.AggregatorProcessor;
-import org.springframework.http.HttpEntity;
 
 /**
  * Basic, "dumb" implementation of the AggregatorProcessor interface.
@@ -10,21 +11,21 @@ import org.springframework.http.HttpEntity;
  * @author AANGANES
  *
  */
-public class BasicAggregatorProcessor implements AggregatorProcessor {
+public class BasicAggregatorProcessor implements AggregatorProcessor<ArrayList<String>, String> {
 
-	private HttpEntity<String> content;
+	private ArrayList<String> content;
 	
-	public HttpEntity<String> process(HttpEntity<String> input) {
-		
-		String newContentString = content.getBody().concat(input.getBody());
-		HttpEntity<String> newContent = new HttpEntity<String>(newContentString, content.getHeaders());
-		
-		this.content = newContent;
-		return newContent;
+	public BasicAggregatorProcessor() {
+		content = new ArrayList<String>();
 	}
 	
-	public HttpEntity<String> getContent() {
+	public void process(String input) {
+		content.add(input);
+	}
+	
+	public ArrayList<String> getContent() {
 		return content;
 	}
+
 	
 }

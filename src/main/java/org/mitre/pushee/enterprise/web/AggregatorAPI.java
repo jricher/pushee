@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping("/management/aggregators/api")
+@RequestMapping("/manager/aggregators/api")
 public class AggregatorAPI {
 
 	@Autowired

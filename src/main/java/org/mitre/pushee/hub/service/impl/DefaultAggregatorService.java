@@ -31,13 +31,12 @@ public class DefaultAggregatorService implements AggregatorService {
 	@Autowired
 	private HubService hubService;
 	
-	//@Autowired
 	private String baseTomcatUrl;
 	
 	/**
 	 * Default constructor
 	 */
-	public DefaultAggregatorService() {
+	public DefaultAggregatorService() { 
 		
 	}
 	

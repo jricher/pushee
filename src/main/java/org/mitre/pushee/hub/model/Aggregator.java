@@ -14,7 +14,6 @@ import javax.persistence.Transient;
 import org.mitre.pushee.hub.model.processor.AggregatorProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
 
 /**
  * An aggregator is a special class of Feed that acts as both a Feed and a Subscriber -
@@ -45,6 +44,7 @@ public class Aggregator {
 	@JoinColumn(name = "subscriber_id")
 	private Subscriber sourceSubscriber;
 	
+	@SuppressWarnings("rawtypes")
 	@Transient
 	private AggregatorProcessor processor;
 	
@@ -57,11 +57,12 @@ public class Aggregator {
 		logger.info("Aggregator constructor");
 	}
 
-	public void process(HttpEntity<String> input) {
+	@SuppressWarnings("unchecked")
+	public void process(Object input) {
 		processor.process(input);
 	}
 	
-	public HttpEntity<String> getContent() {
+	public Object getContent() {
 		return processor.getContent();
 	}
 	
@@ -186,10 +187,12 @@ public class Aggregator {
 		this.sourceSubscriber = subscriber;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public AggregatorProcessor getProcessor() {
 		return processor;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setProcessor(AggregatorProcessor processor) {
 		this.processor = processor;
 	}

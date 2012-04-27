@@ -5,13 +5,14 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.mitre.pushee.hub.model.Aggregator;
+import org.mitre.pushee.hub.model.Feed;
 import org.mitre.pushee.hub.model.processor.AggregatorProcessor;
 import org.mitre.pushee.hub.service.AggregatorService;
+import org.mitre.pushee.hub.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-@RequestMapping("/management/aggregators")
+@RequestMapping("/manager/aggregators")
 public class AggregatorController {
 
 	@Autowired

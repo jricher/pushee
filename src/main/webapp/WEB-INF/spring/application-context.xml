@@ -65,5 +65,9 @@
     <bean id="defaultAggregatorService" class="org.mitre.pushee.hub.service.impl.DefaultAggregatorService">
 		<property name="baseTomcatUrl" value ="http://pushe.mitre.org" />
 	</bean>
+	
+	<bean class="org.mitre.pushee.hub.web.AggregatorContentControllerEndpoint">
+		<property name="aggService" value="http://pushee.mitre.org/hub"/>	
+	</bean>
 
 </beans>
